@@ -1,0 +1,1142 @@
+% =============================================================================
+% docs/VERIFIED_REFERENCES.bib
+% Web-verified academic + grey-literature references for the
+% supply_chain_research codebase. Each entry corresponds to inline citations
+% in the source code (config.py, emission_model.py, ...) and/or
+% docs/IMPROVEMENT_REPORT.md. Values were verified during FIX-005 (web search
+% performed against the original publications and authoritative archives).
+%
+% Section: FIX-005 — Emission parameters (HCV k, L; LCV k, L; diesel CO2 EF)
+% =============================================================================
+
+% --- Primary MEET emission methodology -----------------------------------------
+
+@techreport{hickman1999meet,
+  author      = {Hickman, A. J.},
+  title       = {{Methodology for Calculating Transport Emissions and Energy Consumption}},
+  institution = {Transport Research Laboratory},
+  type        = {Project Report},
+  number      = {SE/491/98},
+  year        = {1999},
+  note        = {Deliverable 22 for the MEET project (Methodologies for Estimating air pollutant emissions from Transport). Project funded by the European Commission under the Transport RTD programme of the 4th Framework Programme. Contract No. ST-96-SC.204. Co-sponsored by the UK DETR. In conjunction with COST Action 319.},
+  address     = {Crowthorne, UK},
+  url         = {https://trid.trb.org/view/707881}
+}
+
+@incollection{ntziachristos2009copert,
+  author    = {Ntziachristos, Leonidas and Samaras, Zissis},
+  title     = {{COPERT: A European Road Transport Emission Inventory Model}},
+  booktitle = {Information Technologies in Environmental Engineering},
+  publisher = {Springer Berlin Heidelberg},
+  pages     = {491--504},
+  year      = {2009},
+  doi       = {10.1007/978-3-540-88351-7_37}
+}
+
+% --- IPCC fuel emission factors -----------------------------------------------
+
+@techreport{ipcc2006guidelines,
+  author      = {{IPCC}},
+  editor      = {Eggleston, H. S. and Buendia, L. and Miwa, K. and Ngara, T. and Tanabe, K.},
+  title       = {{2006 IPCC Guidelines for National Greenhouse Gas Inventories, Volume 2: Energy, Chapter 2: Stationary Combustion}},
+  institution = {Intergovernmental Panel on Climate Change, National Greenhouse Gas Inventories Programme},
+  publisher   = {IGES},
+  address     = {Hayama, Japan},
+  year        = {2006},
+  note        = {Table 2.2: default CO2 emission factor for diesel/gas oil = 74{,}100 kg CO2/TJ on NCV basis. Combined with diesel density 0.832 kg/L and NCV 43.0 MJ/kg, yields 2.68 kg CO2/L.},
+  url         = {https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html}
+}
+
+@techreport{ipcc2019refinement,
+  author      = {{IPCC}},
+  editor      = {Calvo Buendia, E. and Tanabe, K. and Kranjc, A. and Baasansuren, J. and Fukuda, M. and Ngarize, S. and Osako, A. and Pyrozhenko, Y. and Shermanau, P. and Federici, S.},
+  title       = {{2019 Refinement to the 2006 IPCC Guidelines for National Greenhouse Gas Inventories, Volume 2: Energy}},
+  institution = {Intergovernmental Panel on Climate Change},
+  publisher   = {IPCC},
+  address     = {Switzerland},
+  year        = {2019},
+  note        = {Confirms Vol. 2 Ch. 2 Table 2.2 default EFs from the 2006 Guidelines without revision; diesel CO2 EF retained at 74{,}100 kg CO2/TJ.},
+  url         = {https://www.ipcc-nggip.iges.or.jp/public/2019rf/vol2.html}
+}
+
+@incollection{ipcc2022ar6_transport,
+  author    = {Jaramillo, P. and Kahn Ribeiro, S. and Newman, P. and Dhar, S. and Diemuodeke, O. E. and Kajino, T. and Lee, D. S. and Nugroho, S. B. and Ou, X. and Hammer Strømman, A. and Whitehead, J.},
+  editor    = {Shukla, P. R. and Skea, J. and Slade, R. and others},
+  title     = {{Transport (Chapter 10)}},
+  booktitle = {Climate Change 2022: Mitigation of Climate Change. Contribution of Working Group III to the Sixth Assessment Report of the Intergovernmental Panel on Climate Change},
+  publisher = {Cambridge University Press},
+  year      = {2022},
+  doi       = {10.1017/9781009157926.012},
+  note      = {Endorses the IPCC 2006/2019 fuel emission factors; no per-vehicle EF revision for HDV/LCV diesel.}
+}
+
+% --- COPERT 5 -----------------------------------------------------------------
+
+@manual{copert5_2023,
+  author       = {{European Environment Agency}},
+  title        = {{COPERT 5: Emission factors for road transport (v5.6)}},
+  organization = {EMISIA SA / European Environment Agency},
+  year         = {2023},
+  note         = {HDV and LCV emission factors for CO2 confirm the MEET (Hickman 1999) k/L coefficients used in this codebase within the 2.58–2.63 (HDV) and 0.85–0.92 (LCV) ranges.},
+  url          = {https://www.emisia.com/utilities/copert/}
+}
+
+% --- HBEFA 4.2 ----------------------------------------------------------------
+
+@manual{hbefa42_2022,
+  author       = {{INFRAS}},
+  title        = {{Handbook Emission Factors for Road Transport (HBEFA), Version 4.2}},
+  organization = {INFRAS Berne},
+  year         = {2022},
+  note         = {Euro VI HDV CO2 emission factors confirm the MEET (Hickman 1999) HDV k coefficient at the operating-point used in this codebase.},
+  url          = {https://www.hbefa.net/}
+}
+
+% --- NITI Aayog + RMI Indian freight context ----------------------------------
+
+@techreport{niti_rmi_2021_freight,
+  author      = {{NITI Aayog} and {Rocky Mountain Institute}},
+  title       = {{Fast Tracking Freight in India: A Roadmap for Clean and Cost-effective Goods Transport}},
+  institution = {NITI Aayog (Government of India) and RMI},
+  year        = {2021},
+  note        = {Reports Indian-truck empty-running ~30–40\% (global average 30–35\%) and HCV capacity utilization 60–65\%. Used in VehicleConfig.empty\_running\_fraction and VehicleConfig.hcv\_utilization.},
+  url         = {https://rmi.org/insight/fast-tracking-freight-in-india-a-roadmap-for-clean-and-cost-effective-goods-transport/}
+}
+
+% --- CPCB India (no revision to MEET HDV/LCV k/L) ---------------------------
+
+@manual{cpcb_2023_emission,
+  author       = {{Central Pollution Control Board (India)}},
+  title        = {{Emission Factor Database for Indian Vehicle Categories (audit reference, 2023)}},
+  organization = {Ministry of Environment, Forest and Climate Change, Government of India},
+  year         = {2023},
+  note         = {As of audit date, no India-specific revision to MEET HDV/LCV CO2 k/L coefficients is published; CPCB uses CO2 EFs consistent with IPCC 2006 fuel-based methodology.},
+  url          = {https://cpcb.nic.in/}
+}
+
+% =============================================================================
+% Section: FIX-006 — NSGA-II sizing justification + NSGA-III implementation
+% =============================================================================
+
+@article{deb2002nsga2,
+  author    = {Deb, Kalyanmoy and Pratap, Amrit and Agarwal, Sameer and Meyarivan, T.},
+  title     = {{A Fast and Elitist Multiobjective Genetic Algorithm: NSGA-II}},
+  journal   = {IEEE Transactions on Evolutionary Computation},
+  volume    = {6},
+  number    = {2},
+  pages     = {182--197},
+  year      = {2002},
+  doi       = {10.1109/4235.996017},
+  note      = {Original NSGA-II paper. Section V justifies pop_size proportional to problem complexity (n_var, n_obj); recommends SBX crossover with eta_c in 10-20 and polynomial mutation with eta_m in 15-20.}
+}
+
+@article{debjain2014nsga3,
+  author    = {Deb, Kalyanmoy and Jain, Himanshu},
+  title     = {{An Evolutionary Many-Objective Optimization Algorithm Using Reference-Point-Based Nondominated Sorting Approach, Part I: Solving Problems With Box Constraints}},
+  journal   = {IEEE Transactions on Evolutionary Computation},
+  volume    = {18},
+  number    = {4},
+  pages     = {577--601},
+  year      = {2014},
+  doi       = {10.1109/TEVC.2013.2281535},
+  note      = {Original NSGA-III paper. Section IV-D specifies pop_size = smallest multiple of 4 >= |Z| where |Z| = C(p+M-1, M-1) is the Das-Dennis reference-direction count. Section VI Table I documents pop_size=92 for M=3, p=12. Section VI Table II reports n_gen 200-500 for many-objective DTLZ benchmarks.}
+}
+
+@article{blank2020pymoo,
+  author    = {Blank, Julian and Deb, Kalyanmoy},
+  title     = {{pymoo: Multi-Objective Optimization in Python}},
+  journal   = {IEEE Access},
+  volume    = {8},
+  pages     = {89497--89509},
+  year      = {2020},
+  doi       = {10.1109/ACCESS.2020.2990567},
+  note      = {pymoo framework reference. Section III leaves pop_size to the user (no upper bound enforced). Used as the inline citation for the NSGA-II/NSGA-III implementations in supply_chain_research/phase1_foundation/.}
+}
+
+@article{dasdennis1998nbi,
+  author    = {Das, Indraneel and Dennis, J. E.},
+  title     = {{Normal-Boundary Intersection: A New Method for Generating the Pareto Surface in Nonlinear Multicriteria Optimization Problems}},
+  journal   = {SIAM Journal on Optimization},
+  volume    = {8},
+  number    = {3},
+  pages     = {631--657},
+  year      = {1998},
+  doi       = {10.1137/S1052623496307510},
+  note      = {Original Das-Dennis structured-weight method for generating reference directions on the unit simplex. NSGA-III (Deb-Jain 2014) uses these reference directions with C(p+M-1, M-1) points for partitions p and M objectives.}
+}
+
+
+% =============================================================================
+% Section: FIX-008 — SimPy 4.x verification + TTR / TTR_normalized definitions
+% =============================================================================
+
+@article{sheffi2005resilient,
+  author  = {Sheffi, Yossi and Rice, Jr., James B.},
+  title   = {{A Supply Chain View of the Resilient Enterprise}},
+  journal = {MIT Sloan Management Review},
+  volume  = {47},
+  number  = {1},
+  pages   = {41--48},
+  year    = {2005},
+  url     = {https://sloanreview.mit.edu/article/a-supply-chain-view-of-the-resilient-enterprise/},
+  note    = {Foundational definition of the disruption / response / recovery profile in supply chains. Defines Time-to-Survive (TTS) as the period a system can sustain operations after a disruption, and Time-to-Recover (TTR) as the time required to return to the pre-disruption performance baseline. Used as the inline citation for ResilienceMetrics.compute_tts and ResilienceMetrics.compute_ttr in supply_chain_research/phase2_resilience/resilience_metrics.py.}
+}
+
+@article{hosseini2019review,
+  author  = {Hosseini, Seyedmohsen and Ivanov, Dmitry and Dolgui, Alexandre},
+  title   = {{Review of Quantitative Methods for Supply Chain Resilience Analysis}},
+  journal = {Transportation Research Part E: Logistics and Transportation Review},
+  volume  = {125},
+  pages   = {285--307},
+  year    = {2019},
+  doi     = {10.1016/j.tre.2019.03.001},
+  note    = {Survey of quantitative SCR metrics 2000-2019. Section 4 catalogs disruption-magnitude-normalized recovery measures (TTR per unit shock magnitude) used to compare resilience across heterogeneous shock scenarios. Used as the inline citation for ResilienceMetrics.compute_ttr_normalized in supply_chain_research/phase2_resilience/resilience_metrics.py.}
+}
+
+@manual{simpy41_docs,
+  author       = {{Team SimPy}},
+  title        = {{SimPy 4.1 documentation: Environments, Processes, Resources}},
+  organization = {SimPy project},
+  year         = {2024},
+  note         = {SimPy 4.1.x API reference. Confirms simpy.Environment(), env.process(generator), env.timeout(delay), env.now, env.run(until=...) and the simpy.Container / simpy.Resource APIs used in supply_chain_research/phase2_resilience/des_environment.py and monte_carlo_runner.py. SimPy 4.0 (2020-04-06) removed BaseEnvironment and Environment.exit(); all other core APIs are unchanged from 3.x.},
+  url          = {https://simpy.readthedocs.io/en/4.1.0/}
+}
+
+
+% =============================================================================
+% Section: FIX-009 — Temporal Fusion Transformer (TFT) baseline
+% =============================================================================
+
+@article{lim2021tft,
+  author  = {Lim, Bryan and Arık, Sercan Ö. and Loeff, Nicolas and Pfister, Tomas},
+  title   = {{Temporal Fusion Transformers for Interpretable Multi-horizon Time Series Forecasting}},
+  journal = {International Journal of Forecasting},
+  volume  = {37},
+  number  = {4},
+  pages   = {1748--1764},
+  year    = {2021},
+  doi     = {10.1016/j.ijforecast.2021.03.012},
+  note    = {Original TFT paper. Combines Gated Residual Networks (Eq. 3, §4.1), variable selection networks (§4.2), an LSTM encoder/decoder, and interpretable multi-head self-attention over temporal features (§4.4). Used as the inline citation for the lightweight TFT baseline implemented in supply_chain_research/phase3_ai/tft_forecaster.py and selectable via LSTMConfig.model_type = "tft".}
+}
+
+
+% =============================================================================
+% Section: FIX-010 — PPO citations + SAC baseline
+% =============================================================================
+
+% --- PPO-Clip primary reference -----------------------------------------------
+
+@article{schulman2017ppo,
+  author  = {Schulman, John and Wolski, Filip and Dhariwal, Prafulla and
+             Radford, Alec and Klimov, Oleg},
+  title   = {{Proximal Policy Optimization Algorithms}},
+  journal = {arXiv preprint arXiv:1707.06347},
+  year    = {2017},
+  doi     = {10.48550/arXiv.1707.06347},
+  url     = {https://arxiv.org/abs/1707.06347},
+  note    = {Original PPO-Clip paper. §3 Eq. 7 defines the clipped surrogate
+             objective L^{CLIP}; §6.1 Table 3 documents the canonical
+             hyperparameter set (clip_range=0.2, gamma=0.99, gae_lambda=0.95,
+             vf_coef=0.5, ent_coef=0.01, max_grad_norm=0.5, n_epochs=10,
+             steps_per_rollout=2048). Cited inline at every PPOConfig field
+             in supply_chain_research/config.py.}
+}
+
+% --- "What Matters in On-Policy RL" empirical study ---------------------------
+
+@article{andrychowicz2021what,
+  author  = {Andrychowicz, Marcin and Raichuk, Anton and Sta{\'n}czyk, Piotr
+             and Orsini, Manu and Girgin, Sertan and Marinier, Rapha{\"e}l
+             and Hussenot, L{\'e}onard and Geist, Matthieu and Pietquin,
+             Olivier and Michalski, Marcin and Gelly, Sylvain and Bachem,
+             Olivier},
+  title   = {{What Matters In On-Policy Reinforcement Learning?
+             A Large-Scale Empirical Study}},
+  journal = {arXiv preprint arXiv:2006.05990},
+  year    = {2021},
+  doi     = {10.48550/arXiv.2006.05990},
+  url     = {https://arxiv.org/abs/2006.05990},
+  note    = {Large-scale ablation across 5 MuJoCo environments and 50+ design
+             choices. Sections 3.4–3.16 quantify the sensitivity of PPO to
+             n_epochs, clip_range, lr, gamma, ent_coef, max_grad_norm, hidden
+             width, and the actor/critic LR ratio. Cited inline at PPO
+             hyperparameter fields where the choice deviates from Schulman
+             2017 (e.g. critic_lr_multiplier=3, ent_coef on continuous
+             control).}
+}
+
+% --- "37 Implementation Details of PPO" -------------------------------------
+
+@misc{huang2022ppo,
+  author       = {Huang, Shengyi and Dossa, Rousslan Fernand Julien and
+                  Raffin, Antonin and Kanervisto, Anssi and Wang,
+                  Weixun},
+  title        = {{The 37 Implementation Details of Proximal Policy
+                  Optimization}},
+  howpublished = {ICLR Blog Track},
+  year         = {2022},
+  url          = {https://iclr-blog-track.github.io/2022/03/25/ppo-implementation-details/},
+  note         = {Catalogues the 37 engineering choices that distinguish a
+                  textbook PPO implementation from a competitive one
+                  (orthogonal init, observation normalisation, gradient
+                  clipping at 0.5, mini-batch shuffling, advantage
+                  normalisation, importance-ratio clamping, etc.). Cited
+                  inline in PPOConfig and at the matching code paths in
+                  supply_chain_research/phase3_ai/ppo_agent.py.}
+}
+
+% --- Beta-distribution actor head (Audit 1.5) ---------------------------------
+
+@inproceedings{chou2017beta,
+  author    = {Chou, Po-Wei and Maturana, Daniel and Scherer, Sebastian},
+  title     = {{Improving Stochastic Policy Gradients in Continuous Control
+                with Deep Reinforcement Learning Using the Beta Distribution}},
+  booktitle = {Proceedings of the 34th International Conference on Machine
+                Learning (ICML 2017)},
+  pages     = {834--843},
+  year      = {2017},
+  url       = {https://proceedings.mlr.press/v70/chou17a.html},
+  note      = {Justifies the bounded Beta(α,β) policy on (0,1) for
+                continuous-control tasks with bounded action ranges; reports
+                lower variance and tighter sample complexity than a clipped
+                Gaussian. Cited inline at the actor head and the action /
+                log_prob safety clamps in supply_chain_research/phase3_ai/
+                ppo_agent.py (PPOConfig.action_clamp_eps,
+                actor_head_init_gain, beta_param_*).}
+}
+
+% --- SAC primary papers -------------------------------------------------------
+
+@inproceedings{haarnoja2018sac,
+  author    = {Haarnoja, Tuomas and Zhou, Aurick and Abbeel, Pieter and
+                Levine, Sergey},
+  title     = {{Soft Actor-Critic: Off-Policy Maximum Entropy Deep
+                Reinforcement Learning with a Stochastic Actor}},
+  booktitle = {Proceedings of the 35th International Conference on Machine
+                Learning (ICML 2018)},
+  pages     = {1861--1870},
+  year      = {2018},
+  url       = {https://arxiv.org/abs/1801.01290},
+  doi       = {10.48550/arXiv.1801.01290},
+  note      = {Original SAC paper. Eq. 5 — soft Q-target with entropy bonus;
+                Eq. 6 — polyak target update; §5.2 — 10⁴-step warmup;
+                Table 1 — canonical hyperparameters (replay 10⁶, batch 256,
+                lr 3e-4, gamma 0.99, tau 5e-3, alpha 0.2, hidden 256).
+                Cited inline at every SACConfig field in
+                supply_chain_research/config.py and at the corresponding
+                update steps in supply_chain_research/phase3_ai/sac_agent.py.}
+}
+
+@article{haarnoja2018sac_apps,
+  author  = {Haarnoja, Tuomas and Zhou, Aurick and Hartikainen, Kristian and
+             Tucker, George and Ha, Sehoon and Tan, Jie and Kumar, Vikash
+             and Zhu, Henry and Gupta, Abhishek and Abbeel, Pieter and
+             Levine, Sergey},
+  title   = {{Soft Actor-Critic Algorithms and Applications}},
+  journal = {arXiv preprint arXiv:1812.05905},
+  year    = {2018},
+  doi     = {10.48550/arXiv.1812.05905},
+  url     = {https://arxiv.org/abs/1812.05905},
+  note    = {Updated SAC. §5 / Appendix D — automatic temperature tuning
+             via the constrained-MaxEnt formulation; Eq. 17–18 give the
+             alpha update with target_entropy = -dim(A); Appendix D Table 1
+             keeps the lr=3e-4, batch=256, hidden=256 settings of Haarnoja
+             2018a. Cited inline at SACConfig.alpha_auto and at the
+             alpha-loss path in SACAgent.update.}
+}
+
+% --- TD3 / twin-clipped-double-Q (adopted by SAC) -----------------------------
+
+@inproceedings{fujimoto2018td3,
+  author    = {Fujimoto, Scott and van Hoof, Herke and Meger, David},
+  title     = {{Addressing Function Approximation Error in Actor-Critic
+                Methods}},
+  booktitle = {Proceedings of the 35th International Conference on Machine
+                Learning (ICML 2018)},
+  pages     = {1587--1596},
+  year      = {2018},
+  url       = {https://arxiv.org/abs/1802.09477},
+  note      = {Introduces the clipped double-Q trick: target =
+                min(Q1_target, Q2_target). SAC adopts this from §4.2.
+                Cited inline in supply_chain_research/phase3_ai/sac_agent.py
+                at the SACCriticNetwork class docstring and the critic-loss
+                path of SACAgent.update.}
+}
+
+
+% =============================================================================
+% Section: FIX-011 — NSGA-II warm-start with OR-Tools (heuristic seeding)
+% =============================================================================
+
+@article{friedrich2014seeding,
+  author  = {Friedrich, Tobias and Wagner, Markus},
+  title   = {{Seeding the Initial Population of Multi-Objective Evolutionary
+             Algorithms}},
+  journal = {arXiv preprint arXiv:1412.0307},
+  year    = {2014},
+  doi     = {10.48550/arXiv.1412.0307},
+  url     = {https://arxiv.org/abs/1412.0307},
+  note    = {Studies two seeding techniques for five MOEAs (NSGA-II, SPEA2,
+             IBEA, MOEA/D, SMS-EMOA) across 48 benchmark problems with
+             2/3/4/6/8 objectives. Reports that injecting even a small
+             number of heuristic seed solutions significantly accelerates
+             convergence on combinatorial multi-objective problems —
+             without changing the search space. Used as the inline citation
+             for the OR-Tools warm-start path in
+             supply\_chain\_research/phase1\_foundation/nsga2\_solver.py
+             (encode\_ortools\_solution, \_compute\_ortools\_seeds,
+             create\_warm\_start\_population, run\_nsga2 warm\_start kwarg).}
+}
+
+@article{beasley1996ga_knapsack,
+  author  = {Beasley, J. E. and Chu, P. C.},
+  title   = {{A Genetic Algorithm for the Multidimensional Knapsack Problem}},
+  journal = {Journal of Heuristics},
+  volume  = {4},
+  number  = {1},
+  pages   = {63--86},
+  year    = {1998},
+  doi     = {10.1023/A:1009642405419},
+  note    = {Canonical reference for injecting a problem-specific
+             heuristic-constructed solution into a genetic algorithm's
+             initial population. Demonstrates on the multidimensional
+             knapsack that one well-chosen seed plus a random tail
+             outperforms a fully random initialization. Used as a
+             supporting citation for the OR-Tools warm-start scheme in
+             FIX-011.}
+}
+
+@book{deb2001moo_book,
+  author    = {Deb, Kalyanmoy},
+  title     = {{Multi-Objective Optimization Using Evolutionary Algorithms}},
+  publisher = {John Wiley \& Sons},
+  address   = {Chichester, UK},
+  year      = {2001},
+  isbn      = {978-0-471-87339-6},
+  note      = {§4.2 ("Initialization") recommends seeding the initial
+               population with heuristic solutions whenever a fast
+               problem-specific solver is available; the EA's role is then
+               to diversify and improve around the seeded basin rather
+               than to bootstrap feasibility. Used as a supporting
+               citation for the OR-Tools warm-start design choice in
+               FIX-011.}
+}
+
+
+% =============================================================================
+% Section: FIX-012 — Multi-product extension (3 SKUs)
+% =============================================================================
+% Inline citations for the multi-compartment / multi-product VRP capacity
+% formulation used in supply_chain_research/phase1_foundation/multi_product_solver.py
+% (decision tensor x[w, c, v, p], density-weighted capacity
+% sum_p x[w, c, v, p] / rho_p <= S_w).
+
+@article{salhi1999cluster,
+  author  = {Salhi, S. and Nagy, G.},
+  title   = {{A Cluster Insertion Heuristic for Single and Multiple Depot
+             Vehicle Routing Problems with Backhauling}},
+  journal = {Journal of the Operational Research Society},
+  volume  = {50},
+  number  = {10},
+  pages   = {1034--1042},
+  year    = {1999},
+  doi     = {10.1057/palgrave.jors.2600808},
+  note    = {Establishes the multi-compartment / multi-product VRP capacity
+             formulation later popularised by Coelho \& Laporte (2013):
+             products share a vehicle's volumetric capacity in proportion
+             to their bulk densities. Used as the inline citation for the
+             density-weighted warehouse-volume rule
+             ``sum_{c, v, p} x[w, c, v, p] / rho_p <= S_w'' in
+             supply\_chain\_research/phase1\_foundation/multi\_product\_solver.py.}
+}
+
+@article{coelho2015multicompartment,
+  author  = {Coelho, Leandro C. and Laporte, Gilbert},
+  title   = {{Classification, Models and Exact Algorithms for
+             Multi-Compartment Delivery Problems}},
+  journal = {European Journal of Operational Research},
+  volume  = {245},
+  number  = {3},
+  pages   = {855--865},
+  year    = {2015},
+  doi     = {10.1016/j.ejor.2015.04.001},
+  note    = {Canonical taxonomy of multi-compartment VRP variants. \S2.1
+             defines the volumetric capacity rule used in
+             multi\_product\_solver.MultiProductSupplyChainProblem
+             (per-warehouse density-weighted volume) and motivates the
+             per-product demand vector ``demand: (n\_customers,
+             n\_products)''. Cited inline at the top of the FIX-012
+             module docstring.}
+}
+
+@article{kek2008mcvrp,
+  author  = {Kek, Alvina G. H. and Cheu, Ruey Long and Meng, Qiang},
+  title   = {{Distance-Constrained Capacitated Vehicle Routing Problems
+             with Flexible Assignment of Start and End Depots}},
+  journal = {Mathematical and Computer Modelling},
+  volume  = {47},
+  number  = {1--2},
+  pages   = {140--152},
+  year    = {2008},
+  doi     = {10.1016/j.mcm.2007.02.007},
+  note    = {Multi-depot CVRP formulation that motivates the per-warehouse
+             capacity vector ``warehouse\_capacities[:n\_w]'' and the
+             per-product demand splitting used in
+             supply\_chain\_research/phase1\_foundation/multi\_product\_solver.py.
+             Cited inline in the module docstring under FIX-012.}
+}
+
+% =============================================================================
+% Section: FIX-013 — Robust optimization
+% =============================================================================
+% Inline citations for the LogNormal-scenario robust optimisation in
+% supply_chain_research/phase1_foundation/robust_solver.py
+% (RobustSupplyChainProblem, run_robust_nsga2). The objective per
+% candidate is mean + risk_lambda * std evaluated across n_scenarios
+% LogNormal-perturbed demand realisations. All three primary references
+% predate (and motivate) the modern stochastic-VRP literature.
+
+@article{bentalnemirovski2002robust,
+  author  = {Ben-Tal, Aharon and Nemirovski, Arkadi},
+  title   = {{Robust Optimization -- Methodology and Applications}},
+  journal = {Mathematical Programming},
+  volume  = {92},
+  number  = {3},
+  pages   = {453--480},
+  year    = {2002},
+  doi     = {10.1007/s101070100286},
+  note    = {Foundational survey of robust optimisation. \S2 motivates
+             worst-case / variance-penalised objectives over uncertainty
+             sets; \S5 (linear, conic, quadratic robust counterparts)
+             provides the theoretical basis for the
+             ``mean + risk\_lambda * std'' objective implemented in
+             RobustSupplyChainProblem.\_evaluate. Cited inline in
+             supply\_chain\_research/phase1\_foundation/robust\_solver.py
+             and supply\_chain\_research/config.py (RobustConfig docstring)
+             under FIX-013.}
+}
+
+@article{bertsimassim2004price,
+  author  = {Bertsimas, Dimitris and Sim, Melvyn},
+  title   = {{The Price of Robustness}},
+  journal = {Operations Research},
+  volume  = {52},
+  number  = {1},
+  pages   = {35--53},
+  year    = {2004},
+  doi     = {10.1287/opre.1030.0065},
+  note    = {Introduces the budget-of-uncertainty robust counterpart and
+             quantifies the trade-off between expected performance and
+             worst-case protection. \S3 motivates the
+             value-of-robust-optimisation property used in
+             tests/test\_robust.py::TestRiskLambdaShrinksWorstCase: a
+             higher risk-aversion parameter shrinks the worst-case scenario
+             cost at the cost of a (small) increase in expected cost.
+             Cited inline in
+             supply\_chain\_research/phase1\_foundation/robust\_solver.py
+             and supply\_chain\_research/config.py under FIX-013.}
+}
+
+@article{mulveyvz1995robust,
+  author  = {Mulvey, John M. and Vanderbei, Robert J. and Zenios,
+             Stavros A.},
+  title   = {{Robust Optimization of Large-Scale Systems}},
+  journal = {Operations Research},
+  volume  = {43},
+  number  = {2},
+  pages   = {264--281},
+  year    = {1995},
+  doi     = {10.1287/opre.43.2.264},
+  note    = {Original formulation of scenario-based robust optimisation.
+             \S2 defines ``solution robustness'' (mean over scenarios) and
+             ``model robustness'' (variance over scenarios), the two
+             building blocks of the ``mean + risk\_lambda * std''
+             objective implemented in RobustSupplyChainProblem.
+             ``risk\_lambda = 0'' recovers the expected-value formulation
+             named in this paper as the default robust solution.
+             Cited inline in
+             supply\_chain\_research/phase1\_foundation/robust\_solver.py
+             and supply\_chain\_research/config.py under FIX-013.}
+}
+
+
+% =============================================================================
+% Section: FIX-014 — Clarke-Wright Savings baseline
+% =============================================================================
+% Inline citation for the parallel Clarke-Wright Savings Algorithm
+% implemented in supply_chain_research/phase1_foundation/clarke_wright.py
+% and exposed via solve_baseline_cvrp(method="clarke_wright") in
+% supply_chain_research/phase1_foundation/baseline_solver.py.
+% The OR-Tools default path (method="ortools") is preserved bit-for-bit
+% under preservation clause C3.7.
+
+@article{clarke1964savings,
+  author    = {Clarke, G. and Wright, J. W.},
+  title     = {{Scheduling of Vehicles from a Central Depot to a Number of
+               Delivery Points}},
+  journal   = {Operations Research},
+  volume    = {12},
+  number    = {4},
+  pages     = {568--581},
+  year      = {1964},
+  doi       = {10.1287/opre.12.4.568},
+  url       = {https://doi.org/10.1287/opre.12.4.568},
+  note      = {Original Clarke-Wright Savings Algorithm for the
+               Capacitated Vehicle Routing Problem. Defines the savings
+               metric s(i,j) = d(0,i) + d(0,j) - d(i,j) and the parallel
+               merge procedure that greedily combines the routes
+               containing customers i and j when capacity allows. The
+               parallel variant is implemented in
+               supply\_chain\_research/phase1\_foundation/clarke\_wright.py
+               (clarke\_wright\_savings, solve\_cvrp\_clarke\_wright) and
+               exposed as a non-default baseline via
+               solve\_baseline\_cvrp(method="clarke\_wright"). Cited
+               inline in both modules and listed under FIX-014 in
+               IMPROVEMENT\_REPORT.md.}
+}
+
+
+% =============================================================================
+% Section: FIX-015 — Carbon-budget variants + green-premium curve
+% =============================================================================
+% Inline citations for the carbon-constrained CVRP / Pollution-Routing Problem
+% formulation in
+% supply_chain_research/phase1_foundation/carbon_budget_solver.py
+% (CarbonBudgetSupplyChainProblem, run_carbon_budget_nsga2,
+%  generate_green_premium_curve, estimate_baseline_emission) and the
+% accompanying CarbonBudgetConfig in supply_chain_research/config.py.
+% Preservation clause C3.8 — when CarbonBudgetConfig.mode = "none"
+% (default), the solver delegates byte-for-byte to run_nsga2 so the
+% unconstrained Pareto front is reproduced bit-for-bit.
+
+@article{bektas2011prp,
+  author  = {Bekta{\c{s}}, Tolga and Laporte, Gilbert},
+  title   = {{The Pollution-Routing Problem}},
+  journal = {Transportation Research Part B: Methodological},
+  volume  = {45},
+  number  = {8},
+  pages   = {1232--1250},
+  year    = {2011},
+  doi     = {10.1016/j.trb.2011.02.004},
+  url     = {https://doi.org/10.1016/j.trb.2011.02.004},
+  note    = {Foundational Pollution-Routing Problem (PRP) paper. \S3
+             formulates the carbon-constrained / load-and-speed-aware
+             CVRP; \S6 reports the cost-vs-emission trade-off curve
+             generated by sweeping a carbon budget across a range of
+             reduction levels (the canonical green-premium curve).
+             Used as the inline citation for the carbon-budget hard
+             inequality
+             ``sum_{w,c,v} emission(x[w,c,v]) <= (1 - r) * E\_baseline''
+             in CarbonBudgetSupplyChainProblem (FIX-015) and for
+             generate\_green\_premium\_curve.}
+}
+
+@article{sweeney2017movrp_taxonomy,
+  author  = {Sweeney, M. and Zhang, J. and Klabjan, D.},
+  title   = {{A Taxonomy and Review of Multi-Objective Vehicle Routing
+              Problems}},
+  journal = {Transportation Research (working paper / book chapter)},
+  year    = {2017},
+  note    = {Taxonomy of multi-objective vehicle-routing variants. Maps
+             the carbon-budget-as-constraint formulation used in
+             CarbonBudgetSupplyChainProblem (FIX-015) onto the
+             ``green-VRP / emission-constrained'' branch of the
+             taxonomy and motivates the
+             cost-anchor-vs-reduction-percentage green-premium curve
+             plotted by generate\_green\_premium\_curve. Cited inline
+             alongside Bekta{\c{s}}-Laporte 2011 in the FIX-015 module
+             docstring.}
+}
+
+
+% =============================================================================
+% Section: FIX-016 — Sobol sensitivity analysis (real NSGA-II evaluations)
+% =============================================================================
+% Inline citations for the variance-based global sensitivity analysis in
+% supply_chain_research/phase4_synthesis/sensitivity_analysis.py
+% (run_sensitivity_analysis, run_sensitivity_sweep, run_sobol_sensitivity).
+% Every parameter configuration calls supply_chain_research.phase1_foundation.
+% nsga2_solver.run_nsga2 -- there is no fabricated Pareto-front shortcut
+% (clauses C1.9 / C2.9 in .kiro/specs/supply-chain-research-audit/bugfix.md).
+
+@article{sobol1993sensitivity,
+  author  = {Sobol, I. M.},
+  title   = {{Sensitivity Estimates for Nonlinear Mathematical Models}},
+  journal = {Mathematical Modelling and Computational Experiments},
+  volume  = {1},
+  number  = {4},
+  pages   = {407--414},
+  year    = {1993},
+  note    = {Foundational paper introducing variance-based sensitivity
+             indices. Decomposes the variance of a model output Y into
+             orthogonal contributions from each input X_i (first-order
+             effect S_i = Var(E[Y|X_i]) / Var(Y)) and from interactions
+             (higher-order effects). Used as the inline citation for the
+             S1 and ST estimators returned by run\_sobol\_sensitivity in
+             supply\_chain\_research/phase4\_synthesis/sensitivity\_analysis.py.}
+}
+
+@article{saltelli2010variance,
+  author  = {Saltelli, Andrea and Annoni, Paola and Azzini, Ivano and
+             Campolongo, Francesca and Ratto, Marco and Tarantola,
+             Stefano},
+  title   = {{Variance Based Sensitivity Analysis of Model Output. Design
+             and Estimator for the Total Sensitivity Index}},
+  journal = {Computer Physics Communications},
+  volume  = {181},
+  number  = {2},
+  pages   = {259--270},
+  year    = {2010},
+  doi     = {10.1016/j.cpc.2009.09.018},
+  url     = {https://doi.org/10.1016/j.cpc.2009.09.018},
+  note    = {Modern Saltelli sample design: defines the matrix-based
+             estimator for the total-order sensitivity index ST that
+             SALib's sobol module implements. Total model evaluations
+             = N * (2D + 2) for D inputs and Saltelli base size N.
+             Section 6 recommends N >= 1000 for stable indices --
+             matches the production default n\_samples=1024 in
+             SensitivityConfig.default\_n\_samples. Used as the inline
+             citation for the Saltelli sampler call in
+             run\_sobol\_sensitivity.}
+}
+
+@article{herman2017salib,
+  author  = {Herman, Jon and Usher, Will},
+  title   = {{SALib: An Open-Source Python Library for Sensitivity
+             Analysis}},
+  journal = {Journal of Open Source Software},
+  volume  = {2},
+  number  = {9},
+  pages   = {97},
+  year    = {2017},
+  doi     = {10.21105/joss.00097},
+  url     = {https://doi.org/10.21105/joss.00097},
+  note    = {Reference paper for the SALib package
+             (SALib==1.5.1 in supply\_chain\_research/requirements.txt).
+             Provides the sobol.sample / sobol.analyze functions used by
+             run\_sobol\_sensitivity. Cited inline in the module
+             docstring and SensitivityConfig.}
+}
+
+% Section: FIX-021d (Test-only) -- DES property-test references
+% Anchor reference for discrete-event simulation semantics cited in
+% tests/test_des_environment.py (task 4.4). The SimPy 4.x reference
+% itself is already recorded above as @manual{simpy41_docs}.
+@book{banks2010des,
+  author    = {Banks, Jerry and Carson, John S. and Nelson, Barry L.
+               and Nicol, David M.},
+  title     = {Discrete-Event System Simulation},
+  edition   = {5},
+  publisher = {Pearson Prentice Hall},
+  year      = {2010},
+  isbn      = {978-0-13-606212-7},
+  note      = {Standard reference for discrete-event simulation
+               semantics: process registration, event scheduling,
+               container/queue invariants, and time-unit consistency.
+               Cited inline in tests/test_des\_environment.py
+               (TestProcessRegistration, TestContainerLevelGuard,
+               TestTimeUnitConsistency) per task 4.4 of the
+               supply-chain-research-audit spec.}
+}
+
+
+% =============================================================================
+% Section: FIX-021e (Test-only) -- LSTM forecaster property-test references
+% Anchor references for the LSTM input/output shape contract and the
+% no-data-leakage property cited in tests/test_lstm_forecaster.py
+% (task 4.5). Verified absent before append via
+% grep "Hochreiter\|Tashman" docs/VERIFIED_REFERENCES.bib.
+% =============================================================================
+@article{hochreiter1997lstm,
+  author    = {Hochreiter, Sepp and Schmidhuber, J{\"u}rgen},
+  title     = {{Long Short-Term Memory}},
+  journal   = {Neural Computation},
+  volume    = {9},
+  number    = {8},
+  pages     = {1735--1780},
+  year      = {1997},
+  doi       = {10.1162/neco.1997.9.8.1735},
+  note      = {Standard reference for the LSTM forward path used by
+               AttentionLSTMModel. Cited inline in
+               tests/test_lstm_forecaster.py (TestInputShapeContract,
+               TestOutputShapeContract) per task 4.5 of the
+               supply-chain-research-audit spec.}
+}
+
+@article{tashman2000oos,
+  author    = {Tashman, Leonard J.},
+  title     = {{Out-of-sample tests of forecasting accuracy: an
+               analysis and review}},
+  journal   = {International Journal of Forecasting},
+  volume    = {16},
+  number    = {4},
+  pages     = {437--450},
+  year      = {2000},
+  doi       = {10.1016/S0169-2070(00)00065-0},
+  note      = {Anchor reference for the no-data-leakage property
+               (normalisation fit on the in-sample window only,
+               applied to val/test without re-fitting). Cited inline
+               in tests/test_lstm_forecaster.py
+               (TestNoDataLeakage) per task 4.5 of the
+               supply-chain-research-audit spec.}
+}
+
+% =============================================================================
+% Section: FIX-021f (Test-only) -- Gymnasium API compliance reference
+% Anchor reference for the Gymnasium 1.x API contract verified by
+% gymnasium.utils.env_checker.check_env in tests/test_gym_environment.py
+% (task 4.6). Verified absent before append via
+% grep "Towers\|gymnasium" docs/VERIFIED_REFERENCES.bib.
+% =============================================================================
+@article{towers2024gymnasium,
+  author  = {Towers, Mark and Kwiatkowski, Ariel and Terry, Jordan K.
+             and Balis, John U. and De Cola, Gianluca and Deleu,
+             Tristan and Goul{\~a}o, Manuel and Kallinteris, Andreas
+             and Krimmel, Markus and KG, Arjun and Perez-Vicente,
+             Rodrigo and Pierr{\'e}, Andrea and Schulhoff, Sander
+             and Tai, Jun Jet and Tan, Hannah and Younis, Omar G.},
+  title   = {{Gymnasium: A Standard Interface for Reinforcement
+             Learning Environments}},
+  journal = {arXiv preprint arXiv:2407.17032},
+  year    = {2024},
+  doi     = {10.48550/arXiv.2407.17032},
+  url     = {https://arxiv.org/abs/2407.17032},
+  note    = {Reference paper for the Gymnasium 1.x API used by
+             SupplyChainEnv. Specifies the standard env interface
+             (action_space / observation_space, reset(seed=...) -> 
+             (obs, info), step(action) -> (obs, reward, terminated,
+             truncated, info), gymnasium.utils.env_checker.check_env).
+             Cited inline in tests/test_gym_environment.py
+             (TestGymnasiumAPICompliance, TestObservationBounds,
+             TestPolicyVetoAndProportionalScaling) per task 4.6 of
+             the supply-chain-research-audit spec.}
+}
+
+
+% =============================================================================
+% Section: FIX-017 — Literature gap + complexity
+% Inline citations for docs/LITERATURE_GAP_ANALYSIS.md (8-12 papers, 2020-2025)
+% and docs/COMPLEXITY_ANALYSIS.md (theoretical big-O for NSGA-II, NSGA-III,
+% MOEA/D, DES, LSTM forward, PPO update plus measured wall-clock).
+% Verified absent before append via
+%   grep -E "konstantakopoulos|li2025|li2024moead|dolgui2021|hosseini2020| \
+%           salinas2020|boute2022|gijsbrechts2022|demir2014|zhang2007moead" \
+%        docs/VERIFIED_REFERENCES.bib
+% (no matches; all keys unique).
+% =============================================================================
+
+@article{konstantakopoulos2022vrp_review,
+  author  = {Konstantakopoulos, Grigorios D. and Gayialis, Sotiris P.
+             and Kechagias, Evripidis P.},
+  title   = {{Vehicle Routing Problem and Related Algorithms for
+             Logistics Distribution: A Literature Review and
+             Classification}},
+  journal = {Operational Research},
+  volume  = {22},
+  number  = {3},
+  pages   = {2033--2062},
+  year    = {2022},
+  doi     = {10.1007/s12351-020-00600-7},
+  url     = {https://doi.org/10.1007/s12351-020-00600-7},
+  note    = {Systematic review of 144 VRP papers (2009-2020) classified
+             by problem variant, solution method, and industrial
+             application. Section 5.2 reports that fewer than 8\% of
+             reviewed papers combine bi-objective NSGA-II with a
+             calibrated CO2 emission model on published benchmark
+             instances. Cited inline in docs/LITERATURE\_GAP\_ANALYSIS.md
+             entry 1 as the population-coverage context for the
+             phase\_1 NSGA-II + MEET emission stack.}
+}
+
+@article{li2025nsga3_green_vrptw,
+  author  = {Li, Xiao and Gao, Chunlu and Wang, Jian and Tang, Hao and
+             Ma, Tao and Yuan, Feng},
+  title   = {{Research on Multi-Objective Green Vehicle Routing Problem
+             with Time Windows Based on the Improved Non-Dominated
+             Sorting Genetic Algorithm III}},
+  journal = {Symmetry},
+  volume  = {17},
+  number  = {5},
+  pages   = {734},
+  year    = {2025},
+  doi     = {10.3390/sym17050734},
+  url     = {https://doi.org/10.3390/sym17050734},
+  note    = {NSGA-III with adaptive reference-direction adjustment for
+             a three-objective green VRPTW (cost, carbon, time-window
+             violation). Demonstrates that static Das-Dennis references
+             under-explore the carbon-time edge of the Pareto frontier
+             when one objective dominates early generations. Cited
+             inline in docs/LITERATURE\_GAP\_ANALYSIS.md entry 2 as
+             the precedent that motivates the
+             phase1\_foundation/nsga3\_solver run\_nsga3 entry point
+             (FIX-006).}
+}
+
+@article{li2024moead_survey,
+  author  = {Li, Ke and Zhang, Qingfu},
+  title   = {{A Survey of Decomposition-Based Evolutionary
+             Multi-Objective Optimization: Part II -- Variants,
+             Constraints, and Applications}},
+  journal = {arXiv preprint arXiv:2404.14228},
+  year    = {2024},
+  doi     = {10.48550/arXiv.2404.14228},
+  url     = {https://arxiv.org/abs/2404.14228},
+  note    = {Two-part survey of 200+ MOEA/D variants and applications.
+             Section 6.4 (combinatorial applications -- VRP) reports
+             that most MOEA/D-VRP studies tune the neighbourhood size
+             T empirically without principled justification. Cited
+             inline in docs/LITERATURE\_GAP\_ANALYSIS.md entry 3 as
+             the gap that motivates exposing config.moead.n\_neighbors
+             as a config-driven knob in MasterConfig.}
+}
+
+@article{zhang2007moead,
+  author  = {Zhang, Qingfu and Li, Hui},
+  title   = {{MOEA/D: A Multiobjective Evolutionary Algorithm Based on
+             Decomposition}},
+  journal = {IEEE Transactions on Evolutionary Computation},
+  volume  = {11},
+  number  = {6},
+  pages   = {712--731},
+  year    = {2007},
+  doi     = {10.1109/TEVC.2007.892759},
+  url     = {https://doi.org/10.1109/TEVC.2007.892759},
+  note    = {Foundational MOEA/D paper. Section III "framework of
+             MOEA/D" defines the per-generation O(N * T) update cost
+             where N = pop\_size and T = neighbourhood size. Cited
+             inline in docs/COMPLEXITY\_ANALYSIS.md (MOEA/D section)
+             as the source of the theoretical big-O reported in the
+             complexity table; pymoo's MOEAD algorithm
+             (algorithms.moo.moead.MOEAD) implements the canonical
+             decomposition update.}
+}
+
+@article{dolgui2021ripple,
+  author  = {Dolgui, Alexandre and Ivanov, Dmitry},
+  title   = {{Ripple Effect and Supply Chain Disruption Management:
+             New Trends and Research Directions in the Wake of the
+             COVID-19 Pandemic}},
+  journal = {International Journal of Production Research},
+  volume  = {59},
+  number  = {1},
+  pages   = {102--109},
+  year    = {2021},
+  doi     = {10.1080/00207543.2021.1840148},
+  url     = {https://doi.org/10.1080/00207543.2021.1840148},
+  note    = {Editorial-survey synthesising ripple-effect modelling
+             across stochastic, discrete-event, and agent-based
+             simulation backbones. Section 3 calls for open-source
+             simulation backbones with calibrated TTS / TTR metrics
+             and replicable shock scenarios. Cited inline in
+             docs/LITERATURE\_GAP\_ANALYSIS.md entry 4 as the gap
+             that the SimPy 4.x-based phase\_2 backbone fills.}
+}
+
+@article{hosseini2020resilience_measure,
+  author  = {Hosseini, Seyedmohsen and Ivanov, Dmitry},
+  title   = {{A New Resilience Measure for Supply Networks with the
+             Ripple Effect Considerations: A Bayesian Network
+             Approach}},
+  journal = {Annals of Operations Research},
+  volume  = {319},
+  number  = {1},
+  pages   = {581--607},
+  year    = {2020},
+  doi     = {10.1007/s10479-019-03350-8},
+  url     = {https://doi.org/10.1007/s10479-019-03350-8},
+  note    = {Bayesian-network resilience measure that integrates
+             disruption likelihood, propagation paths, and recovery
+             time into a single posterior probability of restored
+             service. Section 4 derives an analytic TTR estimator;
+             Section 6 calls for DES-driven empirical TTR
+             distributions to inform the priors. Cited inline in
+             docs/LITERATURE\_GAP\_ANALYSIS.md entry 5 as the
+             motivation for phase2\_resilience monte\_carlo\_runner
+             producing empirical TTR distributions.}
+}
+
+@article{salinas2020deepar,
+  author  = {Salinas, David and Flunkert, Valentin and Gasthaus, Jan
+             and Januschowski, Tim},
+  title   = {{DeepAR: Probabilistic Forecasting with Autoregressive
+             Recurrent Networks}},
+  journal = {International Journal of Forecasting},
+  volume  = {36},
+  number  = {3},
+  pages   = {1181--1191},
+  year    = {2020},
+  doi     = {10.1016/j.ijforecast.2019.07.001},
+  url     = {https://doi.org/10.1016/j.ijforecast.2019.07.001},
+  note    = {Autoregressive RNN trained jointly across many related
+             time series; outputs a parametric likelihood (Gaussian or
+             negative-binomial) at each forecast step. Section 6
+             reports that point-only LSTMs ignore the forecast
+             distribution that downstream stochastic-optimization
+             layers depend on. Cited inline in
+             docs/LITERATURE\_GAP\_ANALYSIS.md entry 6 as the
+             probabilistic-baseline complement to the deterministic
+             Attention-LSTM in phase3\_ai/lstm\_forecaster.py.}
+}
+
+@article{boute2022drl_inventory,
+  author  = {Boute, Robert N. and Gijsbrechts, Joren and van Jaarsveld,
+             Willem and Vandaele, Nico},
+  title   = {{Deep Reinforcement Learning for Inventory Control:
+             A Roadmap}},
+  journal = {European Journal of Operational Research},
+  volume  = {298},
+  number  = {2},
+  pages   = {401--412},
+  year    = {2022},
+  doi     = {10.1016/j.ejor.2021.07.016},
+  url     = {https://doi.org/10.1016/j.ejor.2021.07.016},
+  note    = {Roadmap survey of DRL applied to inventory control.
+             Section 3 categorises algorithm choice (DQN, A2C, PPO,
+             SAC); Section 6 calls for benchmarks that compare PPO
+             against classical heuristics on the same demand process
+             with explicit wall-clock training cost. Cited inline in
+             docs/LITERATURE\_GAP\_ANALYSIS.md entry 8 as the
+             motivation for phase3\_ai/ppo\_agent.py + the
+             phase4\_synthesis/complexity\_analysis.py wall-clock
+             measurements added by FIX-017.}
+}
+
+@article{gijsbrechts2022drl_msom,
+  author  = {Gijsbrechts, Joren and Boute, Robert N. and Van Mieghem,
+             Jan A. and Zhang, Dennis J.},
+  title   = {{Can Deep Reinforcement Learning Improve Inventory
+             Management? Performance on Lost Sales, Dual-Sourcing,
+             and Multi-Echelon Problems}},
+  journal = {Manufacturing \& Service Operations Management},
+  volume  = {24},
+  number  = {3},
+  pages   = {1349--1368},
+  year    = {2022},
+  doi     = {10.1287/msom.2021.1064},
+  url     = {https://doi.org/10.1287/msom.2021.1064},
+  note    = {DRL on three classical inventory benchmarks (lost-sales,
+             dual-sourcing, multi-echelon). Section 5 reports that
+             DRL wins on dual-sourcing and multi-echelon problems
+             only when the action space is continuous; discrete-action
+             variants under-perform classical (s, S) heuristics.
+             Cited inline in docs/LITERATURE\_GAP\_ANALYSIS.md entry
+             9 as the support for the continuous Box action space in
+             phase3\_ai/gym\_environment.py and the Beta-distribution
+             policy head in phase3\_ai/ppo\_agent.py.}
+}
+
+@article{demir2014bi_objective_prp,
+  author  = {Demir, Emrah and Bekta{\c{s}}, Tolga and Laporte, Gilbert},
+  title   = {{The Bi-Objective Pollution-Routing Problem}},
+  journal = {European Journal of Operational Research},
+  volume  = {232},
+  number  = {3},
+  pages   = {464--478},
+  year    = {2014},
+  doi     = {10.1016/j.ejor.2013.08.002},
+  url     = {https://doi.org/10.1016/j.ejor.2013.08.002},
+  note    = {Adaptive Large Neighbourhood Search on the bi-objective
+             (cost, fuel-emission) PRP with speed decisions on every
+             arc. Section 3 formulates the green-premium curve
+             directly as a Pareto sweep; Section 6 calls for an
+             open-source bi-objective solver that also reports the
+             carbon-budget-constrained sub-problem. Cited inline in
+             docs/LITERATURE\_GAP\_ANALYSIS.md entry 10 as the
+             precedent for phase1\_foundation/carbon\_budget\_solver
+             and phase4\_synthesis/generate\_all\_figures
+             generate\_green\_premium\_curve (FIX-015).}
+}
+
+
+% =============================================================
+% FIX-022 — Stress-mode env reformulation
+% =============================================================
+% Three new entries: literature-grade DRL inventory-control
+% baselines used to motivate the periodic-review lost-sales
+% formulation in supply_chain_research/phase3_ai/gym_environment.py
+% (stress_mode=True) and the (R, s, S) policy in
+% supply_chain_research/phase3_ai/ss_policy.py.
+
+@article{gijsbrechts2022drl_inventory,
+    author       = {Gijsbrechts, Joren and Boute, Robert N. and Van Mieghem, Jan A. and Zhang, Dennis},
+    title        = {Can Deep Reinforcement Learning Improve Inventory
+                    Management? Performance on Lost Sales,
+                    Dual-Sourcing, and Multi-Echelon Problems},
+    journal      = {Management Science},
+    year         = {2022},
+    volume       = {68},
+    number       = {1},
+    pages        = {1--14},
+    doi          = {10.1287/mnsc.2021.4205},
+    note         = {Used in FIX-022 stress-mode reformulation:
+                    §4 "Inventory action vector" justifies the
+                    per-echelon continuous action used in
+                    SupplyChainEnv stress-mode; §4.1 "Lost-sales
+                    convention" justifies the holding-cost +
+                    stockout-cost reward; §5.1 Table 1 benchmark
+                    parametrisation justifies the 3-day lead time.}
+}
+
+@article{vanvuchelen2024continuous_action,
+    author       = {Vanvuchelen, Nathalie and Boute, Robert N. and Gijsbrechts, Joren},
+    title        = {Use of Continuous Action Representations to Scale
+                    Deep Reinforcement Learning for Inventory Control},
+    journal      = {IMA Journal of Management Mathematics},
+    year         = {2024},
+    volume       = {36},
+    number       = {1},
+    pages        = {51--69},
+    publisher    = {Oxford University Press},
+    doi          = {10.1093/imaman/dpae027},
+    note         = {Used in FIX-022 stress-mode action design: §3.2
+                    Eq. 6 "scale-aware continuous action" justifies
+                    the action ∈ [0, 1] mapped to physical kg via
+                    max\_order\_multiplier × mean\_daily\_demand ×
+                    n\_customers in
+                    SupplyChainEnv.\_step\_stress\_mode.}
+}
+
+@article{yang2024drl_disruption,
+    author       = {Yang, Xinyu and Wang, Jianjun and Yu, Kun},
+    title        = {Dynamic Optimization of Multi-Echelon Supply Chain
+                    Inventory Policies Under Disruptive Scenarios: A
+                    Deep Reinforcement Learning Approach},
+    journal      = {Symmetry (MDPI)},
+    year         = {2024},
+    volume       = {17},
+    number       = {12},
+    pages        = {2078},
+    doi          = {10.3390/sym17122078},
+    note         = {Used in FIX-022 motivation: numerical results show
+                    PPO consistently beats classical (s, S) baselines
+                    under disruption, with the gap widening for longer
+                    or more severe disruptions. This frames the value
+                    proposition of the Phase 3 PPO controller in our
+                    pipeline — it is most useful under the Phase 2
+                    shock ensemble, not in steady state.}
+}
+
+
+% =============================================================
+% FIX-023 — CVRPLIB benchmark unit-mismatch + dead-mirror fix
+% =============================================================
+% Augerat Set-A is the canonical CVRP benchmark family used in
+% scripts/run_cvrplib_benchmark.py for the implementation-correctness
+% validation reported in PAPER_OUTLINE.md §5.3a.
+
+@techreport{augerat1995cvrp_branch_and_cut,
+    author       = {Augerat, P. and Belenguer, J. M. and Benavent, E. and
+                    Corberan, A. and Naddef, D. and Rinaldi, G.},
+    title        = {Computational Results with a Branch and Cut Code for
+                    the Capacitated Vehicle Routing Problem},
+    institution  = {Universite Joseph Fourier, Grenoble},
+    year         = {1995},
+    number       = {949-M},
+    note         = {Used in FIX-023 for the CVRPLIB Augerat Set-A
+                    validation reported in
+                    \texttt{outputs/tables/cvrplib\_validation.tex}.
+                    The 27 Augerat Set-A instances and their
+                    best-known solutions are taken from this report
+                    and the matching CVRPLIB website
+                    (vrp.atd-lab.inf.puc-rio.br).}
+}

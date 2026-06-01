@@ -1,0 +1,25 @@
+  PRESENT       2538  supply_chain_research/requirements.txt
+  PRESENT      17211  supply_chain_research/phase1_foundation/nsga3_solver.py
+  PRESENT      21490  supply_chain_research/phase1_foundation/multi_product_solver.py
+  PRESENT      15921  supply_chain_research/phase1_foundation/robust_solver.py
+  PRESENT      10565  supply_chain_research/phase1_foundation/clarke_wright.py
+  PRESENT      21534  supply_chain_research/phase1_foundation/carbon_budget_solver.py
+  PRESENT      11171  supply_chain_research/phase3_ai/tft_forecaster.py
+  PRESENT      22529  supply_chain_research/phase3_ai/sac_agent.py
+  PRESENT      26200  supply_chain_research/phase4_synthesis/complexity_analysis.py
+  PRESENT      32088  supply_chain_research/phase4_synthesis/managerial_insights.py
+  PRESENT      14926  docs/LITERATURE_GAP_ANALYSIS.md
+  PRESENT       8936  docs/COMPLEXITY_ANALYSIS.md
+  PRESENT       6887  docs/MANAGERIAL_INSIGHTS.md
+  PRESENT     174744  docs/IMPROVEMENT_REPORT.md
+  PRESENT      52113  docs/VERIFIED_REFERENCES.bib
+  PRESENT      72320  docs/PAPER_OUTLINE.md
+  PRESENT      18893  docs/REPLICATION_GUIDE.md
+  PRESENT       5517  cloud_training/README_CLOUD_SETUP.md
+  PRESENT       4382  cloud_training/kaggle_setup.ipynb
+  PRESENT       4378  cloud_training/colab_setup.ipynb
+  PRESENT       4197  cloud_training/vastai_setup.sh
+  PRESENT      22493  cloud_training/local_training_runner.py
+  PRESENT       7418  cloud_training/TRAINING_GUIDE.md
+
+TOTAL MISSING: 0

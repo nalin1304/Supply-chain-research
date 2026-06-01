@@ -1,0 +1,115 @@
+% Stub document for verifying that every numbered equation in
+% docs/PAPER_OUTLINE.md section 3 (drafted in task 9.3) compiles
+% in isolation. Compile with:
+%   pdflatex -interaction=nonstopmode -halt-on-error \
+%       audit_workspace/_check_eqns.tex
+% and inspect the resulting PDF for any equation that fails to
+% render. The labels match the eq:* tags used in the PAPER_OUTLINE
+% draft so cross-references stay aligned.
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\begin{document}
+
+\section*{Equation compilation stub for task 9.3}
+
+\paragraph{Cost objective.}
+\begin{equation}
+Z_1(\mathbf{x}) \;=\; \sum_{w \in W} \sum_{c \in C}
+\sum_{v \in V} \;
+2 \, \kappa_v \, d_{wc} \, \frac{x_{wcv}}{Q_v} \,
+(1 + \phi),
+\label{eq:cost-objective}
+\end{equation}
+
+\paragraph{Emission objective.}
+\begin{equation}
+Z_2(\mathbf{x}) \;=\; \sum_{w \in W} \sum_{c \in C}
+\sum_{v \in V} \;
+\bigl( k_v + L_v \, x_{wcv} \bigr) \,
+\cdot \, 2 \, d_{wc},
+\label{eq:emission-objective}
+\end{equation}
+
+\paragraph{Demand fulfilment.}
+\begin{equation}
+\sum_{w \in W} \sum_{v \in V} x_{wcv} \;=\; D_c
+\quad \forall c \in C,
+\label{eq:demand-constraint}
+\end{equation}
+
+\paragraph{Warehouse capacity.}
+\begin{equation}
+\sum_{c \in C} \sum_{v \in V} x_{wcv} \;\leq\; S_w
+\quad \forall w \in W,
+\label{eq:capacity-constraint}
+\end{equation}
+
+\paragraph{Non-negativity.}
+\begin{equation}
+x_{wcv} \;\geq\; 0
+\quad \forall w \in W, c \in C, v \in V.
+\label{eq:nonnegativity}
+\end{equation}
+
+\paragraph{Volume-weighted delivery time.}
+\begin{equation}
+f_3(\mathbf{x}) \;=\;
+\frac{
+\displaystyle
+\sum_{w \in W} \sum_{c \in C} \sum_{v \in V}
+\mathbf{1}[x_{wcv} > \tau] \, x_{wcv} \, t_{wc}
+}{
+\displaystyle
+\sum_{w \in W} \sum_{c \in C} \sum_{v \in V}
+\mathbf{1}[x_{wcv} > \tau] \, x_{wcv}
+},
+\label{eq:f3-volume-weighted}
+\end{equation}
+
+\paragraph{Carbon-budget program.}
+\begin{equation}
+\begin{aligned}
+& \min_{\mathbf{x}} \; Z_1(\mathbf{x}) \\
+& \text{s.t.} \quad
+Z_2(\mathbf{x}) \;\leq\; (1 - r) \, E_{\mathrm{baseline}}, \\
+& \quad\;\;
+(\ref{eq:demand-constraint}), \;
+(\ref{eq:capacity-constraint}), \;
+(\ref{eq:nonnegativity}).
+\end{aligned}
+\label{eq:carbon-budget}
+\end{equation}
+
+\paragraph{Log-normal demand noise.}
+\begin{equation}
+\xi_{c,s} \;=\; \exp(\eta_{c,s}),
+\quad \eta_{c,s} \;\sim\; \mathcal{N}(0, \sigma_{\mathrm{demand}}^2),
+\quad
+\widetilde{D}_{c,s} \;=\; D_c \, \xi_{c,s},
+\label{eq:lognormal-noise}
+\end{equation}
+
+\paragraph{Robust objective.}
+\begin{equation}
+f^{\mathrm{robust}}_j(\mathbf{x})
+\;=\;
+\frac{1}{S} \sum_{s=1}^{S} f_j(\mathbf{x}, \widetilde{\mathbf{D}}_s)
+\;+\;
+\lambda \,
+\sqrt{ \frac{1}{S} \sum_{s=1}^{S} \!
+\left( f_j(\mathbf{x}, \widetilde{\mathbf{D}}_s)
+       - \overline{f_j}(\mathbf{x}) \right)^{2} },
+\quad j \in \{1, 2\},
+\label{eq:robust-objective}
+\end{equation}
+
+\paragraph{Density-weighted multi-product capacity.}
+\begin{equation}
+\sum_{c \in C} \sum_{v \in V} \sum_{p \in P}
+\frac{x_{wcvp}}{\rho_p} \;\leq\; S_w
+\quad \forall w \in W.
+\label{eq:density-weighted-capacity}
+\end{equation}
+
+\end{document}

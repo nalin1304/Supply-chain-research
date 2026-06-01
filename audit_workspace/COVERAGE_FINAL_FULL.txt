@@ -1,0 +1,103 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.14.3, pytest-9.0.2, pluggy-1.6.0
+rootdir: /Users/nalinaggarwal/Downloads/Supply-chain-main
+configfile: pytest.ini
+plugins: hypothesis-6.151.9, anyio-4.12.1, cov-7.1.0, timeout-2.4.0
+timeout: 120.0s
+timeout method: signal
+timeout func_only: False
+collected 352 items
+
+tests/test_carbon_budget.py .........                                    [  2%]
+tests/test_clarke_wright.py .............                                [  6%]
+tests/test_data_engineering.py ..............ss                          [ 10%]
+tests/test_des.py .....................................                  [ 21%]
+tests/test_des_environment.py .............                              [ 25%]
+tests/test_emission_model.py .....................s                      [ 31%]
+tests/test_gym_env.py ........................s....                      [ 39%]
+tests/test_gym_environment.py ..........                                 [ 42%]
+tests/test_lstm.py .........s.................                           [ 50%]
+tests/test_lstm_forecaster.py ...........                                [ 53%]
+tests/test_math_correctness.py .............                             [ 56%]
+tests/test_multi_product.py ........                                     [ 59%]
+tests/test_nsga2.py .............                                        [ 62%]
+tests/test_nsga2_solver.py .........                                     [ 65%]
+tests/test_nsga2_warmstart.py .......                                    [ 67%]
+tests/test_nsga3.py .......                                              [ 69%]
+tests/test_pareto_analysis.py .....                                      [ 70%]
+tests/test_phase4.py .............................                       [ 78%]
+tests/test_ppo_agent.py ...........                                      [ 82%]
+tests/test_regression_baseline.py ..                                     [ 82%]
+tests/test_robust.py .......                                             [ 84%]
+tests/test_sac_agent.py .............                                    [ 88%]
+tests/test_sensitivity.py ..............                                 [ 92%]
+tests/test_tft_forecaster.py ...............                             [ 96%]
+tests/test_webapp_endpoints.py ............                              [100%]
+
+=============================== warnings summary ===============================
+<frozen importlib._bootstrap>:491
+  <frozen importlib._bootstrap>:491: DeprecationWarning: builtin type SwigPyPacked has no __module__ attribute
+
+<frozen importlib._bootstrap>:491
+  <frozen importlib._bootstrap>:491: DeprecationWarning: builtin type SwigPyObject has no __module__ attribute
+
+<frozen importlib._bootstrap>:491
+  <frozen importlib._bootstrap>:491: DeprecationWarning: builtin type swigvarlink has no __module__ attribute
+
+tests/test_phase4.py::TestStatisticalTests::test_friedman_test_identical_groups
+  /opt/homebrew/lib/python3.14/site-packages/scipy/stats/_stats_py.py:8593: RuntimeWarning: invalid value encountered in scalar divide
+    statistic = (12.0 / (k*n*(k+1)) * ssbn - 3*n*(k+1)) / c
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+================================ tests coverage ================================
+_______________ coverage: platform darwin, python 3.14.3-final-0 _______________
+
+Name                                                                      Stmts   Miss  Cover   Missing
+-------------------------------------------------------------------------------------------------------
+supply_chain_research/__init__.py                                             0      0   100%
+supply_chain_research/config.py                                             292     43    85%   1165-1177, 1185-1226, 1247-1267, 1282-1294, 1313
+supply_chain_research/phase1_foundation/__init__.py                           0      0   100%
+supply_chain_research/phase1_foundation/baseline_solver.py                   85      4    95%   81, 96, 105, 114
+supply_chain_research/phase1_foundation/carbon_budget_solver.py             153     17    89%   256-258, 383, 385, 387, 445-452, 533, 560, 602-606
+supply_chain_research/phase1_foundation/clarke_wright.py                    107      7    93%   151, 241-242, 250, 264, 272, 281
+supply_chain_research/phase1_foundation/data_engineering.py                 210     73    65%   79-92, 118-139, 145-147, 169, 252, 285-324, 392-393, 431, 447-451, 522, 535, 540, 660, 707-720
+supply_chain_research/phase1_foundation/emission_model.py                    68      5    93%   78, 194, 227, 263, 293
+supply_chain_research/phase1_foundation/formulation_latex.py                 22     22     0%   8-182
+supply_chain_research/phase1_foundation/moead_solver.py                      22     22     0%   7-74
+supply_chain_research/phase1_foundation/multi_product_solver.py             143     16    89%   114-116, 119, 217, 224, 233, 504, 506, 508, 566-573
+supply_chain_research/phase1_foundation/nsga2_solver.py                     267     26    90%   100, 215-217, 229, 242, 252, 517-538, 659, 875, 877, 879, 980
+supply_chain_research/phase1_foundation/nsga3_solver.py                     153     40    74%   111, 122-167, 423, 425, 427, 429
+supply_chain_research/phase1_foundation/pareto_analysis.py                  106     77    27%   139-153, 172-176, 194-198, 212-235, 253-278, 300-309, 346-368, 397-410
+supply_chain_research/phase1_foundation/robust_solver.py                    111      8    93%   226, 381, 383, 385, 433-437
+supply_chain_research/phase2_resilience/__init__.py                           0      0   100%
+supply_chain_research/phase2_resilience/des_environment.py                  169      7    96%   136, 199, 254-258, 283-285
+supply_chain_research/phase2_resilience/monte_carlo_runner.py                93     14    85%   207, 210, 335-360
+supply_chain_research/phase2_resilience/resilience_metrics.py               104     32    69%   81, 120-124, 195, 201, 205, 235, 293, 341-356, 375-392
+supply_chain_research/phase2_resilience/shock_models.py                     131     18    86%   174, 294-295, 319-342, 360, 397, 447, 465
+supply_chain_research/phase3_ai/__init__.py                                  18     12    33%   24-38
+supply_chain_research/phase3_ai/attention_lstm.py                            15      0   100%
+supply_chain_research/phase3_ai/data_generator.py                           143     12    92%   148-149, 155, 209-210, 321, 328-329, 350-351, 368, 372
+supply_chain_research/phase3_ai/drl_trainer.py                               89      3    97%   68, 75, 101
+supply_chain_research/phase3_ai/gym_environment.py                          171      0   100%
+supply_chain_research/phase3_ai/lstm_forecaster.py                          153     32    79%   60-99, 141, 262, 277, 439, 524-533
+supply_chain_research/phase3_ai/ppo_agent.py                                222      3    99%   389, 559, 573
+supply_chain_research/phase3_ai/sac_agent.py                                171     30    82%   414, 420, 469-474, 507-516, 560, 605, 628-639, 649-664
+supply_chain_research/phase3_ai/ss_policy.py                                 46     40    13%   54-65, 88-115, 155-183
+supply_chain_research/phase3_ai/tft_forecaster.py                            52      0   100%
+supply_chain_research/phase4_synthesis/__init__.py                           12      7    42%   29-39
+supply_chain_research/phase4_synthesis/ablation_study.py                     84     12    86%   165-174, 310-311
+supply_chain_research/phase4_synthesis/complexity_analysis.py               164    164     0%   49-728
+supply_chain_research/phase4_synthesis/compute_managerial_thresholds.py      76     76     0%   13-280
+supply_chain_research/phase4_synthesis/generate_all_figures.py              442     63    86%   99, 197, 222-223, 228-229, 278, 292, 304, 308-311, 320-321, 328-329, 376, 490, 492, 494, 507-509, 600, 944-945, 951-953, 973-984, 1012-1054
+supply_chain_research/phase4_synthesis/generate_latex_tables.py             115      3    97%   433-435
+supply_chain_research/phase4_synthesis/managerial_insights.py               205    205     0%   55-860
+supply_chain_research/phase4_synthesis/sensitivity_analysis.py              155     22    86%   290-291, 329, 349, 491, 550, 638, 651-652, 761-799
+supply_chain_research/phase4_synthesis/statistical_tests.py                 165     12    93%   39, 90, 131, 168, 213, 250, 316, 418-419, 552-553, 580
+supply_chain_research/utils/__init__.py                                       0      0   100%
+supply_chain_research/utils/plotting_style.py                                 3      0   100%
+supply_chain_research/utils/reproducibility.py                               33     33     0%   12-142
+supply_chain_research/utils/serialization.py                                 40     40     0%   9-157
+supply_chain_research/utils/validators.py                                    31     31     0%   3-149
+-------------------------------------------------------------------------------------------------------
+TOTAL                                                                      4841   1231    75%
+============ 347 passed, 5 skipped, 4 warnings in 174.46s (0:02:54) ============

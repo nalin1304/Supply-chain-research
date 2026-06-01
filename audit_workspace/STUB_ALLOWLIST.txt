@@ -1,0 +1,19 @@
+# STUB_ALLOWLIST.txt — FIX-003 (clause 1.8 / 2.8)
+#
+# Documented allowlist for `pass` / `...` / `raise NotImplementedError` /
+# `TODO` / `FIXME` matches that are intentional and not stub function
+# bodies.
+#
+# Status: empty. The audit pass for FIX-003 found zero true stub
+# function bodies in `supply_chain_research/`. The three regex matches
+# returned by the inventory command on the pre-fix tree were all false
+# positives (two `except: pass` exception handlers and one doctest
+# continuation marker). They were rewritten in-place using
+# `contextlib.suppress` and a single-line doctest, respectively, so no
+# allowlist entries are required.
+#
+# This file is consumed by:
+#     grep -rEn "^\\s*(pass|\\.\\.\\.|raise NotImplementedError)|TODO|FIXME" \
+#         supply_chain_research --include="*.py" \
+#         | grep -vFf audit_workspace/STUB_ALLOWLIST.txt | wc -l
+# which MUST report `0` for clause 2.8 to hold.
