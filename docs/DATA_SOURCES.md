@@ -72,6 +72,12 @@
 - **Key value**: **Real sequential inventory decisions** representing expert state-action trajectories.
 - **Use for**: Offline Reinforcement Learning (Phase 12). Used to pre-train the Decision Transformers on human-like replenishment actions before online fine-tuning.
 
+### 1.7 Indian Supply Chain Demand & Network (Dalal 2022)
+- **Folder**: `data/external/dalal_2022/`
+- **Files**: `demand_location_data_2021.xlsx`, `distance_matrix.xlsx`, `warehouses.xlsx`
+- **Key value**: **Real-world Indian supply chain locations, warehouses, and demand metrics**.
+- **Use for**: Validating spatial distribution of customer demand and baseline warehouse network structure in the simulation environment.
+
 ---
 
 ## Tier 2: India-Specific Government & Policy Data
@@ -146,6 +152,13 @@
 - **URL**: https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0304422
 - **Key value**: Geocoded VRP instances from real urban environments with OSRM distances
 - **Use for**: Validating our OSRM-based approach against published methodology
+
+### 3.5 SVRPBench: Stochastic Vehicle Routing Benchmark
+- **URL**: https://github.com/yehias21/vrp-benchmarks
+- **Folder**: `data/external/svrpbench/`
+- **Key value**: **Open and extensible benchmark for the Stochastic Vehicle Routing Problem (SVRP)**, evaluating algorithms under realistic urban logistics conditions (time-dependent travel delays, uncertain customer availability, dynamic disruptions).
+- **Use for**: Validating stochastic routing algorithms against realistic urban traffic baselines.
+- **Citation**: Heakl, Ahmed et al. (2025). "SVRPBench: A Benchmark for Stochastic Vehicle Routing Problems."
 
 ---
 
