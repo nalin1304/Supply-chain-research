@@ -182,6 +182,21 @@ horizon dominates per-day cost; retain (R, s, S) on steady-state-only
 nodes as the cost-minimum benchmark. Re-train quarterly on the
 latest 90-day demand window per `cloud_training/TRAINING_GUIDE.md`.
 
+## 7. Advanced Agent Playbook (Phases 7 to 14)
+
+The pipeline incorporates advanced multi-agent reinforcement learning and robustness mechanisms to ensure the policy can be safely deployed in production.
+
+| Component | Managerial Action |
+|---|---|
+| **Multi-Agent PPO (MAPPO)** | Deploy decentralized warehouse control with parameter sharing. This handles complex multi-echelon interactions without creating a single point of failure. |
+| **Sim-to-Real Transfer** | Use the Phase 8 domain randomization module to validate policies against real-world retail disruptions (like the M5 Kaggle dataset) before physical deployment. |
+| **Explainable AI (XAI)** | Leverage tree-based policy extraction (Phase 9) to generate readable rules for warehouse managers who need to trust the deep RL model's decisions. |
+| **Risk-Averse RL (CVaR)** | Use the CVaR objective (Phase 10) to strictly bound the worst-case tail risks (the 99th percentile of stockout scenarios). This prevents black swan events from paralyzing the network. |
+| **Adversarial Robustness** | Employ Phase 11 minimax attacker-defender training to ensure policies do not memorize benign stochastic patterns and are resilient to intelligent adversarial shocks. |
+| **Offline Decision Transformers** | Use Phase 12 for offline sequence modeling to pre-train policies on historical data without requiring millions of risky exploration steps in the live environment. |
+| **Dynamic Spatio-Temporal Routing** | Use Phase 13 to integrate live traffic penalties and rush-hour conditions into the routing engine dynamically. |
+| **Multi-Objective RL** | Adjust operational priorities on the fly using Phase 14's MORL architecture, allowing immediate shifting between cost savings and service-level targets without retraining. |
+
 ## References
 
 - Bektas, T. & Laporte, G. (2011). The Pollution-Routing Problem.

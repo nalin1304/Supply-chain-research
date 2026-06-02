@@ -178,6 +178,22 @@ Expected per-episode mean reward (last 100 episodes):
 
 Wall-clock: both PPO stress-mode runs are included in the recorded 2.96-hour Modal T4 production run.
 
+### Step 6b: Train Advanced RL Models (Phases 7-14)
+
+Train the suite of advanced reinforcement learning architectures introduced in Phases 7-14, including CVaR-MAPPO, Offline Decision Transformers, and the Adversarial Minimax attacker framework.
+
+```bash
+# Modal execution (runs highly parallelized on A100/T4 instances):
+modal run --detach supply_chain_research/phase3_ai/modal_mappo_trainer.py
+modal run --detach supply_chain_research/phase3_ai/modal_offline_trainer.py
+modal run --detach supply_chain_research/phase3_ai/modal_adversarial_trainer.py
+```
+
+Expected output:
+- `models/mappo_cloud_*.pt`: MAPPO multi-agent decentralized policy.
+- `models/offline_dt_*.pt`: Decision Transformer offline pre-trained weights.
+- `models/adversarial_cvar_*.pt`: Robust CVaR-MAPPO weights after minimax training against the attacker agent.
+
 ### Step 7: Run DES Monte Carlo (100 Replications)
 
 Run the SimPy DES backbone for 100 Monte-Carlo replications under the no-shock baseline plus the three configured shock scenarios.

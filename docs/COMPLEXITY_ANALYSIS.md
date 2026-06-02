@@ -200,3 +200,21 @@ The accompanying source-of-record JSON file
 (`audit_workspace/COMPLEXITY_REPORT.json`) contains every measurement
 plus the metadata block (Python version, NumPy version, platform
 string, UTC timestamp).
+
+## MAPPO — Multi-Agent PPO (Phase 7 & 10)
+
+**Theoretical.** Extending PPO to $K$ agents involves running the actor update $K$ times and a centralized critic that takes the concatenated state of all $K$ agents. The update cost is `O(K * B * E * d^2 + B * E * (K*d)^2)` where the latter term comes from the centralized critic processing a state vector of size $K \times d$. 
+
+**Citation.** `yu2021mappo` (The Surprising Effectiveness of MAPPO).
+
+## Decision Transformer — Offline RL (Phase 12)
+
+**Theoretical.** Chen et al. (2021) shows that the self-attention mechanism in the Decision Transformer costs `O(L^2 * d)` per layer, where $L$ is the context window length (e.g., 20 timesteps of states, actions, and returns = 60 tokens). Total forward pass is `O(H * L^2 * d + H * L * d^2)` for $H$ layers.
+
+**Citation.** `chen2021decisiontransformer`.
+
+## Spatio-Temporal GNN (Phase 7)
+
+**Theoretical.** A standard message-passing ST-GNN over $V$ nodes (warehouses/customers) and $E$ edges takes `O(|E| * d + |V| * d^2)` per spatial layer, plus the temporal convolution/attention which takes `O(|V| * T * d^2)`. Given the sparse Indian road network topology, $|E| \approx k|V|$ for some small $k$, making the spatial complexity roughly linear in the number of nodes.
+
+**Citation.** `wu2020graphwavenet` (Graph WaveNet for Deep Spatial-Temporal Graph Modeling).

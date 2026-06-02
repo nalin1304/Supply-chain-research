@@ -24,6 +24,10 @@ DES + simulation for resilience      4, 5
 LSTM / TFT for demand forecasting    6, 7
 PPO / SAC for inventory + disruption 8, 9
 Carbon-aware routing                 10
+Multi-Agent RL and ST-GNN (Phase 7)    11
+Sim-to-Real and Domain Rand (Phase 8)  12
+XAI and Risk-Averse RL (Phases 9-10)   13
+Adv, Offline, and MO-RL (Phases 11-14) 14
 ```
 
 ## Numbered Gap Analysis
@@ -303,6 +307,54 @@ front from `run_nsga2`, the carbon-budget variant from FIX-015, and
 the green-premium curve generated as a publishable PNG. Demir-2014 is
 already in the bib via the FIX-015 anchor (`bektas2011prp`); the
 follow-up bi-objective paper is the explicit precedent for the curve.
+
+### 11. Yu et al. (2022): MAPPO for Cooperative Multi-Agent Reinforcement Learning
+
+**Citation.** Yu, C., Velu, A., Vinitsky, E., Gao, J., Wang, Y., Bayen, A., Wu, Y. (2022). The surprising effectiveness of PPO in cooperative multi-agent games. *Advances in Neural Information Processing Systems*, 35, 24611-24624. BibTeX key: `yu2022mappo`.
+
+**Methodology.** Empirical study demonstrating that Multi-Agent PPO (MAPPO) with centralized value functions and decentralized actors achieves state-of-the-art results on cooperative tasks.
+
+**Scope.** Cooperative multi-agent systems and games.
+
+**Identified gap.** The paper highlights that MAPPO is highly effective but rarely applied to complex, multi-echelon supply chain inventory control where spatial dependencies exist.
+
+**How this codebase addresses it.** Phase 7 introduces MAPPO coupled with Spatio-Temporal Graph Neural Networks (ST-GNN) to explicitly capture warehouse-level structural dependencies.
+
+### 12. Zhao et al. (2020): Sim-to-Real Transfer in Deep Reinforcement Learning
+
+**Citation.** Zhao, W., Queralta, J. P., Westerlund, T. (2020). Sim-to-real transfer in deep reinforcement learning for robotics: a survey. *IEEE Symposium Series on Computational Intelligence*, 737-744. BibTeX key: `zhao2020sim2real`.
+
+**Methodology.** Survey of domain randomization and system identification techniques for transferring policies from simulated environments to the real world.
+
+**Scope.** Sim-to-real transfer across continuous control domains.
+
+**Identified gap.** Supply chain RL often assumes perfect simulator fidelity and stationary demand, neglecting the distribution shifts seen in real-world retail, like the M5 dataset.
+
+**How this codebase addresses it.** Phase 8 integrates a Domain Randomization trainer and an M5 Evaluator to zero-shot test RL robustness on Kaggle M5 Walmart real-world data.
+
+### 13. Puiutta & Veith (2020): Explainable Reinforcement Learning (XAI)
+
+**Citation.** Puiutta, E., Veith, E. M. (2020). Explainable reinforcement learning: A survey. *Machine Learning and Knowledge Extraction*, 12241, 77-95. BibTeX key: `puiutta2020xai`.
+
+**Methodology.** Comprehensive survey of XAI techniques applied to RL, including policy extraction, feature attribution, and reward shaping.
+
+**Scope.** Interpretability in sequential decision-making models.
+
+**Identified gap.** Deep RL models in supply chains act as black boxes, hindering managerial trust and adoption, particularly regarding risk metrics.
+
+**How this codebase addresses it.** Phase 9 incorporates Tree-based Policy Extraction and SHAP values for interpretable rules, while Phase 10 bounds inventory tail risks using a CVaR (Conditional Value at Risk) optimization framework.
+
+### 14. Levine et al. (2020): Offline Reinforcement Learning
+
+**Citation.** Levine, S., Kumar, A., Tucker, G., Fu, J. (2020). Offline reinforcement learning: Tutorial, review, and perspectives on open problems. *arXiv preprint 2005.01643*. BibTeX key: `levine2020offline`.
+
+**Methodology.** Tutorial on offline RL techniques, focusing on policy extraction from static datasets without environment interaction (e.g., Decision Transformers).
+
+**Scope.** Pre-training sequence models for control.
+
+**Identified gap.** RL requires millions of exploratory steps which is impractical or unsafe in real supply chains. Dynamic routing and shifting multi-objective preferences are also underexplored in Offline RL.
+
+**How this codebase addresses it.** Phase 12 implements Decision Transformers for offline pre-training. Phase 11 bolsters this with Minimax Adversarial RL. Phase 13 introduces Traffic-Aware Spatio-Temporal routing, and Phase 14 applies Multi-Objective RL to directly trace the Pareto frontier via scalarized learned agents.
 
 ## Coverage and Boundaries
 

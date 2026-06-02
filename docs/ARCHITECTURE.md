@@ -853,15 +853,15 @@ cd webapp/frontend && npm install && npm run dev
 
 ## 18. Advanced Phases (7-14)
 
-The project has recently been extended to cover highly advanced RL, resilience, and operational aspects:
-- **Phase 7 (Multi-Agent RL):** Replaces centralized PPO with MAPPO and ST-GNN architectures for decentralized, cooperative warehouse control.
-- **Phase 8 (Sim-to-Real Domain Randomization):** Bridges the simulation gap using Kaggle M5 dataset and Domain Randomization (`dr_env_wrapper.py`). Note that `DemandDataGenerator` is intentionally synthetic for pre-training, but real-world evaluation uses real data.
-- **Phase 9 (Explainable AI):** SHAP and LIME values to interpret RL actions (e.g. why did the agent order X units?).
-- **Phase 10 (Dynamic Routing):** Real-time responsive VRP adjustments using Google OR-Tools.
-- **Phase 11 (Adversarial RL):** Minimax CVaR-MAPPO against an adversarial agent (`adversarial_trainer.py`) that purposefully disrupts the supply chain to build robustness.
-- **Phase 12 (Offline RL):** Decision Transformer (`offline_trainer.py`) trained on static historical expert logs to avoid costly online env interaction during initial training.
-- **Phase 13 (Real-Time Traffic):** `TrafficMatrix` using OpenRouteService or pre-computed Delhi travel times to adjust pathing dynamically.
-- **Phase 14 (Multi-Objective RL):** `MORLAgent` + `MultiObjectiveSupplyChainEnv` extending PPO to dynamically trade-off Carbon vs Cost based on an input preference vector.
+The project has recently been extended to cover highly advanced RL, resilience, and operational aspects across 8 new phases:
+- **Phase 7 (Multi-Agent RL & ST-GNN):** Replaces centralized PPO with MAPPO (`modal_mappo_trainer.py`) and introduces Spatio-Temporal Graph Neural Networks for decentralized, cooperative warehouse control and correlated demand forecasting.
+- **Phase 8 (Sim-to-Real Domain Randomization):** Bridges the simulation gap using Domain Randomization and external datasets (e.g., M5 dataset) to prove policy generalization.
+- **Phase 9 (Explainable AI):** SHAP values and attention-weight probing (`policy_explainer.py`) to interpret RL actions (e.g., why did the agent order X units?).
+- **Phase 10 (Risk-Averse RL):** Injecting Conditional Value-at-Risk (CVaR) into MAPPO to optimize for the worst 5% of disruption scenarios.
+- **Phase 11 (Adversarial Robustness RL):** Minimax CVaR-MAPPO against an adversarial agent (`modal_adversarial_trainer.py`) that purposefully disrupts the supply chain to build robustness.
+- **Phase 12 (Offline RL):** Decision Transformer (`modal_offline_trainer.py`) trained on static historical expert logs to pre-train policies without costly online environment interaction.
+- **Phase 13 (Dynamic Spatio-Temporal Routing):** `TrafficMatrix` using OpenRouteService and Delhi probe data to adjust pathing and routing times dynamically based on rush-hour traffic.
+- **Phase 14 (Multi-Objective RL):** `MORLAgent` + `morl_env.py` extending PPO to dynamically trade-off Carbon vs Cost based on an input preference vector, avoiding the need for static scalarization.
 
 ---
 

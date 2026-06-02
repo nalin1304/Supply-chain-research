@@ -83,7 +83,12 @@ There are three options, ordered by speed and budget:
 
 ```bash
 modal run --detach cloud_training/modal_train.py
-# (job runs detached; reconnect with: modal app logs supply-chain-ultimate-v3)
+# Advanced RL pipelines (Phases 7-14):
+modal run --detach supply_chain_research/phase3_ai/modal_mappo_trainer.py
+modal run --detach supply_chain_research/phase3_ai/modal_offline_trainer.py
+modal run --detach supply_chain_research/phase3_ai/modal_adversarial_trainer.py
+
+# (jobs run detached; reconnect with: modal app logs <app-name>)
 # When complete:
 modal volume get sc-results-v3 / data/results --force
 ```
