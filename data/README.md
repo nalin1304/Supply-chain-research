@@ -9,7 +9,10 @@ data/
 │   ├── dataco/                 # DataCo: 180K orders (demand calibration)
 │   ├── delhivery/              # Delhivery: 145K shipments (distance validation)
 │   ├── reports/                # PDF reports (NITI Aayog, NCAER, TERI)
-│   └── supplygraph/           # NeurIPS 2023 graph benchmark
+│   ├── supplygraph/           # NeurIPS 2023 graph benchmark
+│   ├── svrpbench/              # SVRPBench: Stochastic VRP benchmark instances
+│   ├── traffic_data/           # New Delhi Traffic Probe (Time-of-day matrices)
+│   └── offline_rl_data/        # High-Dimensional SC Inventory (Expert trajectories)
 ├── processed/                  # Derived/calibrated data
 │   ├── dalal_customer_locations.npy    # 101 GPS coordinates
 │   ├── delhivery_distance_matrix_km.npy # Validated distances
@@ -48,6 +51,21 @@ data/
 - **Source**: ORS API (openrouteservice.org)
 - **Content**: Driving distances between all warehouse-customer pairs
 - **Use**: Replaces Euclidean/Haversine with real road distances
+
+### SVRPBench — Stochastic Routing
+- **Source**: SVRPBench Benchmark Data
+- **Content**: Stochastic delivery scenarios and urban delays
+- **Use**: Baseline for robust routing under disruption (Phase 11 & Phase 13)
+
+### New Delhi Traffic Probe — Traffic Matrices
+- **Source**: 2024 Traffic Probe Data
+- **Content**: Time-of-day congestion penalties
+- **Use**: Dynamic Spatio-Temporal Routing algorithms (Phase 13)
+
+### High-Dimensional SC Inventory — Offline RL
+- **Source**: Expert Trajectory Data
+- **Content**: Sequential human-like replenishment actions
+- **Use**: Pre-training Decision Transformers for offline reinforcement learning (Phase 12)
 
 ## Calibration Parameters (from real data)
 

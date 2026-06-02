@@ -14,24 +14,35 @@ import {
   ReferenceLine,
 } from 'recharts'
 
+import { motion } from 'framer-motion'
+
 function ResilienceMetricCard({ icon: Icon, label, value, unit }) {
   const hasValue = value != null && value !== 0
   return (
-    <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-5 hover:border-zinc-700 transition-colors duration-150">
-      <p className="text-xs font-medium uppercase tracking-wider text-zinc-500 mb-2">
-        {label}
-      </p>
-      <p className="text-xl font-semibold text-zinc-50 font-mono">
+    <motion.div 
+      whileHover={{ y: -5, boxShadow: '0 10px 30px -10px rgba(176, 38, 255, 0.2)' }}
+      className="bg-cyber-panel backdrop-blur-md border border-cyber-border rounded-xl p-6 relative overflow-hidden group"
+    >
+      <div className="absolute -top-10 -right-10 w-24 h-24 bg-cyber-purple/10 rounded-full blur-2xl group-hover:bg-cyber-purple/20 transition-all duration-500"></div>
+      
+      <div className="flex justify-between items-start mb-4 relative z-10">
+        <p className="text-xs font-semibold uppercase tracking-widest text-zinc-400">
+          {label}
+        </p>
+        {Icon && <Icon size={18} className="text-cyber-purple opacity-70" />}
+      </div>
+
+      <p className="text-3xl font-bold text-zinc-50 font-mono relative z-10 drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">
         {hasValue ? (
           <>
             {typeof value === 'number' ? value.toFixed(1) : value}
-            <span className="text-sm text-zinc-500 ml-1 font-sans">{unit}</span>
+            <span className="text-sm font-bold text-cyber-purple ml-1 font-sans tracking-widest uppercase">{unit}</span>
           </>
         ) : (
           <span className="text-zinc-700">—</span>
         )}
       </p>
-    </div>
+    </motion.div>
   )
 }
 
@@ -44,15 +55,15 @@ function ShockControls({ onRun, isRunning }) {
   })
 
   return (
-    <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-5">
-      <h3 className="text-xs font-medium uppercase tracking-wider text-zinc-500 mb-4">
-        Disruption Scenario
+    <div className="bg-cyber-panel backdrop-blur-xl border border-cyber-border rounded-xl p-6">
+      <h3 className="text-xs font-bold uppercase tracking-widest text-cyber-cyan mb-6 drop-shadow-[0_0_8px_rgba(0,240,255,0.4)]">
+        Disruption Scenario Generator
       </h3>
-      <div className="space-y-4">
+      <div className="space-y-6">
         <div>
-          <div className="flex justify-between text-xs text-zinc-500 mb-2">
-            <span>Shock Day</span>
-            <span className="text-zinc-400 font-mono">Day {params.shock_day}</span>
+          <div className="flex justify-between text-xs text-zinc-400 font-medium mb-3">
+            <span className="tracking-wide">SHOCK DAY</span>
+            <span className="text-cyber-cyan font-mono drop-shadow-[0_0_5px_rgba(0,240,255,0.5)]">Day {params.shock_day}</span>
           </div>
           <input
             type="range"
@@ -60,12 +71,13 @@ function ShockControls({ onRun, isRunning }) {
             max="70"
             value={params.shock_day}
             onChange={(e) => setParams({ ...params, shock_day: parseInt(e.target.value) })}
+            className="w-full accent-cyber-cyan"
           />
         </div>
         <div>
-          <div className="flex justify-between text-xs text-zinc-500 mb-2">
-            <span>Magnitude</span>
-            <span className="text-zinc-400 font-mono">{(params.shock_magnitude * 100).toFixed(0)}%</span>
+          <div className="flex justify-between text-xs text-zinc-400 font-medium mb-3">
+            <span className="tracking-wide">MAGNITUDE</span>
+            <span className="text-cyber-cyan font-mono drop-shadow-[0_0_5px_rgba(0,240,255,0.5)]">{(params.shock_magnitude * 100).toFixed(0)}%</span>
           </div>
           <input
             type="range"
@@ -73,12 +85,13 @@ function ShockControls({ onRun, isRunning }) {
             max="100"
             value={params.shock_magnitude * 100}
             onChange={(e) => setParams({ ...params, shock_magnitude: parseInt(e.target.value) / 100 })}
+            className="w-full accent-cyber-cyan"
           />
         </div>
         <div>
-          <div className="flex justify-between text-xs text-zinc-500 mb-2">
-            <span>Duration</span>
-            <span className="text-zinc-400 font-mono">{params.shock_duration} days</span>
+          <div className="flex justify-between text-xs text-zinc-400 font-medium mb-3">
+            <span className="tracking-wide">DURATION</span>
+            <span className="text-cyber-cyan font-mono drop-shadow-[0_0_5px_rgba(0,240,255,0.5)]">{params.shock_duration} days</span>
           </div>
           <input
             type="range"
@@ -86,16 +99,19 @@ function ShockControls({ onRun, isRunning }) {
             max="21"
             value={params.shock_duration}
             onChange={(e) => setParams({ ...params, shock_duration: parseInt(e.target.value) })}
+            className="w-full accent-cyber-cyan"
           />
         </div>
-        <button
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
           onClick={() => onRun(params)}
           disabled={isRunning}
-          className="w-full mt-2 flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+          className="w-full mt-4 flex items-center justify-center gap-2 px-4 py-3 bg-cyber-purple/20 border border-cyber-purple text-cyber-purple shadow-[0_0_15px_rgba(176,38,255,0.2)] text-sm font-bold tracking-wider rounded-lg hover:bg-cyber-purple/30 hover:shadow-[0_0_25px_rgba(176,38,255,0.4)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer uppercase"
         >
-          <Zap size={14} />
-          {isRunning ? 'Simulating...' : 'Simulate Disruption'}
-        </button>
+          <Zap size={16} />
+          {isRunning ? 'SIMULATING...' : 'INJECT SHOCK'}
+        </motion.button>
       </div>
     </div>
   )

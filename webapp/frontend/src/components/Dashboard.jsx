@@ -33,6 +33,8 @@ function formatValue(value, unit) {
   return value.toString()
 }
 
+import { motion } from 'framer-motion'
+
 function TrainingStatus({ status }) {
   const items = [
     { key: 'nsga2_complete', label: 'NSGA-II Optimization', icon: TrendingUp },
@@ -42,36 +44,48 @@ function TrainingStatus({ status }) {
   ]
 
   return (
-    <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-5">
-      <h3 className="text-xs font-medium uppercase tracking-wider text-zinc-500 mb-4">
+    <motion.div 
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      className="bg-cyber-panel backdrop-blur-xl border border-cyber-border rounded-xl p-6 relative overflow-hidden"
+    >
+      <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-cyber-purple/10 rounded-full blur-3xl"></div>
+      
+      <h3 className="text-xs font-bold uppercase tracking-widest text-cyber-purple mb-6 drop-shadow-[0_0_8px_rgba(176,38,255,0.4)]">
         Training Status
       </h3>
-      <div className="space-y-3">
-        {items.map((item) => {
+      <div className="space-y-4 relative z-10">
+        {items.map((item, idx) => {
           const isComplete = status?.[item.key]
           const Icon = item.icon
           return (
-            <div key={item.key} className="flex items-center justify-between">
-              <div className="flex items-center gap-2.5">
-                <Icon size={14} className="text-zinc-500" />
-                <span className="text-sm text-zinc-400">{item.label}</span>
+            <motion.div 
+              key={item.key} 
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: idx * 0.1 }}
+              className="flex items-center justify-between p-3 rounded-lg bg-black/20 border border-cyber-border/50"
+            >
+              <div className="flex items-center gap-3">
+                <Icon size={16} className={isComplete ? "text-cyber-cyan drop-shadow-[0_0_5px_rgba(0,240,255,0.8)]" : "text-zinc-600"} />
+                <span className={`text-sm font-medium ${isComplete ? 'text-zinc-200' : 'text-zinc-500'}`}>{item.label}</span>
               </div>
               {isComplete ? (
-                <span className="inline-flex items-center gap-1 text-xs text-green-600">
-                  <CheckCircle2 size={12} />
+                <span className="inline-flex items-center gap-1.5 text-xs font-bold text-cyber-cyan drop-shadow-[0_0_5px_rgba(0,240,255,0.4)]">
+                  <CheckCircle2 size={14} />
                   Complete
                 </span>
               ) : (
-                <span className="inline-flex items-center gap-1 text-xs text-zinc-600">
-                  <Clock size={12} />
+                <span className="inline-flex items-center gap-1.5 text-xs font-medium text-zinc-600">
+                  <Clock size={14} />
                   Pending
                 </span>
               )}
-            </div>
+            </motion.div>
           )
         })}
       </div>
-    </div>
+    </motion.div>
   )
 }
 

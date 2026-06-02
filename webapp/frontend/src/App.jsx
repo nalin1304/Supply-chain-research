@@ -39,17 +39,20 @@ export default function App() {
   }
 
   return (
-    <div className="flex h-screen overflow-hidden bg-zinc-950">
-      <Sidebar
-        sections={sections}
-        activeSection={activeSection}
-        onSectionChange={setActiveSection}
-      />
-      <main className="flex-1 overflow-y-auto p-8">
-        <div className="max-w-5xl mx-auto">
-          {renderSection()}
-        </div>
-      </main>
+    <div className="flex h-screen overflow-hidden bg-cyber-dark text-white bg-cyber-grid">
+      <div className="absolute inset-0 bg-cyber-gradient pointer-events-none z-0"></div>
+      <div className="relative z-10 flex h-full w-full">
+        <Sidebar
+          sections={sections}
+          activeSection={activeSection}
+          onSectionChange={setActiveSection}
+        />
+        <main className="flex-1 overflow-y-auto p-8 relative scrollbar-hide">
+          <div className="max-w-6xl mx-auto pb-24">
+            {renderSection()}
+          </div>
+        </main>
+      </div>
     </div>
   )
 }

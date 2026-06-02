@@ -1,4 +1,0 @@
-docs/ARCHITECTURE.md:296:| `src/components/EmptyState.jsx` | "No data yet, run the pipeline" placeholder | Pure presentation component |
-docs/ARCHITECTURE.md:408:| `VERIFIED_REFERENCES.bib` | The single BibTeX bibliography used everywhere | One entry per cited source; every entry has a `note = {Used in FIX-XXX for ...}` field tying it to the audit log |
-docs/ARCHITECTURE.md:422:├── raw/                  # currently empty (placeholder for raw scrapes)
-docs/REPLICATION_GUIDE.md:264:The managerial-insights document gracefully degrades when training artefacts are missing: any section whose backing artefact is absent emits the standard `*Data not yet available*` placeholder rather than crashing or fabricating numbers.
