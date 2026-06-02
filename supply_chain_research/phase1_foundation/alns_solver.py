@@ -22,7 +22,14 @@ def dominates(a: np.ndarray, b: np.ndarray) -> bool:
     """Return True if a dominates b (minimization).
     Parameters
     ----------
-    """
+    
+            Parameters
+            ----------
+            a : type
+                Description of a.
+            b : type
+                Description of b.
+        """
     return np.all(a <= b) and np.any(a < b)
 
 
@@ -30,7 +37,8 @@ class ALNSSolver(BaseSolver):
     """Adaptive Large Neighborhood Search (ALNS) solver for multi-objective optimization.
     Parameters
     ----------
-    """
+    
+        """
 
     def solve(
         self,
@@ -42,7 +50,18 @@ class ALNSSolver(BaseSolver):
         """Run ALNS optimization.
         Parameters
         ----------
-        """
+        
+                Parameters
+                ----------
+                config : type
+                    Description of config.
+                distance_matrix : type
+                    Description of distance_matrix.
+                demand : type
+                    Description of demand.
+                seed : type
+                    Description of seed.
+            """
         logger.info("Initializing ALNS solver...")
         start_time = time.time()
 
@@ -264,6 +283,17 @@ def run_alns(
     """Wrapper function to execute ALNS solver.
     Parameters
     ----------
-    """
+    
+            Parameters
+            ----------
+            config : type
+                Description of config.
+            distance_matrix : type
+                Description of distance_matrix.
+            demand : type
+                Description of demand.
+            seed : type
+                Description of seed.
+        """
     solver = ALNSSolver()
     return solver.solve(config, distance_matrix, demand, seed)

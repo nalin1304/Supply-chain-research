@@ -29,7 +29,8 @@ class ComparisonResult:
     """Unified container for all algorithm comparison results.
     Parameters
     ----------
-    """
+    
+        """
 
     solvers: list[str]
     seeds: list[int]
@@ -43,7 +44,8 @@ class FriedmanResult:
     """
     Parameters
     ----------
-    """
+    
+        """
     statistic: float
     p_value: float
     mean_ranks: dict[str, float]
@@ -55,7 +57,8 @@ class PairwiseResult:
     """
     Parameters
     ----------
-    """
+    
+        """
     p_values: dict[tuple[str, str], float]
     adjusted_p_values: dict[tuple[str, str], float]
     significant_pairs: list[tuple[str, str]]
@@ -71,7 +74,20 @@ def run_comparison(
     """Compare multiple solvers across multiple seeds.
     Parameters
     ----------
-    """
+    
+            Parameters
+            ----------
+            config : type
+                Description of config.
+            distance_matrix : type
+                Description of distance_matrix.
+            demand : type
+                Description of demand.
+            solvers : type
+                Description of solvers.
+            n_seeds : type
+                Description of n_seeds.
+        """
     logger.info(f"Running multi-objective solver comparison framework over {n_seeds} seeds...")
     seeds = [42 + i for i in range(n_seeds)]
 
@@ -106,7 +122,12 @@ def friedman_test(results: ComparisonResult) -> FriedmanResult:
     """Run non-parametric Friedman rank test on Hypervolume values.
     Parameters
     ----------
-    """
+    
+            Parameters
+            ----------
+            results : type
+                Description of results.
+        """
     logger.info("Executing Friedman rank test...")
     # Build matrix: shape (n_seeds, n_solvers)
     hv_matrix = np.array([results.hypervolumes[s] for s in results.solvers]).T
@@ -134,7 +155,14 @@ def wilcoxon_pairwise(results: ComparisonResult, correction: str = "holm") -> Pa
     """Run pairwise Wilcoxon signed-rank tests with Holm-Bonferroni correction.
     Parameters
     ----------
-    """
+    
+            Parameters
+            ----------
+            results : type
+                Description of results.
+            correction : type
+                Description of correction.
+        """
     logger.info("Executing pairwise Wilcoxon signed-rank tests...")
     solvers = results.solvers
     n_solvers = len(solvers)
@@ -183,7 +211,14 @@ def critical_difference_diagram(results: ComparisonResult, output_path: str = "o
     """Generate and save Critical Difference diagram based on mean ranks.
     Parameters
     ----------
-    """
+    
+            Parameters
+            ----------
+            results : type
+                Description of results.
+            output_path : type
+                Description of output_path.
+        """
     logger.info(f"Generating Critical Difference diagram at {output_path}...")
     test_res = friedman_test(results)
     ranks = test_res.mean_ranks
@@ -209,7 +244,14 @@ def performance_profile(results: ComparisonResult, output_path: str = "outputs/p
     """Generate and save Performance Profile plot.
     Parameters
     ----------
-    """
+    
+            Parameters
+            ----------
+            results : type
+                Description of results.
+            output_path : type
+                Description of output_path.
+        """
     logger.info(f"Generating Performance Profile at {output_path}...")
     solvers = results.solvers
     n_seeds = len(results.seeds)

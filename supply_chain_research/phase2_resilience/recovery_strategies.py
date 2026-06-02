@@ -4,7 +4,8 @@ class RecoveryStrategy:
     """Base class for recovery strategies.
     Parameters
     ----------
-    """
+    
+        """
     def apply(self, des_env):
         """
         Parameters

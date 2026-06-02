@@ -25,7 +25,14 @@ class ScalarProblem(Problem):
     """Wraps bi-objective SupplyChainProblem as a single-objective problem.
     Parameters
     ----------
-    """
+    
+            Parameters
+            ----------
+            bi_problem : type
+                Description of bi_problem.
+            obj_index : type
+                Description of obj_index.
+        """
 
     def __init__(self, bi_problem: Problem, obj_index: int):
         """
@@ -57,7 +64,8 @@ class SingleObjectiveGASolver(BaseSolver):
     """Single-Objective GA solver for anchor points computation.
     Parameters
     ----------
-    """
+    
+        """
 
     def solve(
         self,
@@ -69,7 +77,18 @@ class SingleObjectiveGASolver(BaseSolver):
         """Run two independent single-objective GA optimizations.
         Parameters
         ----------
-        """
+        
+                Parameters
+                ----------
+                config : type
+                    Description of config.
+                distance_matrix : type
+                    Description of distance_matrix.
+                demand : type
+                    Description of demand.
+                seed : type
+                    Description of seed.
+            """
         logger.info("Initializing Single-Objective GA solver...")
         start_time = time.time()
 
@@ -171,6 +190,17 @@ def run_single_objective_ga(
     """Wrapper function to execute Single-Objective GA solver.
     Parameters
     ----------
-    """
+    
+            Parameters
+            ----------
+            config : type
+                Description of config.
+            distance_matrix : type
+                Description of distance_matrix.
+            demand : type
+                Description of demand.
+            seed : type
+                Description of seed.
+        """
     solver = SingleObjectiveGASolver()
     return solver.solve(config, distance_matrix, demand, seed)

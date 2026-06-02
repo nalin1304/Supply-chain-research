@@ -29,7 +29,14 @@ class WeightedSumProblem(Problem):
     """Scalarized single-objective version of the SupplyChainProblem.
     Parameters
     ----------
-    """
+    
+            Parameters
+            ----------
+            bi_problem : type
+                Description of bi_problem.
+            alpha : type
+                Description of alpha.
+        """
 
     def __init__(self, bi_problem: Problem, alpha: float):
         """
@@ -62,7 +69,8 @@ class WeightedSumSolver(BaseSolver):
     """Weighted Sum Method solver.
     Parameters
     ----------
-    """
+    
+        """
 
     def solve(
         self,
@@ -74,7 +82,18 @@ class WeightedSumSolver(BaseSolver):
         """Run Weighted Sum solver by sweeping alpha weights.
         Parameters
         ----------
-        """
+        
+                Parameters
+                ----------
+                config : type
+                    Description of config.
+                distance_matrix : type
+                    Description of distance_matrix.
+                demand : type
+                    Description of demand.
+                seed : type
+                    Description of seed.
+            """
         logger.info("Initializing Weighted Sum solver...")
         start_time = time.time()
 
@@ -200,6 +219,17 @@ def run_weighted_sum(
     """Wrapper function to execute Weighted Sum solver.
     Parameters
     ----------
-    """
+    
+            Parameters
+            ----------
+            config : type
+                Description of config.
+            distance_matrix : type
+                Description of distance_matrix.
+            demand : type
+                Description of demand.
+            seed : type
+                Description of seed.
+        """
     solver = WeightedSumSolver()
     return solver.solve(config, distance_matrix, demand, seed)

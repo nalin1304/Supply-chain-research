@@ -81,7 +81,18 @@ class CNNLSTMForecaster(BaseForecaster):
     """Training and inference wrapper for CNNLSTMModel.
     Parameters
     ----------
-    """
+    
+            Parameters
+            ----------
+            input_size : type
+                Description of input_size.
+            config : type
+                Description of config.
+            device : type
+                Description of device.
+            checkpoint_dir : type
+                Description of checkpoint_dir.
+        """
 
     def __init__(self, input_size: int, config: LSTMConfig = None, device=None, checkpoint_dir='data/results'):
         """

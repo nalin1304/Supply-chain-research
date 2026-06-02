@@ -22,7 +22,8 @@ class EpsilonConstraintSolver(BaseSolver):
     """Epsilon-Constraint Method solver.
     Parameters
     ----------
-    """
+    
+        """
 
     def solve(
         self,
@@ -34,7 +35,18 @@ class EpsilonConstraintSolver(BaseSolver):
         """Run Epsilon-Constraint solver.
         Parameters
         ----------
-        """
+        
+                Parameters
+                ----------
+                config : type
+                    Description of config.
+                distance_matrix : type
+                    Description of distance_matrix.
+                demand : type
+                    Description of demand.
+                seed : type
+                    Description of seed.
+            """
         logger.info("Initializing Epsilon-Constraint solver...")
         start_time = time.time()
 
@@ -192,6 +204,17 @@ def run_epsilon_constraint(
     """Wrapper function to execute Epsilon-Constraint solver.
     Parameters
     ----------
-    """
+    
+            Parameters
+            ----------
+            config : type
+                Description of config.
+            distance_matrix : type
+                Description of distance_matrix.
+            demand : type
+                Description of demand.
+            seed : type
+                Description of seed.
+        """
     solver = EpsilonConstraintSolver()
     return solver.solve(config, distance_matrix, demand, seed)

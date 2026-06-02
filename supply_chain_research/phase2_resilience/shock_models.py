@@ -559,7 +559,24 @@ class Cyberattack:
     
     Parameters
     ----------
-    """
+    
+            Parameters
+            ----------
+            warehouse_ids : type
+                Description of warehouse_ids.
+            severity : type
+                Description of severity.
+            detection_time : type
+                Description of detection_time.
+            recovery_time : type
+                Description of recovery_time.
+            start_day : type
+                Description of start_day.
+            seed : type
+                Description of seed.
+            config : type
+                Description of config.
+        """
 
     def __init__(
         self,
@@ -678,7 +695,26 @@ class LaborStrike:
     
     Parameters
     ----------
-    """
+    
+            Parameters
+            ----------
+            warehouse_ids : type
+                Description of warehouse_ids.
+            severity : type
+                Description of severity.
+            strike_prob : type
+                Description of strike_prob.
+            duration_range : type
+                Description of duration_range.
+            negotiation_rate : type
+                Description of negotiation_rate.
+            start_day : type
+                Description of start_day.
+            seed : type
+                Description of seed.
+            config : type
+                Description of config.
+        """
 
     def __init__(
         self,
@@ -798,7 +834,24 @@ class RawMaterialShortage:
     
     Parameters
     ----------
-    """
+    
+            Parameters
+            ----------
+            shortage_severity : type
+                Description of shortage_severity.
+            price_multiplier : type
+                Description of price_multiplier.
+            substitute_available : type
+                Description of substitute_available.
+            duration_range : type
+                Description of duration_range.
+            start_day : type
+                Description of start_day.
+            seed : type
+                Description of seed.
+            config : type
+                Description of config.
+        """
 
     def __init__(
         self,
@@ -905,7 +958,22 @@ class TransportInfrastructure:
     
     Parameters
     ----------
-    """
+    
+            Parameters
+            ----------
+            link_failure_prob : type
+                Description of link_failure_prob.
+            detour_factor : type
+                Description of detour_factor.
+            repair_time : type
+                Description of repair_time.
+            start_day : type
+                Description of start_day.
+            seed : type
+                Description of seed.
+            config : type
+                Description of config.
+        """
 
     def __init__(
         self,
@@ -1002,7 +1070,22 @@ class RegulatoryChange:
     
     Parameters
     ----------
-    """
+    
+            Parameters
+            ----------
+            compliance_cost : type
+                Description of compliance_cost.
+            implementation_lead_time : type
+                Description of implementation_lead_time.
+            duration_range : type
+                Description of duration_range.
+            start_day : type
+                Description of start_day.
+            seed : type
+                Description of seed.
+            config : type
+                Description of config.
+        """
 
     def __init__(
         self,
@@ -1107,7 +1190,22 @@ class PowerOutage:
     
     Parameters
     ----------
-    """
+    
+            Parameters
+            ----------
+            outage_duration : type
+                Description of outage_duration.
+            spoilage_rate : type
+                Description of spoilage_rate.
+            backup_power_prob : type
+                Description of backup_power_prob.
+            start_day : type
+                Description of start_day.
+            seed : type
+                Description of seed.
+            config : type
+                Description of config.
+        """
 
     def __init__(
         self,

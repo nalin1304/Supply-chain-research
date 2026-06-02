@@ -21,7 +21,12 @@ def compute_crowding_distances(F: np.ndarray) -> np.ndarray:
     """Compute crowding distances for points in objective space.
     Parameters
     ----------
-    """
+    
+            Parameters
+            ----------
+            F : type
+                Description of F.
+        """
     n = len(F)
     if n <= 2:
         return np.full(n, np.inf)
@@ -47,7 +52,20 @@ def update_archive(archive_X: list, archive_F: list, candidate_X: np.ndarray, ca
     """Update Pareto archive with new non-dominated solutions.
     Parameters
     ----------
-    """
+    
+            Parameters
+            ----------
+            archive_X : type
+                Description of archive_X.
+            archive_F : type
+                Description of archive_F.
+            candidate_X : type
+                Description of candidate_X.
+            candidate_F : type
+                Description of candidate_F.
+            max_size : type
+                Description of max_size.
+        """
     # Check if candidate is dominated by any archive member
     for f in archive_F:
         if np.all(f <= candidate_F) and np.any(f < candidate_F):
@@ -81,7 +99,8 @@ class MOPSOSolver(BaseSolver):
     """Multi-Objective Particle Swarm Optimization (MOPSO) solver.
     Parameters
     ----------
-    """
+    
+        """
 
     def solve(
         self,
@@ -93,7 +112,18 @@ class MOPSOSolver(BaseSolver):
         """Run MOPSO optimization.
         Parameters
         ----------
-        """
+        
+                Parameters
+                ----------
+                config : type
+                    Description of config.
+                distance_matrix : type
+                    Description of distance_matrix.
+                demand : type
+                    Description of demand.
+                seed : type
+                    Description of seed.
+            """
         logger.info("Initializing MOPSO solver...")
         start_time = time.time()
 
@@ -231,6 +261,17 @@ def run_mopso(
     """Wrapper function to execute MOPSO solver.
     Parameters
     ----------
-    """
+    
+            Parameters
+            ----------
+            config : type
+                Description of config.
+            distance_matrix : type
+                Description of distance_matrix.
+            demand : type
+                Description of demand.
+            seed : type
+                Description of seed.
+        """
     solver = MOPSOSolver()
     return solver.solve(config, distance_matrix, demand, seed)

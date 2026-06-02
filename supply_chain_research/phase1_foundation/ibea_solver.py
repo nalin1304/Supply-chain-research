@@ -61,7 +61,12 @@ class IBEASurvival(Survival):
     """Environmental selection based on additive epsilon indicator (Zitzler & Kunzli 2004).
     Parameters
     ----------
-    """
+    
+            Parameters
+            ----------
+            kappa : type
+                Description of kappa.
+        """
 
     def __init__(self, kappa: float = 0.05):
         """
@@ -112,7 +117,8 @@ class IBEASolver(BaseSolver):
     """Indicator-Based Evolutionary Algorithm (IBEA) solver.
     Parameters
     ----------
-    """
+    
+        """
 
     def solve(
         self,
@@ -124,7 +130,18 @@ class IBEASolver(BaseSolver):
         """Run IBEA optimization.
         Parameters
         ----------
-        """
+        
+                Parameters
+                ----------
+                config : type
+                    Description of config.
+                distance_matrix : type
+                    Description of distance_matrix.
+                demand : type
+                    Description of demand.
+                seed : type
+                    Description of seed.
+            """
         logger.info("Initializing IBEA solver...")
         start_time = time.time()
 
@@ -215,6 +232,17 @@ def run_ibea(
     """Wrapper function to execute IBEA solver.
     Parameters
     ----------
-    """
+    
+            Parameters
+            ----------
+            config : type
+                Description of config.
+            distance_matrix : type
+                Description of distance_matrix.
+            demand : type
+                Description of demand.
+            seed : type
+                Description of seed.
+        """
     solver = IBEASolver()
     return solver.solve(config, distance_matrix, demand, seed)

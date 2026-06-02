@@ -164,7 +164,8 @@ class BaseSolver(ABC):
     
     Parameters
     ----------
-    """
+    
+        """
 
     @abstractmethod
     def solve(

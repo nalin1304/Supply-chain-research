@@ -23,7 +23,8 @@ class SPEA2Solver(BaseSolver):
     """Strength Pareto Evolutionary Algorithm 2 (SPEA2) solver.
     Parameters
     ----------
-    """
+    
+        """
 
     def solve(
         self,
@@ -35,7 +36,18 @@ class SPEA2Solver(BaseSolver):
         """Run SPEA2 optimization.
         Parameters
         ----------
-        """
+        
+                Parameters
+                ----------
+                config : type
+                    Description of config.
+                distance_matrix : type
+                    Description of distance_matrix.
+                demand : type
+                    Description of demand.
+                seed : type
+                    Description of seed.
+            """
         logger.info("Initializing SPEA2 solver...")
         start_time = time.time()
 
@@ -121,6 +133,17 @@ def run_spea2(
     """Wrapper function to execute SPEA2 solver.
     Parameters
     ----------
-    """
+    
+            Parameters
+            ----------
+            config : type
+                Description of config.
+            distance_matrix : type
+                Description of distance_matrix.
+            demand : type
+                Description of demand.
+            seed : type
+                Description of seed.
+        """
     solver = SPEA2Solver()
     return solver.solve(config, distance_matrix, demand, seed)

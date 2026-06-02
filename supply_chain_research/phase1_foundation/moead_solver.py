@@ -27,7 +27,12 @@ class UnconstrainedSupplyChainProblem(Problem):
     
     Parameters
     ----------
-    """
+    
+            Parameters
+            ----------
+            problem : type
+                Description of problem.
+        """
     def __init__(self, problem):
         """
         Parameters

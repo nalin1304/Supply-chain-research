@@ -22,7 +22,14 @@ def dominates(a: np.ndarray, b: np.ndarray) -> bool:
     """Return True if a dominates b (minimization).
     Parameters
     ----------
-    """
+    
+            Parameters
+            ----------
+            a : type
+                Description of a.
+            b : type
+                Description of b.
+        """
     return np.all(a <= b) and np.any(a < b)
 
 
@@ -30,7 +37,14 @@ def domination_amount(a: np.ndarray, b: np.ndarray) -> float:
     """Calculate the amount of domination of a over b.
     Parameters
     ----------
-    """
+    
+            Parameters
+            ----------
+            a : type
+                Description of a.
+            b : type
+                Description of b.
+        """
     # Domination difference: product of positive differences
     diff = np.maximum(0.0, a - b)
     return float(np.prod(diff[diff > 0])) if np.any(diff > 0) else 0.0
@@ -40,7 +54,8 @@ class AMOSASolver(BaseSolver):
     """Archived Multi-Objective Simulated Annealing (AMOSA) solver.
     Parameters
     ----------
-    """
+    
+        """
 
     def solve(
         self,
@@ -52,7 +67,18 @@ class AMOSASolver(BaseSolver):
         """Run AMOSA optimization.
         Parameters
         ----------
-        """
+        
+                Parameters
+                ----------
+                config : type
+                    Description of config.
+                distance_matrix : type
+                    Description of distance_matrix.
+                demand : type
+                    Description of demand.
+                seed : type
+                    Description of seed.
+            """
         logger.info("Initializing AMOSA solver...")
         start_time = time.time()
 
@@ -258,6 +284,17 @@ def run_amosa(
     """Wrapper function to execute AMOSA solver.
     Parameters
     ----------
-    """
+    
+            Parameters
+            ----------
+            config : type
+                Description of config.
+            distance_matrix : type
+                Description of distance_matrix.
+            demand : type
+                Description of demand.
+            seed : type
+                Description of seed.
+        """
     solver = AMOSASolver()
     return solver.solve(config, distance_matrix, demand, seed)

@@ -144,7 +144,20 @@ class MonteCarloRunner:
     """Parallelized Monte Carlo runner for resilience analysis.
     Parameters
     ----------
-    """
+    
+            Parameters
+            ----------
+            config : type
+                Description of config.
+            n_runs : type
+                Description of n_runs.
+            n_jobs : type
+                Description of n_jobs.
+            base_seed : type
+                Description of base_seed.
+            distance_matrix : type
+                Description of distance_matrix.
+        """
 
     def __init__(
         self,
@@ -209,7 +222,12 @@ class MonteCarloRunner:
         """Run Monte Carlo analysis for supply shocks.
         Parameters
         ----------
-        """
+        
+                Parameters
+                ----------
+                lhs : type
+                    Description of lhs.
+            """
         lhs_params = self._sample_lhs_supply() if lhs else None
         
         results = Parallel(n_jobs=self.n_jobs)(
@@ -229,7 +247,12 @@ class MonteCarloRunner:
         """Run Monte Carlo analysis for demand shocks.
         Parameters
         ----------
-        """
+        
+                Parameters
+                ----------
+                lhs : type
+                    Description of lhs.
+            """
         lhs_params = self._sample_lhs_demand() if lhs else None
         
         results = Parallel(n_jobs=self.n_jobs)(
@@ -249,7 +272,12 @@ class MonteCarloRunner:
         """Run Monte Carlo analysis for all shock types.
         Parameters
         ----------
-        """
+        
+                Parameters
+                ----------
+                lhs : type
+                    Description of lhs.
+            """
         supply_results = self.run_supply_shock_analysis(lhs=lhs)
         demand_results = self.run_demand_shock_analysis(lhs=lhs)
 
@@ -262,7 +290,14 @@ class MonteCarloRunner:
         """Run stress testing by sweeping shock severity from 0.1 to 1.0.
         Parameters
         ----------
-        """
+        
+                Parameters
+                ----------
+                severities : type
+                    Description of severities.
+                n_runs : type
+                    Description of n_runs.
+            """
         if severities is None:
             severities = np.linspace(0.1, 1.0, 10)
         
