@@ -30,12 +30,20 @@ from routes.dashboard import router as dashboard_router
 from routes.optimization import router as optimization_router
 from routes.simulation import router as simulation_router
 from routes.forecasting import router as forecasting_router
+from routes.advanced_rl import router as advanced_rl_router
+from routes.robustness import router as robustness_router
+from routes.xai import router as xai_router
+from routes.morl import router as morl_router
 from schemas import HealthResponse
 
 app.include_router(dashboard_router, prefix="/api/dashboard", tags=["dashboard"])
 app.include_router(optimization_router, prefix="/api/optimization", tags=["optimization"])
 app.include_router(simulation_router, prefix="/api/simulation", tags=["simulation"])
 app.include_router(forecasting_router, prefix="/api/forecasting", tags=["forecasting"])
+app.include_router(advanced_rl_router, prefix="/api/advanced-rl", tags=["advanced_rl"])
+app.include_router(robustness_router, prefix="/api/robustness", tags=["robustness"])
+app.include_router(xai_router, prefix="/api/xai", tags=["xai"])
+app.include_router(morl_router, prefix="/api/morl", tags=["morl"])
 
 
 @app.get("/api/health", response_model=HealthResponse)

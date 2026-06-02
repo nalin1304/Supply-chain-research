@@ -126,11 +126,27 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-8">
-      {/* Header */}
-      <div>
-        <h2 className="text-xl font-semibold text-zinc-50 tracking-tight">Overview</h2>
-        <p className="text-sm text-zinc-500 mt-1">Supply chain optimization metrics</p>
-      </div>
+      {/* Welcome Banner */}
+      <motion.div 
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="bg-cyber-panel/80 border border-cyber-border rounded-xl p-6 backdrop-blur-md relative overflow-hidden"
+      >
+        <div className="absolute top-0 right-0 w-64 h-64 bg-cyber-blue/10 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
+        <div className="flex items-start gap-4">
+          <div className="p-3 bg-cyber-blue/20 rounded-lg text-cyber-blue shrink-0">
+            <LayoutDashboard size={24} />
+          </div>
+          <div>
+            <h1 className="text-2xl font-light text-white tracking-wide mb-2 drop-shadow-cyber">
+              Welcome to the Multi-Objective Resilient Supply Chain Dashboard
+            </h1>
+            <p className="text-zinc-400 leading-relaxed text-sm max-w-4xl">
+              This project tackles the massive challenge of balancing <strong>logistics cost</strong> against <strong>carbon emissions (CO₂)</strong> across Indian logistics networks. Using cutting-edge Artificial Intelligence (Reinforcement Learning), we train virtual 'agents' to make inventory and routing decisions that are both green and highly resilient to real-world supply chain shocks. Use the sidebar to explore the 14 advanced phases of this research.
+            </p>
+          </div>
+        </div>
+      </motion.div>
 
       {/* KPI Cards */}
       {hasKpis && !isMock ? (

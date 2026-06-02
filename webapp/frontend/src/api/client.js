@@ -81,3 +81,20 @@ export function fetchAttentionWeights() {
 export function fetchHealth() {
   return request('/health')
 }
+
+// Advanced AI & Routing
+export function fetchLearningCurves() {
+  return request('/advanced-rl/learning-curves')
+}
+
+export function fetchAttackSurface() {
+  return request('/robustness/attack-surface')
+}
+
+export function fetchShapValues() {
+  return request('/xai/shap-values')
+}
+
+export function fetchParetoShift() {
+  return request('/morl/pareto-shift')
+}

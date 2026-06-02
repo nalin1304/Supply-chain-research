@@ -5,6 +5,10 @@ import {
   Shield,
   Brain,
   Leaf,
+  Network,
+  Activity,
+  Lightbulb,
+  Crosshair
 } from 'lucide-react'
 import { motion } from 'framer-motion'
 
@@ -14,6 +18,10 @@ const iconMap = {
   optimization: TrendingUp,
   resilience: Shield,
   forecasting: Brain,
+  advanced_rl: Network,
+  robustness: Activity,
+  xai: Lightbulb,
+  morl: Crosshair,
   carbon: Leaf,
 }
 

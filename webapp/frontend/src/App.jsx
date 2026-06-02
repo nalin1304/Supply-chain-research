@@ -6,6 +6,10 @@ import ParetoChart from './components/ParetoChart'
 import ResiliencePanel from './components/ResiliencePanel'
 import TrainingProgress from './components/TrainingProgress'
 import CarbonBudget from './components/CarbonBudget'
+import AdvancedRLPanel from './components/AdvancedRLPanel'
+import RobustnessPanel from './components/RobustnessPanel'
+import XAIPanel from './components/XAIPanel'
+import MORLPanel from './components/MORLPanel'
 
 const sections = [
   { id: 'overview', label: 'Overview' },
@@ -13,6 +17,10 @@ const sections = [
   { id: 'optimization', label: 'Optimization' },
   { id: 'resilience', label: 'Resilience' },
   { id: 'forecasting', label: 'Forecasting' },
+  { id: 'advanced_rl', label: 'Advanced RL (Ph 7 & 12)' },
+  { id: 'robustness', label: 'Robustness (Ph 8, 10, 11)' },
+  { id: 'xai', label: 'Explainable AI (Ph 9)' },
+  { id: 'morl', label: 'Dynamic MORL (Ph 13 & 14)' },
   { id: 'carbon', label: 'Carbon' },
 ]
 
@@ -31,6 +39,14 @@ export default function App() {
         return <ResiliencePanel />
       case 'forecasting':
         return <TrainingProgress />
+      case 'advanced_rl':
+        return <AdvancedRLPanel />
+      case 'robustness':
+        return <RobustnessPanel />
+      case 'xai':
+        return <XAIPanel />
+      case 'morl':
+        return <MORLPanel />
       case 'carbon':
         return <CarbonBudget />
       default:
