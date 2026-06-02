@@ -41,13 +41,13 @@ export default function AdvancedRLPanel() {
         </div>
 
         {/* Educational Context Banner */}
-        <div className="bg-blue-900/20 border border-blue-500/30 rounded-lg p-4 flex gap-4">
-          <div className="text-blue-400 mt-1">
+        <div className="bg-premium-accent/10 border-l-4 border-premium-accent rounded-r-lg p-5 flex gap-4">
+          <div className="text-premium-accent mt-1">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
           </div>
           <div>
-            <h4 className="text-sm font-semibold text-blue-300 mb-1">What is this?</h4>
-            <p className="text-xs text-blue-200/70 leading-relaxed">
+            <h4 className="text-sm font-semibold text-premium-text mb-1">Methodology Overview</h4>
+            <p className="text-sm text-premium-textMuted leading-relaxed">
               Normally, an AI (PPO) learns by trial and error, which takes a long time. In <strong>Phase 7 (MAPPO)</strong>, we break the problem down so multiple AI agents work together at different warehouses. In <strong>Phase 12 (Decision Transformers)</strong>, we give the AI an 'offline' cheat sheet of expert human decisions so it doesn't have to start learning from scratch. This graph shows how much faster our advanced models learn compared to the baseline.
             </p>
           </div>
@@ -55,20 +55,20 @@ export default function AdvancedRLPanel() {
 
         {/* Deep Academic Specs */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2">
-          <div className="p-3 bg-black/40 border border-zinc-800 rounded-md">
-            <h5 className="text-[10px] uppercase text-zinc-500 font-bold tracking-wider mb-1">Architecture</h5>
+          <div className="p-4 bg-premium-panel border border-premium-border rounded-xl">
+            <h5 className="text-[10px] uppercase text-zinc-500 font-bold tracking-wider mb-2">Architecture</h5>
             <div className="text-xs text-zinc-300 font-mono">Attention-LSTM<br/>256 hidden × 3 layers</div>
           </div>
-          <div className="p-3 bg-black/40 border border-zinc-800 rounded-md">
-            <h5 className="text-[10px] uppercase text-zinc-500 font-bold tracking-wider mb-1">Forecasting (7-Day)</h5>
+          <div className="p-4 bg-premium-panel border border-premium-border rounded-xl">
+            <h5 className="text-[10px] uppercase text-zinc-500 font-bold tracking-wider mb-2">Forecasting (7-Day)</h5>
             <div className="text-xs text-zinc-300 font-mono">MAPE: 23.46%<br/>RMSE: 56.46 kg</div>
           </div>
-          <div className="p-3 bg-black/40 border border-zinc-800 rounded-md">
-            <h5 className="text-[10px] uppercase text-zinc-500 font-bold tracking-wider mb-1">RL Algorithms</h5>
-            <div className="text-xs text-zinc-300 font-mono">MAPPO (Phase 7)<br/>Decision Transformer (Phase 12)</div>
+          <div className="p-4 bg-premium-panel border border-premium-border rounded-xl">
+            <h5 className="text-[10px] uppercase text-zinc-500 font-bold tracking-wider mb-2">RL Algorithms</h5>
+            <div className="text-xs text-zinc-300 font-mono">MAPPO (Phase 7)<br/>Decision Transformer</div>
           </div>
-          <div className="p-3 bg-black/40 border border-zinc-800 rounded-md">
-            <h5 className="text-[10px] uppercase text-zinc-500 font-bold tracking-wider mb-1">Cloud Training</h5>
+          <div className="p-4 bg-premium-panel border border-premium-border rounded-xl">
+            <h5 className="text-[10px] uppercase text-zinc-500 font-bold tracking-wider mb-2">Cloud Training</h5>
             <div className="text-xs text-zinc-300 font-mono">1,000,000 steps<br/>Modal Tesla T4 ($1.80)</div>
           </div>
         </div>

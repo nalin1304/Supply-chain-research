@@ -27,11 +27,11 @@ const iconMap = {
 
 export default function Sidebar({ sections, activeSection, onSectionChange }) {
   return (
-    <aside className="w-[240px] h-screen border-r border-cyber-border flex flex-col bg-cyber-panel backdrop-blur-xl">
+    <aside className="w-[240px] h-screen border-r border-premium-border flex flex-col bg-premium-panel/50 backdrop-blur-xl">
       {/* Logo */}
-      <div className="px-5 h-16 flex items-center gap-3 border-b border-cyber-border shadow-[0_4px_30px_rgba(0,0,0,0.1)]">
-        <div className="w-8 h-8 rounded-lg bg-cyber-border flex items-center justify-center border border-cyber-cyan/30 shadow-[0_0_15px_rgba(0,240,255,0.2)]">
-          <span className="text-xs font-bold text-cyber-cyan tracking-widest">AGY</span>
+      <div className="px-5 h-16 flex items-center gap-3 border-b border-premium-border">
+        <div className="w-8 h-8 rounded-lg bg-premium-background flex items-center justify-center border border-premium-border">
+          <span className="text-xs font-bold text-premium-accent tracking-widest">AGY</span>
         </div>
         <span className="text-sm font-semibold text-zinc-100 tracking-wider">
           SUPPLY CHAIN AI
@@ -39,7 +39,7 @@ export default function Sidebar({ sections, activeSection, onSectionChange }) {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-3 py-6 space-y-2">
+      <nav className="flex-1 px-3 py-6 space-y-1">
         {sections.map((section) => {
           const isActive = activeSection === section.id
           const Icon = iconMap[section.id] || LayoutDashboard
@@ -48,15 +48,15 @@ export default function Sidebar({ sections, activeSection, onSectionChange }) {
             <motion.button
               key={section.id}
               onClick={() => onSectionChange(section.id)}
-              whileHover={{ scale: 1.02, x: 4 }}
+              whileHover={{ x: 4 }}
               whileTap={{ scale: 0.98 }}
-              className={`w-full text-left px-4 py-3 rounded-xl text-sm flex items-center gap-3 cursor-pointer transition-all duration-300 ${
+              className={`w-full text-left px-4 py-2.5 rounded-lg text-sm flex items-center gap-3 cursor-pointer transition-colors duration-200 ${
                 isActive
-                  ? 'text-cyber-cyan bg-cyber-cyan/10 font-medium border border-cyber-cyan/20 shadow-[0_0_15px_rgba(0,240,255,0.15)]'
-                  : 'text-zinc-400 hover:text-zinc-100 hover:bg-white/5 border border-transparent'
+                  ? 'text-premium-accent bg-premium-accent/10 font-medium'
+                  : 'text-zinc-400 hover:text-zinc-100 hover:bg-white/5'
               }`}
             >
-              <Icon size={18} className={isActive ? "drop-shadow-[0_0_8px_rgba(0,240,255,0.8)]" : ""} />
+              <Icon size={18} className={isActive ? "text-premium-accent" : "opacity-70"} />
               {section.label}
             </motion.button>
           )

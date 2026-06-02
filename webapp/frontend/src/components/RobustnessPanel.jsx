@@ -41,13 +41,13 @@ export default function RobustnessPanel() {
         </div>
 
         {/* Educational Context Banner */}
-        <div className="bg-red-900/20 border border-red-500/30 rounded-lg p-4 flex gap-4">
-          <div className="text-red-400 mt-1">
+        <div className="bg-premium-accent/10 border-l-4 border-premium-accent rounded-r-lg p-5 flex gap-4">
+          <div className="text-premium-accent mt-1">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
           </div>
           <div>
-            <h4 className="text-sm font-semibold text-red-300 mb-1">What is this?</h4>
-            <p className="text-xs text-red-200/70 leading-relaxed">
+            <h4 className="text-sm font-semibold text-premium-text mb-1">Methodology Overview</h4>
+            <p className="text-sm text-premium-textMuted leading-relaxed">
               Supply chains face random shocks (like delays). But what if a malicious attacker intentionally disrupted our most critical routes? In <strong>Phase 11 (Adversarial Robustness)</strong>, we train our AI against a 'hacker' AI that tries to break our supply chain. We also use <strong>Phase 10 (CVaR)</strong>, a financial risk metric, to ensure that even in the absolute worst 5% of disaster scenarios, our service level never drops below a safe bound. The graph below proves our system stays strong even when actively attacked.
             </p>
           </div>
@@ -55,20 +55,20 @@ export default function RobustnessPanel() {
 
         {/* Deep Academic Specs */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2">
-          <div className="p-3 bg-black/40 border border-zinc-800 rounded-md">
-            <h5 className="text-[10px] uppercase text-zinc-500 font-bold tracking-wider mb-1">Simulation Engine</h5>
+          <div className="p-4 bg-premium-panel border border-premium-border rounded-xl">
+            <h5 className="text-[10px] uppercase text-zinc-500 font-bold tracking-wider mb-2">Simulation Engine</h5>
             <div className="text-xs text-zinc-300 font-mono">SimPy DES<br/>100 Monte Carlo Reps</div>
           </div>
-          <div className="p-3 bg-black/40 border border-zinc-800 rounded-md">
-            <h5 className="text-[10px] uppercase text-zinc-500 font-bold tracking-wider mb-1">Severe Disruption Test</h5>
+          <div className="p-4 bg-premium-panel border border-premium-border rounded-xl">
+            <h5 className="text-[10px] uppercase text-zinc-500 font-bold tracking-wider mb-2">Severe Disruption Test</h5>
             <div className="text-xs text-zinc-300 font-mono">Horizon: 365 days<br/>(R,s,S) Baseline: Fails at 61d</div>
           </div>
-          <div className="p-3 bg-black/40 border border-zinc-800 rounded-md">
-            <h5 className="text-[10px] uppercase text-zinc-500 font-bold tracking-wider mb-1">PPO Stress Survival</h5>
+          <div className="p-4 bg-premium-panel border border-premium-border rounded-xl">
+            <h5 className="text-[10px] uppercase text-zinc-500 font-bold tracking-wider mb-2">PPO Stress Survival</h5>
             <div className="text-xs text-zinc-300 font-mono">Survives 91 days<br/>SL drops to 95.4% max</div>
           </div>
-          <div className="p-3 bg-black/40 border border-zinc-800 rounded-md">
-            <h5 className="text-[10px] uppercase text-zinc-500 font-bold tracking-wider mb-1">Risk Bounds (CVaR)</h5>
+          <div className="p-4 bg-premium-panel border border-premium-border rounded-xl">
+            <h5 className="text-[10px] uppercase text-zinc-500 font-bold tracking-wider mb-2">Risk Bounds (CVaR)</h5>
             <div className="text-xs text-zinc-300 font-mono">99th percentile<br/>Stockouts strictly capped</div>
           </div>
         </div>

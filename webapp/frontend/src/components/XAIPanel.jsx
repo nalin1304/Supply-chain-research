@@ -45,13 +45,13 @@ export default function XAIPanel() {
         </div>
 
         {/* Educational Context Banner */}
-        <div className="bg-amber-900/20 border border-amber-500/30 rounded-lg p-4 flex gap-4">
-          <div className="text-amber-400 mt-1">
+        <div className="bg-premium-accent/10 border-l-4 border-premium-accent rounded-r-lg p-5 flex gap-4">
+          <div className="text-premium-accent mt-1">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
           </div>
           <div>
-            <h4 className="text-sm font-semibold text-amber-300 mb-1">What is this?</h4>
-            <p className="text-xs text-amber-200/70 leading-relaxed">
+            <h4 className="text-sm font-semibold text-premium-text mb-1">Methodology Overview</h4>
+            <p className="text-sm text-premium-textMuted leading-relaxed">
               AI is often a 'black box'—we don't know why it made a decision. In <strong>Phase 9 (SHAP)</strong>, we force the AI to explain itself, showing exactly which factors (like Current Inventory or Forecasts) drove its decision to order more stock. In <strong>Phase 7 (ST-GNN)</strong>, the AI acts like a brain, paying 'attention' to other geographic hubs; the glowing bars show which cities are most closely communicating to predict demand.
             </p>
           </div>
@@ -59,12 +59,12 @@ export default function XAIPanel() {
 
         {/* Deep Academic Specs */}
         <div className="grid grid-cols-2 gap-4 mt-2">
-          <div className="p-3 bg-black/40 border border-zinc-800 rounded-md">
-            <h5 className="text-[10px] uppercase text-zinc-500 font-bold tracking-wider mb-1">Graph Neural Network</h5>
+          <div className="p-4 bg-premium-panel border border-premium-border rounded-xl">
+            <h5 className="text-[10px] uppercase text-zinc-500 font-bold tracking-wider mb-2">Graph Neural Network</h5>
             <div className="text-xs text-zinc-300 font-mono">Spatio-Temporal GNN (ST-GNN)<br/>Extracts inter-hub spatial dependencies for traffic/demand propagation.</div>
           </div>
-          <div className="p-3 bg-black/40 border border-zinc-800 rounded-md">
-            <h5 className="text-[10px] uppercase text-zinc-500 font-bold tracking-wider mb-1">Explainability / Policy Extraction</h5>
+          <div className="p-4 bg-premium-panel border border-premium-border rounded-xl">
+            <h5 className="text-[10px] uppercase text-zinc-500 font-bold tracking-wider mb-2">Explainability / Policy Extraction</h5>
             <div className="text-xs text-zinc-300 font-mono">SHapley Additive exPlanations (SHAP)<br/>100% interpretable operational rules extracted from black-box PPO.</div>
           </div>
         </div>

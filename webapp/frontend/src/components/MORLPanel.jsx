@@ -46,13 +46,13 @@ export default function MORLPanel() {
         </div>
 
         {/* Educational Context Banner */}
-        <div className="bg-fuchsia-900/20 border border-fuchsia-500/30 rounded-lg p-4 flex gap-4">
-          <div className="text-fuchsia-400 mt-1">
+        <div className="bg-premium-accent/10 border-l-4 border-premium-accent rounded-r-lg p-5 flex gap-4">
+          <div className="text-premium-accent mt-1">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
           </div>
           <div>
-            <h4 className="text-sm font-semibold text-fuchsia-300 mb-1">What is this?</h4>
-            <p className="text-xs text-fuchsia-200/70 leading-relaxed">
+            <h4 className="text-sm font-semibold text-premium-text mb-1">Methodology Overview</h4>
+            <p className="text-sm text-premium-textMuted leading-relaxed">
               Different companies have different priorities. A green company cares about carbon; a budget company cares about cost. In <strong>Phase 14 (Multi-Objective RL)</strong>, we created a single AI that can instantly shift its focus between Cost and Carbon based on a slider, without needing to be retrained. The scatter plot below shows how the 'optimal' supply chain choices shift dynamically when we change our priorities.
             </p>
           </div>
@@ -60,20 +60,20 @@ export default function MORLPanel() {
 
         {/* Deep Academic Specs */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2">
-          <div className="p-3 bg-black/40 border border-zinc-800 rounded-md">
-            <h5 className="text-[10px] uppercase text-zinc-500 font-bold tracking-wider mb-1">Multi-Objective Algorithms</h5>
+          <div className="p-4 bg-premium-panel border border-premium-border rounded-xl">
+            <h5 className="text-[10px] uppercase text-zinc-500 font-bold tracking-wider mb-2">Multi-Objective Algorithms</h5>
             <div className="text-xs text-zinc-300 font-mono">NSGA-II, NSGA-III, MOEA/D<br/>Marginal cost-carbon repair op</div>
           </div>
-          <div className="p-3 bg-black/40 border border-zinc-800 rounded-md">
-            <h5 className="text-[10px] uppercase text-zinc-500 font-bold tracking-wider mb-1">NSGA-II Performance</h5>
+          <div className="p-4 bg-premium-panel border border-premium-border rounded-xl">
+            <h5 className="text-[10px] uppercase text-zinc-500 font-bold tracking-wider mb-2">NSGA-II Performance</h5>
             <div className="text-xs text-zinc-300 font-mono">Joint-Normalized HV:<br/>0.713 ± 0.143 (50 seeds)</div>
           </div>
-          <div className="p-3 bg-black/40 border border-zinc-800 rounded-md">
-            <h5 className="text-[10px] uppercase text-zinc-500 font-bold tracking-wider mb-1">Statistical Dominance</h5>
+          <div className="p-4 bg-premium-panel border border-premium-border rounded-xl">
+            <h5 className="text-[10px] uppercase text-zinc-500 font-bold tracking-wider mb-2">Statistical Dominance</h5>
             <div className="text-xs text-zinc-300 font-mono">Friedman Omnibus Test<br/>χ² = 7.32, p = 0.0257</div>
           </div>
-          <div className="p-3 bg-black/40 border border-zinc-800 rounded-md">
-            <h5 className="text-[10px] uppercase text-zinc-500 font-bold tracking-wider mb-1">Dynamic Routing (Phase 13)</h5>
+          <div className="p-4 bg-premium-panel border border-premium-border rounded-xl">
+            <h5 className="text-[10px] uppercase text-zinc-500 font-bold tracking-wider mb-2">Dynamic Routing (Phase 13)</h5>
             <div className="text-xs text-zinc-300 font-mono">Spatio-Temporal constraints<br/>Traffic matrices applied</div>
           </div>
         </div>

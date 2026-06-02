@@ -55,8 +55,8 @@ export default function App() {
   }
 
   return (
-    <div className="flex h-screen overflow-hidden bg-cyber-dark text-white bg-cyber-grid">
-      <div className="absolute inset-0 bg-cyber-gradient pointer-events-none z-0"></div>
+    <div className="flex h-screen overflow-hidden bg-premium-background text-premium-text bg-subtle-grid">
+      <div className="absolute inset-0 bg-premium-gradient pointer-events-none z-0"></div>
       <div className="relative z-10 flex h-full w-full">
         <Sidebar
           sections={sections}

@@ -11,18 +11,19 @@ export default {
         mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
       },
       colors: {
-        cyber: {
-          dark: '#09090b',
-          panel: 'rgba(255, 255, 255, 0.03)',
-          border: 'rgba(255, 255, 255, 0.08)',
-          cyan: '#00f0ff',
-          purple: '#b026ff',
-          blue: '#1e3a8a',
+        premium: {
+          background: '#050505', // Pitch black
+          panel: '#111111', // Very dark gray for panels
+          border: '#27272a', // Subtle gray border
+          accent: '#6366f1', // Elegant Indigo
+          accentHover: '#4f46e5',
+          text: '#fafafa', // High contrast white
+          textMuted: '#a1a1aa', // Muted text
         }
       },
       backgroundImage: {
-        'cyber-grid': 'linear-gradient(to right, #1f2937 1px, transparent 1px), linear-gradient(to bottom, #1f2937 1px, transparent 1px)',
-        'cyber-gradient': 'radial-gradient(circle at top right, rgba(176, 38, 255, 0.15), transparent 40%), radial-gradient(circle at bottom left, rgba(0, 240, 255, 0.15), transparent 40%)'
+        'premium-gradient': 'radial-gradient(circle at top, rgba(99, 102, 241, 0.05), transparent 50%)',
+        'subtle-grid': 'linear-gradient(to right, #18181b 1px, transparent 1px), linear-gradient(to bottom, #18181b 1px, transparent 1px)'
       }
     },
   },

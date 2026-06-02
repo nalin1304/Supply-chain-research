@@ -130,18 +130,18 @@ export default function Dashboard() {
       <motion.div 
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-cyber-panel/80 border border-cyber-border rounded-xl p-6 backdrop-blur-md relative overflow-hidden"
+        className="bg-premium-panel border border-premium-border rounded-xl p-6 relative overflow-hidden"
       >
-        <div className="absolute top-0 right-0 w-64 h-64 bg-cyber-blue/10 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
+        <div className="absolute top-0 right-0 w-64 h-64 bg-premium-accent/5 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
         <div className="flex items-start gap-4">
-          <div className="p-3 bg-cyber-blue/20 rounded-lg text-cyber-blue shrink-0">
+          <div className="p-3 bg-premium-accent/10 rounded-lg text-premium-accent shrink-0">
             <LayoutDashboard size={24} />
           </div>
           <div>
-            <h1 className="text-2xl font-light text-white tracking-wide mb-2 drop-shadow-cyber">
-              Welcome to the Multi-Objective Resilient Supply Chain Dashboard
+            <h1 className="text-2xl font-medium text-premium-text tracking-wide mb-2">
+              Multi-Objective Resilient Supply Chain Dashboard
             </h1>
-            <p className="text-zinc-400 leading-relaxed text-sm max-w-4xl">
+            <p className="text-premium-textMuted leading-relaxed text-sm max-w-4xl">
               This project tackles the massive challenge of balancing <strong>logistics cost</strong> against <strong>carbon emissions (CO₂)</strong> across Indian logistics networks. Using cutting-edge Artificial Intelligence (Reinforcement Learning), we train virtual 'agents' to make inventory and routing decisions that are both green and highly resilient to real-world supply chain shocks. Use the sidebar to explore the 14 advanced phases of this research.
             </p>
           </div>
@@ -155,36 +155,36 @@ export default function Dashboard() {
         transition={{ delay: 0.1 }}
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
       >
-        <div className="p-4 rounded-lg bg-zinc-900/50 border border-zinc-800">
-          <h4 className="text-sm font-semibold text-zinc-300 mb-2 border-b border-zinc-800 pb-2">Primary Datasets</h4>
-          <ul className="text-xs text-zinc-400 space-y-1 font-mono">
+        <div className="p-5 rounded-xl bg-premium-panel border border-premium-border">
+          <h4 className="text-xs font-semibold text-zinc-300 mb-3 uppercase tracking-wider">Primary Datasets</h4>
+          <ul className="text-xs text-zinc-400 space-y-2 font-mono">
             <li>• Delhivery (144,867 records)</li>
             <li>• DataCo Smart SC (180K orders)</li>
             <li>• CVRPLIB Augerat Set-A</li>
             <li>• SVRPBench (Stochastic VRP)</li>
           </ul>
         </div>
-        <div className="p-4 rounded-lg bg-zinc-900/50 border border-zinc-800">
-          <h4 className="text-sm font-semibold text-zinc-300 mb-2 border-b border-zinc-800 pb-2">Network Scope</h4>
-          <ul className="text-xs text-zinc-400 space-y-1 font-mono">
+        <div className="p-5 rounded-xl bg-premium-panel border border-premium-border">
+          <h4 className="text-xs font-semibold text-zinc-300 mb-3 uppercase tracking-wider">Network Scope</h4>
+          <ul className="text-xs text-zinc-400 space-y-2 font-mono">
             <li>• 5 Distribution Warehouses</li>
             <li>• 101 Customer Demand Points</li>
             <li>• 20 Indian Cities</li>
             <li>• OSRM v5 Real Road Distances</li>
           </ul>
         </div>
-        <div className="p-4 rounded-lg bg-zinc-900/50 border border-zinc-800">
-          <h4 className="text-sm font-semibold text-zinc-300 mb-2 border-b border-zinc-800 pb-2">Experimental Setup</h4>
-          <ul className="text-xs text-zinc-400 space-y-1 font-mono">
+        <div className="p-5 rounded-xl bg-premium-panel border border-premium-border">
+          <h4 className="text-xs font-semibold text-zinc-300 mb-3 uppercase tracking-wider">Experimental Setup</h4>
+          <ul className="text-xs text-zinc-400 space-y-2 font-mono">
             <li>• 1,000,000 RL Timesteps</li>
             <li>• 50-Seed Monte Carlo Evals</li>
             <li>• $H_\infty$ Minimax Adversarial</li>
             <li>• Cloud Env: Modal (Tesla T4)</li>
           </ul>
         </div>
-        <div className="p-4 rounded-lg bg-zinc-900/50 border border-zinc-800">
-          <h4 className="text-sm font-semibold text-zinc-300 mb-2 border-b border-zinc-800 pb-2">Statistical Validation</h4>
-          <ul className="text-xs text-zinc-400 space-y-1 font-mono">
+        <div className="p-5 rounded-xl bg-premium-panel border border-premium-border">
+          <h4 className="text-xs font-semibold text-zinc-300 mb-3 uppercase tracking-wider">Statistical Validation</h4>
+          <ul className="text-xs text-zinc-400 space-y-2 font-mono">
             <li>• Friedman Omnibus Test</li>
             <li>• Paired Wilcoxon post-hoc</li>
             <li>• Holm-Bonferroni correction</li>
