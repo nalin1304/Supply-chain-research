@@ -3,20 +3,38 @@
 Trains the MAPPO Agent in the Multi-Agent Supply Chain environment.
 """
 
-import os
 import time
+from pathlib import Path
+
 import numpy as np
-import torch
 from loguru import logger
 from torch.utils.tensorboard import SummaryWriter
 
 from supply_chain_research.config import MasterConfig, PPOConfig
-from supply_chain_research.phase3_ai.marl_env import MultiAgentSupplyChainEnv
+from supply_chain_research.phase3_ai.dr_env_wrapper import DomainRandomizationConfig
 from supply_chain_research.phase3_ai.mappo_agent import MAPPOAgent
+from supply_chain_research.phase3_ai.marl_env import MultiAgentSupplyChainEnv
 
 
 class MAPPOTrainer:
-    def __init__(self, config=None, ppo_config=None, run_name=None, device="auto"):
+    """
+    Parameters
+    ----------
+    """
+    def __init__(
+        self,
+        config=None,
+        ppo_config=None,
+        run_name=None,
+        device="auto",
+        output_root: str = ".",
+        domain_randomization: bool = True,
+        randomization_config: DomainRandomizationConfig | None = None,
+    ):
+        """
+        Parameters
+        ----------
+        """
         self.config = config if config else MasterConfig()
         self.ppo_config = ppo_config if ppo_config else PPOConfig()
         
@@ -25,6 +43,18 @@ class MAPPOTrainer:
             n_warehouses=self.config.network.n_warehouses,
             config=self.config,
         )
+        self.domain_randomization = bool(domain_randomization)
+        self.randomization_config = randomization_config or DomainRandomizationConfig()
+        base_env = self.env.env
+        self._nominal_dr = {
+            "lead_time": base_env._lead_time_days,
+            "holding_cost": base_env._holding_cost_per_kg,
+            "stockout_cost": base_env._stockout_cost_per_kg,
+            "capacities": base_env.warehouse_capacities.copy(),
+            "demand_min": base_env.config.gym_env.demand_min,
+            "demand_max": base_env.config.gym_env.demand_max,
+        }
+        self._dr_rng = np.random.default_rng(self.config.random_seed)
         
         self.agent = MAPPOAgent(
             local_obs_dim=self.env.local_obs_dim,
@@ -38,18 +68,61 @@ class MAPPOTrainer:
         if run_name is None:
             run_name = f"mappo_{int(time.time())}"
         self.run_name = run_name
-        self.writer = SummaryWriter(log_dir=f"runs/{run_name}")
-        self.save_dir = f"models/{run_name}"
-        os.makedirs(self.save_dir, exist_ok=True)
+        self.output_root = Path(output_root)
+        self.run_dir = self.output_root / "runs" / run_name
+        self.save_dir = self.output_root / "models" / run_name
+        self.run_dir.mkdir(parents=True, exist_ok=True)
+        self.save_dir.mkdir(parents=True, exist_ok=True)
+        self.writer = SummaryWriter(log_dir=str(self.run_dir))
+
+    def _apply_domain_randomization(self) -> None:
+        """
+        Parameters
+        ----------
+        """
+        cfg = self.randomization_config
+        base_env = self.env.env
+        base_env._lead_time_days = int(
+            self._dr_rng.integers(cfg.lead_time_min, cfg.lead_time_max + 1)
+        )
+        holding_factor = self._dr_rng.uniform(1.0 - cfg.cost_scale, 1.0 + cfg.cost_scale)
+        stockout_factor = self._dr_rng.uniform(1.0 - cfg.cost_scale, 1.0 + cfg.cost_scale)
+        capacity_factors = self._dr_rng.uniform(
+            1.0 - cfg.capacity_scale,
+            1.0 + cfg.capacity_scale,
+            size=base_env.n_warehouses,
+        )
+        demand_factor = self._dr_rng.uniform(
+            1.0 - cfg.demand_scale,
+            1.0 + cfg.demand_scale,
+        )
+        base_env._holding_cost_per_kg = self._nominal_dr["holding_cost"] * holding_factor
+        base_env._stockout_cost_per_kg = self._nominal_dr["stockout_cost"] * stockout_factor
+        base_env.warehouse_capacities = self._nominal_dr["capacities"] * capacity_factors
+        base_env.config.gym_env.demand_min = self._nominal_dr["demand_min"] * demand_factor
+        base_env.config.gym_env.demand_max = self._nominal_dr["demand_max"] * demand_factor
+
+    def _reset_env(self, seed=None):
+        """
+        Parameters
+        ----------
+        """
+        if self.domain_randomization:
+            self._apply_domain_randomization()
+        return self.env.reset(seed=seed)
         
     def train(self, total_timesteps=1_000_000):
+        """
+        Parameters
+        ----------
+        """
         logger.info(f"Starting MAPPO training on {self.agent.device}...")
         
         timestep = 0
         episodes = 0
         best_reward = -float("inf")
         
-        local_obs, global_obs, _ = self.env.reset()
+        local_obs, global_obs, _ = self._reset_env()
         
         while timestep < total_timesteps:
             # Collect Rollout
@@ -60,7 +133,11 @@ class MAPPOTrainer:
             
             episode_rewards = []
             
-            for _ in range(self.ppo_config.steps_per_rollout):
+            rollout_steps = min(
+                self.ppo_config.steps_per_rollout,
+                total_timesteps - timestep,
+            )
+            for _ in range(rollout_steps):
                 actions_dict, value, log_probs_dict = self.agent.select_actions(local_obs, global_obs)
                 
                 next_local_obs, next_global_obs, rewards, terminations, truncations, info = self.env.step(actions_dict)
@@ -90,7 +167,7 @@ class MAPPOTrainer:
                 if done:
                     episodes += 1
                     episode_rewards.append(info.get('total_daily_cost', 0))
-                    local_obs, global_obs, _ = self.env.reset()
+                    local_obs, global_obs, _ = self._reset_env()
             
             # Bootstrap value for GAE
             _, last_value, _ = self.agent.select_actions(local_obs, global_obs)
@@ -120,10 +197,10 @@ class MAPPOTrainer:
                 # Mean cost lower is better.
                 if -mean_cost > best_reward:
                     best_reward = -mean_cost
-                    self.agent.save(f"{self.save_dir}/best_mappo_agent.pt")
+                    self.agent.save(str(self.save_dir / "best_mappo_agent.pt"))
                     logger.info("New best model saved!")
 
-        self.agent.save(f"{self.save_dir}/final_mappo_agent.pt")
+        self.agent.save(str(self.save_dir / "final_mappo_agent.pt"))
         self.writer.close()
         logger.info("MAPPO Training Completed.")
 

@@ -11,19 +11,20 @@ import os
 import pickle
 
 import matplotlib
+
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np  # noqa: E402
 
 from supply_chain_research.config import MasterConfig  # noqa: E402
+from supply_chain_research.phase4_synthesis.sensitivity_analysis import (  # noqa: E402
+    compute_sensitivity_indices,
+    report_sobol_indices,
+    run_sensitivity_sweep,
+    run_sobol_sensitivity,
+)
 from supply_chain_research.utils.plotting_style import (  # noqa: E402
     set_publication_style,
-)
-from supply_chain_research.phase4_synthesis.sensitivity_analysis import (  # noqa: E402
-    run_sensitivity_sweep,
-    compute_sensitivity_indices,
-    run_sobol_sensitivity,
-    report_sobol_indices,
 )
 
 # Output directories
@@ -44,13 +45,19 @@ _COLORS = {
 
 
 def _ensure_dirs():
-    """Ensure output directories exist."""
+    """Ensure output directories exist.
+    Parameters
+    ----------
+    """
     os.makedirs(FIGURES_DIR, exist_ok=True)
     os.makedirs(SUPP_DIR, exist_ok=True)
 
 
 def _apply_publication_rcparams():
-    """Apply consistent publication-quality rcParams."""
+    """Apply consistent publication-quality rcParams.
+    Parameters
+    ----------
+    """
     plt.rcParams.update({
         "font.family": "serif",
         "font.serif": ["Times New Roman"],
@@ -74,7 +81,10 @@ def _apply_publication_rcparams():
 
 
 def _style_axis(ax):
-    """Apply consistent styling to an axis: remove top/right spines, add grid."""
+    """Apply consistent styling to an axis: remove top/right spines, add grid.
+    Parameters
+    ----------
+    """
     ax.spines['top'].set_visible(False)
     ax.spines['right'].set_visible(False)
     ax.grid(True, alpha=0.3)

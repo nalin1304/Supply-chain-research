@@ -3,7 +3,7 @@
 This script implements task 0.3 of ``supply-chain-research-audit``: it walks
 every module under :mod:`supply_chain_research` using :func:`pkgutil.walk_packages`,
 collects :func:`inspect.signature` for every public function, class, and method,
-and writes a sorted JSON snapshot to ``audit_workspace/SIGNATURE_BASELINE.json``.
+and writes a sorted JSON snapshot to ``audit_workspace/CURRENT_SIGNATURES.json``.
 
 The resulting file is the ground truth for preservation clause C3.12
 (public-API signatures must not change unless an additive optional argument is
@@ -34,7 +34,7 @@ from typing import Any, Dict
 # Repo root = parent of this script's directory.
 REPO_ROOT = Path(__file__).resolve().parent.parent
 PACKAGE_NAME = "supply_chain_research"
-OUTPUT_PATH = REPO_ROOT / "audit_workspace" / "SIGNATURE_BASELINE.json"
+OUTPUT_PATH = REPO_ROOT / "audit_workspace" / "CURRENT_SIGNATURES.json"
 
 
 def _is_public(name: str) -> bool:

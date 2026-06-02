@@ -22,7 +22,6 @@ from __future__ import annotations
 import matplotlib.pyplot as plt
 from cycler import cycler
 
-
 # IBM-design colour-blind-safe sequence
 # (ColorBrewer-2 verified, deuteranopia + protanopia + tritanopia safe)
 COLOUR_BLIND_SAFE = [
@@ -61,6 +60,9 @@ def set_publication_style() -> None:
     -------
     None
         ``matplotlib.pyplot.rcParams`` mutated globally.
+    
+    Parameters
+    ----------
     """
     plt.rcParams.update({
         # Typography — serif body to match journal templates
@@ -161,6 +163,9 @@ def apply_modern_palette() -> list[str]:
     list of str
         Hex colour codes in the canonical order used by
         :func:`set_publication_style`.
+    
+    Parameters
+    ----------
     """
     return list(COLOUR_BLIND_SAFE)
 

@@ -52,7 +52,7 @@ import json
 import platform
 import time
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Dict, Optional, Union
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 
@@ -93,6 +93,9 @@ def _import_master_config():
     -------
     type
         The :class:`supply_chain_research.config.MasterConfig` class.
+    
+    Parameters
+    ----------
     """
     # Local import keeps this module importable even if optional
     # downstream dependencies (pymoo, simpy, torch) are missing on
@@ -103,7 +106,7 @@ def _import_master_config():
     return MasterConfig
 
 
-def _resolve_config(config: Optional["MasterConfig"]) -> "MasterConfig":
+def _resolve_config(config: MasterConfig | None) -> MasterConfig:
     """Return ``config`` or a fresh :class:`MasterConfig` instance.
 
     Parameters
@@ -123,7 +126,7 @@ def _resolve_config(config: Optional["MasterConfig"]) -> "MasterConfig":
     return config
 
 
-def _measure(callable_obj, repetitions: int) -> Dict[str, float]:
+def _measure(callable_obj, repetitions: int) -> dict[str, float]:
     """Time ``callable_obj`` for ``repetitions`` runs and summarise.
 
     Uses :func:`time.perf_counter` per
@@ -204,7 +207,7 @@ def _make_demand(n_customers: int, rng: np.random.Generator) -> np.ndarray:
 # ---------------------------------------------------------------------------
 # Per-algorithm benchmarks
 # ---------------------------------------------------------------------------
-def _benchmark_nsga2(config: "MasterConfig", fast_mode: bool) -> Dict[str, Any]:
+def _benchmark_nsga2(config: MasterConfig, fast_mode: bool) -> dict[str, Any]:
     """Benchmark one NSGA-II generation at small ``pop_size`` and ``n_gen``.
 
     Parameters
@@ -248,6 +251,10 @@ def _benchmark_nsga2(config: "MasterConfig", fast_mode: bool) -> Dict[str, Any]:
     cfg.network.warehouse_capacities = [60000.0, 55000.0, 50000.0][:n_warehouses]
 
     def _run() -> None:
+        """
+        Parameters
+        ----------
+        """
         run_nsga2(
             cfg,
             distance_matrix=distance,
@@ -276,7 +283,7 @@ def _benchmark_nsga2(config: "MasterConfig", fast_mode: bool) -> Dict[str, Any]:
     }
 
 
-def _benchmark_moead(config: "MasterConfig", fast_mode: bool) -> Dict[str, Any]:
+def _benchmark_moead(config: MasterConfig, fast_mode: bool) -> dict[str, Any]:
     """Benchmark one MOEA/D run at small ``pop_size`` and ``n_gen``.
 
     Parameters
@@ -314,6 +321,10 @@ def _benchmark_moead(config: "MasterConfig", fast_mode: bool) -> Dict[str, Any]:
     cfg.network.warehouse_capacities = [60000.0, 55000.0, 50000.0][:n_warehouses]
 
     def _run() -> None:
+        """
+        Parameters
+        ----------
+        """
         run_moead(
             cfg,
             distance_matrix=distance,
@@ -340,7 +351,7 @@ def _benchmark_moead(config: "MasterConfig", fast_mode: bool) -> Dict[str, Any]:
     }
 
 
-def _benchmark_des(config: "MasterConfig", fast_mode: bool) -> Dict[str, Any]:
+def _benchmark_des(config: MasterConfig, fast_mode: bool) -> dict[str, Any]:
     """Benchmark a DES run on a short simulation horizon.
 
     Parameters
@@ -378,6 +389,10 @@ def _benchmark_des(config: "MasterConfig", fast_mode: bool) -> Dict[str, Any]:
     cfg.simulation.warmup_days = warmup_days  # [SimulationConfig.warmup_days]
 
     def _run() -> None:
+        """
+        Parameters
+        ----------
+        """
         env = DESEnvironment(config=cfg, seed=config.random_seed)
         env.run()
 
@@ -403,7 +418,7 @@ def _benchmark_des(config: "MasterConfig", fast_mode: bool) -> Dict[str, Any]:
     }
 
 
-def _benchmark_lstm(config: "MasterConfig", fast_mode: bool) -> Dict[str, Any]:
+def _benchmark_lstm(config: MasterConfig, fast_mode: bool) -> dict[str, Any]:
     """Benchmark a single-batch LSTM forward pass.
 
     Parameters
@@ -460,6 +475,10 @@ def _benchmark_lstm(config: "MasterConfig", fast_mode: bool) -> Dict[str, Any]:
     inputs = torch.randn(batch_size, seq_length, 1)
 
     def _run() -> None:
+        """
+        Parameters
+        ----------
+        """
         with torch.no_grad():  # [PyTorch §"torch.no_grad"]
             model(inputs)
 
@@ -479,7 +498,7 @@ def _benchmark_lstm(config: "MasterConfig", fast_mode: bool) -> Dict[str, Any]:
     }
 
 
-def _benchmark_ppo(config: "MasterConfig", fast_mode: bool) -> Dict[str, Any]:
+def _benchmark_ppo(config: MasterConfig, fast_mode: bool) -> dict[str, Any]:
     """Benchmark a single PPO update on a small synthetic rollout.
 
     Parameters
@@ -551,6 +570,10 @@ def _benchmark_ppo(config: "MasterConfig", fast_mode: bool) -> Dict[str, Any]:
     }
 
     def _run() -> None:
+        """
+        Parameters
+        ----------
+        """
         agent.update(rollout_data, last_value=0.0)
 
     timing = _measure(_run, repetitions)
@@ -575,9 +598,9 @@ def _benchmark_ppo(config: "MasterConfig", fast_mode: bool) -> Dict[str, Any]:
 # Public API
 # ---------------------------------------------------------------------------
 def run_complexity_benchmarks(
-    config: Optional["MasterConfig"] = None,
+    config: MasterConfig | None = None,
     fast_mode: bool = True,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Run the five wall-clock complexity benchmarks once and return results.
 
     Each algorithm runs on a small reproducible instance so the full
@@ -657,7 +680,7 @@ def run_complexity_benchmarks(
         ),
     }
 
-    results: Dict[str, Any] = {"metadata": metadata}
+    results: dict[str, Any] = {"metadata": metadata}
 
     benchmark_specs = (
         # (key, callable, theoretical_big_o_label)
@@ -692,10 +715,10 @@ def run_complexity_benchmarks(
 
 
 def dump_complexity_report(
-    out_path: Union[str, Path] = "audit_workspace/COMPLEXITY_REPORT.json",
-    config: Optional["MasterConfig"] = None,
+    out_path: str | Path = "audit_workspace/COMPLEXITY_REPORT.json",
+    config: MasterConfig | None = None,
     fast_mode: bool = True,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Run the benchmarks once and write the JSON report to ``out_path``.
 
     Parameters
@@ -752,7 +775,7 @@ def dump_complexity_report(
 # ---------------------------------------------------------------------------
 
 
-def _coerce_profile_dict(block: Dict[str, Any]) -> Dict[str, float]:
+def _coerce_profile_dict(block: dict[str, Any]) -> dict[str, float]:
     """Project a benchmark block into the legacy ``Dict[str, float]`` shape.
 
     Parameters
@@ -775,7 +798,7 @@ def _coerce_profile_dict(block: Dict[str, Any]) -> Dict[str, float]:
     carry richer metadata (string big-O label, integer parameters,
     etc.).
     """
-    coerced: Dict[str, float] = {}
+    coerced: dict[str, float] = {}
     for key, value in block.items():
         if isinstance(value, bool):
             coerced[key] = float(value)
@@ -784,7 +807,7 @@ def _coerce_profile_dict(block: Dict[str, Any]) -> Dict[str, float]:
     return coerced
 
 
-def profile_nsga2(config: "MasterConfig") -> Dict[str, float]:  # [bugfix.md C3.12]
+def profile_nsga2(config: MasterConfig) -> dict[str, float]:  # [bugfix.md C3.12]
     """[bugfix.md C3.12 preservation shim] Profile one NSGA-II generation.
 
     Restores the pre-FIX-017 public name
@@ -816,7 +839,7 @@ def profile_nsga2(config: "MasterConfig") -> Dict[str, float]:  # [bugfix.md C3.
     return _coerce_profile_dict(results.get("nsga2", {}))
 
 
-def profile_ppo_rollout(config: "MasterConfig") -> Dict[str, float]:  # [bugfix.md C3.12]
+def profile_ppo_rollout(config: MasterConfig) -> dict[str, float]:  # [bugfix.md C3.12]
     """[bugfix.md C3.12 preservation shim] Profile one PPO update.
 
     Restores the pre-FIX-017 public name
@@ -843,7 +866,7 @@ def profile_ppo_rollout(config: "MasterConfig") -> Dict[str, float]:  # [bugfix.
     return _coerce_profile_dict(results.get("ppo_update", {}))
 
 
-def profile_lstm_forward(config: "MasterConfig") -> Dict[str, float]:  # [bugfix.md C3.12]
+def profile_lstm_forward(config: MasterConfig) -> dict[str, float]:  # [bugfix.md C3.12]
     """[bugfix.md C3.12 preservation shim] Profile one LSTM forward pass.
 
     Restores the pre-FIX-017 public name
@@ -871,7 +894,7 @@ def profile_lstm_forward(config: "MasterConfig") -> Dict[str, float]:  # [bugfix
     return _coerce_profile_dict(results.get("lstm_forward", {}))
 
 
-def profile_des_simulation(config: "MasterConfig") -> Dict[str, float]:  # [bugfix.md C3.12]
+def profile_des_simulation(config: MasterConfig) -> dict[str, float]:  # [bugfix.md C3.12]
     """[bugfix.md C3.12 preservation shim] Profile one DES run.
 
     Restores the pre-FIX-017 public name
@@ -900,7 +923,7 @@ def profile_des_simulation(config: "MasterConfig") -> Dict[str, float]:  # [bugf
     return _coerce_profile_dict(results.get("des", {}))
 
 
-def profile_distance_matrix(config: "MasterConfig") -> Dict[str, float]:  # [bugfix.md C3.12]
+def profile_distance_matrix(config: MasterConfig) -> dict[str, float]:  # [bugfix.md C3.12]
     """[bugfix.md C3.12 preservation shim] Documented stub for distance-matrix profiling.
 
     Restores the pre-FIX-017 public name
@@ -942,7 +965,7 @@ def profile_distance_matrix(config: "MasterConfig") -> Dict[str, float]:  # [bug
 
 def run_complexity_analysis(
     output_path: str = "data/results/complexity_profile.json",
-) -> "list":  # [bugfix.md C3.12]
+) -> list:  # [bugfix.md C3.12]
     """[bugfix.md C3.12 preservation shim] Run the complexity suite and dump JSON.
 
     Restores the pre-FIX-017 public name
@@ -982,7 +1005,7 @@ def run_complexity_analysis(
             continue
         if not isinstance(block, dict):
             continue
-        record: Dict[str, Any] = {"algorithm": algorithm}
+        record: dict[str, Any] = {"algorithm": algorithm}
         record.update(block)
         legacy_records.append(record)
     return legacy_records

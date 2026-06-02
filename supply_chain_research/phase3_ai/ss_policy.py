@@ -13,8 +13,8 @@ References:
       Production Management in Supply Chains. 4th ed. CRC Press.
 """
 
+
 import numpy as np
-from typing import Optional
 
 
 class SSPolicy:
@@ -49,9 +49,13 @@ class SSPolicy:
         n_customers: int,
         reorder_point_fraction: float = 0.3,
         order_up_to_fraction: float = 0.9,
-        warehouse_capacities: Optional[np.ndarray] = None,
+        warehouse_capacities: np.ndarray | None = None,
         review_period_days: int = 7,
     ):
+        """
+        Parameters
+        ----------
+        """
         self.n_warehouses = n_warehouses
         self.n_customers = n_customers
         self.reorder_point_fraction = reorder_point_fraction

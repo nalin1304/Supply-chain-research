@@ -8,22 +8,33 @@ import numpy as np
 import pandas as pd
 from loguru import logger
 from statsmodels.tsa.arima.model import ARIMA
-from statsmodels.tsa.holtwinters import ExponentialSmoothing
 from statsmodels.tsa.forecasting.theta import ThetaModel
+from statsmodels.tsa.holtwinters import ExponentialSmoothing
 
 from supply_chain_research.phase3_ai.forecaster_base import BaseForecaster
 
 
 class ARIMAForecaster(BaseForecaster):
-    """ARIMA forecaster with automatic (p, d, q) order selection based on AIC."""
+    """ARIMA forecaster with automatic (p, d, q) order selection based on AIC.
+    Parameters
+    ----------
+    """
 
     def __init__(self, max_p: int = 2, max_d: int = 1, max_q: int = 2):
+        """
+        Parameters
+        ----------
+        """
         self.max_p = max_p
         self.max_d = max_d
         self.max_q = max_q
         self.models = {}
 
     def fit(self, train_data: np.ndarray, val_data: np.ndarray = None) -> None:
+        """
+        Parameters
+        ----------
+        """
         self.train_data = train_data
         n_customers = train_data.shape[1]
 
@@ -57,6 +68,10 @@ class ARIMAForecaster(BaseForecaster):
                 self.models[c] = None
 
     def predict(self, horizon: int) -> np.ndarray:
+        """
+        Parameters
+        ----------
+        """
         n_customers = self.train_data.shape[1]
         predictions = np.zeros((horizon, n_customers))
 
@@ -77,14 +92,25 @@ class ARIMAForecaster(BaseForecaster):
 
 
 class ETSForecaster(BaseForecaster):
-    """Exponential Smoothing (ETS / Holt-Winters) forecaster."""
+    """Exponential Smoothing (ETS / Holt-Winters) forecaster.
+    Parameters
+    ----------
+    """
 
     def __init__(self, seasonal_periods: int = 7):
+        """
+        Parameters
+        ----------
+        """
         self.seasonal_periods = seasonal_periods
         self.models = {}
         self.last_values = []
 
     def fit(self, train_data: np.ndarray, val_data: np.ndarray = None) -> None:
+        """
+        Parameters
+        ----------
+        """
         self.train_data = train_data
         n_customers = train_data.shape[1]
 
@@ -115,6 +141,10 @@ class ETSForecaster(BaseForecaster):
                     self.models[c] = None
 
     def predict(self, horizon: int) -> np.ndarray:
+        """
+        Parameters
+        ----------
+        """
         n_customers = self.train_data.shape[1]
         predictions = np.zeros((horizon, n_customers))
 
@@ -134,18 +164,33 @@ class ETSForecaster(BaseForecaster):
 
 
 class ThetaForecaster(BaseForecaster):
-    """Theta Method forecaster (Assimakopoulos & Nikolopoulos 2000)."""
+    """Theta Method forecaster (Assimakopoulos & Nikolopoulos 2000).
+    Parameters
+    ----------
+    """
 
     def __init__(self, period: int = 7):
+        """
+        Parameters
+        ----------
+        """
         self.period = period
         self.train_data = None
         self.last_values = []
 
     def fit(self, train_data: np.ndarray, val_data: np.ndarray = None) -> None:
+        """
+        Parameters
+        ----------
+        """
         self.train_data = train_data
         self.last_values = [train_data[-1, c] for c in range(train_data.shape[1])]
 
     def predict(self, horizon: int) -> np.ndarray:
+        """
+        Parameters
+        ----------
+        """
         n_customers = self.train_data.shape[1]
         predictions = np.zeros((horizon, n_customers))
 

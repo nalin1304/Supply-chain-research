@@ -343,7 +343,7 @@ by `cloud_training/modal_train.py`).
 
 ## 8. `tests/` — The Test Suite
 
-483 tests pass, 5 skipped, runs in ~315 s on the Python 3.14 audit
+488 tests pass, 5 skipped, runs in ~205 s on the Python 3.14 audit
 environment. The naming convention
 deserves explanation: where you see two test files with similar
 names (e.g. `test_nsga2.py` AND `test_nsga2_solver.py`), the
@@ -796,7 +796,7 @@ find . -type d -name __pycache__ -exec rm -rf {} +
 grep -q "node_modules" .gitignore || echo "webapp/frontend/node_modules/" >> .gitignore
 ```
 
-After these clean-ups: `pytest -q` should still report **483 passed,
+After these clean-ups: `pytest -q` should still report **488 passed,
 5 skipped** on the current audit environment (no test exercises any of
 the deleted artifacts).
 
@@ -851,7 +851,21 @@ cd webapp/frontend && npm install && npm run dev
 
 ---
 
-*Last updated alongside the FIX-022 stress-mode reformulation. Every
+## 18. Advanced Phases (7-14)
+
+The project has recently been extended to cover highly advanced RL, resilience, and operational aspects:
+- **Phase 7 (Multi-Agent RL):** Replaces centralized PPO with MAPPO and ST-GNN architectures for decentralized, cooperative warehouse control.
+- **Phase 8 (Sim-to-Real Domain Randomization):** Bridges the simulation gap using Kaggle M5 dataset and Domain Randomization (`dr_env_wrapper.py`). Note that `DemandDataGenerator` is intentionally synthetic for pre-training, but real-world evaluation uses real data.
+- **Phase 9 (Explainable AI):** SHAP and LIME values to interpret RL actions (e.g. why did the agent order X units?).
+- **Phase 10 (Dynamic Routing):** Real-time responsive VRP adjustments using Google OR-Tools.
+- **Phase 11 (Adversarial RL):** Minimax CVaR-MAPPO against an adversarial agent (`adversarial_trainer.py`) that purposefully disrupts the supply chain to build robustness.
+- **Phase 12 (Offline RL):** Decision Transformer (`offline_trainer.py`) trained on static historical expert logs to avoid costly online env interaction during initial training.
+- **Phase 13 (Real-Time Traffic):** `TrafficMatrix` using OpenRouteService or pre-computed Delhi travel times to adjust pathing dynamically.
+- **Phase 14 (Multi-Objective RL):** `MORLAgent` + `MultiObjectiveSupplyChainEnv` extending PPO to dynamically trade-off Carbon vs Cost based on an input preference vector.
+
+---
+
+*Last updated alongside the FIX-022 stress-mode reformulation and Advanced Phases additions. Every
 file path in this document was verified by directory walk on the
 date of the FIX-022 commit. If you find a stale reference, it's a
 bug — please flag it.*

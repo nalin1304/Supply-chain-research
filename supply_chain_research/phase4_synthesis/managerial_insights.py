@@ -56,9 +56,10 @@ from __future__ import annotations
 
 import json
 import pickle
+from collections.abc import Iterable
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Optional, Tuple, Union
+from typing import Any
 
 import numpy as np
 
@@ -148,7 +149,7 @@ MISSING_ARTIFACT_NOTE = (
 
 def _resolve_artifact(
     artifact_dir: Path, candidate_names: Iterable[str],
-) -> Optional[Path]:
+) -> Path | None:
     """Return the first existing path among ``candidate_names``.
 
     Parameters
@@ -173,7 +174,7 @@ def _resolve_artifact(
     return None
 
 
-def _load_pareto_front(artifact_dir: Path) -> Optional[np.ndarray]:
+def _load_pareto_front(artifact_dir: Path) -> np.ndarray | None:
     """Load an NSGA-II Pareto front from the artifact directory.
 
     The function probes (in order) the canonical names produced by the
@@ -231,7 +232,7 @@ def _load_pareto_front(artifact_dir: Path) -> Optional[np.ndarray]:
 
 def _load_baseline_solution(
     artifact_dir: Path,
-) -> Optional[Dict[str, Any]]:
+) -> dict[str, Any] | None:
     """Load the OR-Tools / cost-only baseline solution.
 
     Parameters
@@ -260,7 +261,7 @@ def _load_baseline_solution(
     return None
 
 
-def _load_ppo_eval(artifact_dir: Path) -> Optional[Dict[str, Any]]:
+def _load_ppo_eval(artifact_dir: Path) -> dict[str, Any] | None:
     """Load PPO evaluation results.
 
     Parameters
@@ -279,7 +280,7 @@ def _load_ppo_eval(artifact_dir: Path) -> Optional[Dict[str, Any]]:
         path = artifact_dir / name
         if path.exists():
             try:
-                with open(path, "r", encoding="utf-8") as fh:
+                with open(path, encoding="utf-8") as fh:
                     return json.load(fh)
             except (json.JSONDecodeError, OSError):
                 return None
@@ -295,9 +296,9 @@ def _load_ppo_eval(artifact_dir: Path) -> Optional[Dict[str, Any]]:
 
 
 def _format_executive_summary(
-    pareto_front: Optional[np.ndarray],
-    baseline: Optional[Dict[str, Any]],
-    ppo_eval: Optional[Dict[str, Any]],
+    pareto_front: np.ndarray | None,
+    baseline: dict[str, Any] | None,
+    ppo_eval: dict[str, Any] | None,
 ) -> str:
     """Build the executive-summary section.
 
@@ -346,7 +347,7 @@ def _format_executive_summary(
 
 
 def _format_green_premium(
-    pareto_front: Optional[np.ndarray],
+    pareto_front: np.ndarray | None,
 ) -> str:
     """Build the green-premium-curve section.
 
@@ -421,7 +422,7 @@ def _format_green_premium(
 
 
 def _format_fleet_mix(
-    pareto_front: Optional[np.ndarray],
+    pareto_front: np.ndarray | None,
     config: MasterConfig,
 ) -> str:
     """Build the fleet-mix recommendation section.
@@ -520,7 +521,7 @@ def _format_fleet_mix(
 
 
 def _format_top_routes(
-    pareto_front: Optional[np.ndarray],
+    pareto_front: np.ndarray | None,
     config: MasterConfig,
 ) -> str:
     """Build the Top-5 Routes by Tonne-Km section.
@@ -574,7 +575,7 @@ def _format_top_routes(
     demand_max = float(getattr(config.network, "demand_clip_max", 10000.0))
     representative_demand_kg = 0.5 * (demand_min + demand_max)
 
-    rows: List[Tuple[str, str, float, float]] = []
+    rows: list[tuple[str, str, float, float]] = []
     for w_name, w_lat, w_lon in warehouses:
         for c_name, c_lat, c_lon in cities:
             dist_km = _haversine_km(w_lat, w_lon, c_lat, c_lon)
@@ -608,7 +609,7 @@ def _format_top_routes(
 
 
 def _format_disruption_playbook(
-    ppo_eval: Optional[Dict[str, Any]],
+    ppo_eval: dict[str, Any] | None,
 ) -> str:
     """Build the disruption-playbook section.
 
@@ -648,6 +649,10 @@ def _format_disruption_playbook(
         return "\n".join(header + [MISSING_ARTIFACT_NOTE, ""]) + "\n"
 
     def _fmt(value: Any, fmt: str = "{:,.2f}") -> str:
+        """
+        Parameters
+        ----------
+        """
         if value is None:
             return "—"
         try:
@@ -694,8 +699,8 @@ def _format_disruption_playbook(
 
 
 def _format_ppo_roi(
-    baseline: Optional[Dict[str, Any]],
-    ppo_eval: Optional[Dict[str, Any]],
+    baseline: dict[str, Any] | None,
+    ppo_eval: dict[str, Any] | None,
 ) -> str:
     """Build the PPO ROI section.
 
@@ -744,7 +749,11 @@ def _format_ppo_roi(
         or ppo_eval.get("total_carbon")
     )
 
-    def _delta(base: Optional[float], improved: Optional[float]) -> str:
+    def _delta(base: float | None, improved: float | None) -> str:
+        """
+        Parameters
+        ----------
+        """
         if base is None or improved is None:
             return "—"
         try:
@@ -783,8 +792,8 @@ def _format_ppo_roi(
 
 
 def generate_managerial_insights(
-    artifact_dir: Union[str, Path] = "outputs/artifacts",
-    config: Optional[MasterConfig] = None,
+    artifact_dir: str | Path = "outputs/artifacts",
+    config: MasterConfig | None = None,
 ) -> str:
     """Generate the managerial-insights markdown document.
 
@@ -881,6 +890,9 @@ def main() -> None:
     ``MANAGERIAL_INSIGHTS_ARTIFACT_DIR`` environment variable for
     explicit overriding of the artifact directory; otherwise falls
     back to the documented default.
+    
+    Parameters
+    ----------
     """
     import os
     artifact_dir = os.environ.get(
@@ -913,7 +925,7 @@ if __name__ == "__main__":
 
 def load_pareto_front(  # [bugfix.md C3.12]
     results_dir: str = "data/results",
-) -> Optional[np.ndarray]:
+) -> np.ndarray | None:
     """[bugfix.md C3.12 preservation shim] Load NSGA-II Pareto front from a directory.
 
     Restores the pre-FIX-018 public name
@@ -942,7 +954,7 @@ def load_pareto_front(  # [bugfix.md C3.12]
 
 def load_des_results(  # [bugfix.md C3.12]
     results_dir: str = "data/results",
-) -> Optional[Dict[str, Any]]:
+) -> dict[str, Any] | None:
     """[bugfix.md C3.12 preservation shim] Load DES Monte-Carlo summary.
 
     Restores the pre-FIX-018 public name
@@ -982,7 +994,7 @@ def load_des_results(  # [bugfix.md C3.12]
     json_path = primary / "des_results.json"
     if json_path.exists():
         try:
-            with open(json_path, "r", encoding="utf-8") as fh:
+            with open(json_path, encoding="utf-8") as fh:
                 return json.load(fh)
         except (json.JSONDecodeError, OSError):
             return None
@@ -991,7 +1003,7 @@ def load_des_results(  # [bugfix.md C3.12]
 
 def load_ppo_results(  # [bugfix.md C3.12]
     results_dir: str = "data/results",
-) -> Optional[Dict[str, Any]]:
+) -> dict[str, Any] | None:
     """[bugfix.md C3.12 preservation shim] Load PPO evaluation results.
 
     Restores the pre-FIX-018 public name
@@ -1016,8 +1028,8 @@ def load_ppo_results(  # [bugfix.md C3.12]
 
 
 def compute_green_premium_curve(  # [bugfix.md C3.12]
-    pareto_front: Optional[np.ndarray],
-) -> List[Dict[str, Any]]:
+    pareto_front: np.ndarray | None,
+) -> list[dict[str, Any]]:
     """[bugfix.md C3.12 preservation shim] Green-premium curve from a Pareto front.
 
     Restores the pre-FIX-018 public name
@@ -1060,7 +1072,7 @@ def compute_green_premium_curve(  # [bugfix.md C3.12]
     cost_anchor = float(sorted_front[-1, 0])
     carbon_anchor = float(sorted_front[-1, 1])
 
-    curve: List[Dict[str, Any]] = []
+    curve: list[dict[str, Any]] = []
     for pct in (0, 10, 20, 30, 40, 50):
         target_carbon = carbon_anchor * (1.0 - pct / 100.0)
         feasible = sorted_front[sorted_front[:, 1] <= target_carbon + 1e-9]
@@ -1090,9 +1102,9 @@ def compute_green_premium_curve(  # [bugfix.md C3.12]
 
 
 def compute_disruption_response(  # [bugfix.md C3.12]
-    des_results: Optional[Dict[str, Any]],
-    ppo_results: Optional[Dict[str, Any]],
-) -> Dict[str, Any]:
+    des_results: dict[str, Any] | None,
+    ppo_results: dict[str, Any] | None,
+) -> dict[str, Any]:
     """[bugfix.md C3.12 preservation shim] Summarise the disruption playbook.
 
     Restores the pre-FIX-018 public name
@@ -1130,7 +1142,7 @@ def compute_disruption_response(  # [bugfix.md C3.12]
         "ppo": isinstance(ppo_results, dict) and bool(ppo_results),
     }
 
-    baseline: Dict[str, Any] = {}
+    baseline: dict[str, Any] = {}
     if available["des"]:
         for shock_type, block in des_results.items():
             if not isinstance(block, dict):
@@ -1145,7 +1157,7 @@ def compute_disruption_response(  # [bugfix.md C3.12]
                 "n_runs": block.get("n_runs"),
             }
 
-    ppo_summary: Dict[str, Any] = {}
+    ppo_summary: dict[str, Any] = {}
     if available["ppo"]:
         for key, block in ppo_results.items():
             if isinstance(block, dict):
@@ -1169,9 +1181,9 @@ def compute_disruption_response(  # [bugfix.md C3.12]
 
 def identify_high_carbon_routes(  # [bugfix.md C3.12]
     config: MasterConfig,
-    distance_matrix: Optional[np.ndarray] = None,
+    distance_matrix: np.ndarray | None = None,
     top_k: int = 5,
-) -> List[Dict[str, Any]]:
+) -> list[dict[str, Any]]:
     """[bugfix.md C3.12 preservation shim] Rank warehouse-customer arcs by carbon load.
 
     Restores the pre-FIX-018 public name
@@ -1226,7 +1238,7 @@ def identify_high_carbon_routes(  # [bugfix.md C3.12]
         and distance_matrix.shape[1] == len(cities)
     )
 
-    rows: List[Tuple[str, str, float, float, float]] = []
+    rows: list[tuple[str, str, float, float, float]] = []
     for w_idx, (w_name, w_lat, w_lon) in enumerate(warehouses):
         for c_idx, (c_name, c_lat, c_lon) in enumerate(cities):
             if use_matrix:
@@ -1263,7 +1275,7 @@ def identify_high_carbon_routes(  # [bugfix.md C3.12]
 def generate_insights_report(  # [bugfix.md C3.12]
     output_path: str = "docs/MANAGERIAL_INSIGHTS.md",
     results_dir: str = "data/results",
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """[bugfix.md C3.12 preservation shim] Render the managerial-insights markdown.
 
     Restores the pre-FIX-018 public name

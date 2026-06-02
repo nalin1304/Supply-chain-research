@@ -26,9 +26,9 @@ Reference
    baseline".
 """
 
-import numpy as np
 from dataclasses import dataclass, field
-from typing import List
+
+import numpy as np
 
 from supply_chain_research.config import MasterConfig
 from supply_chain_research.phase1_foundation.emission_model import (
@@ -50,7 +50,7 @@ class Route:
         Total route distance in km.
     """
 
-    customers: List[int] = field(default_factory=list)
+    customers: list[int] = field(default_factory=list)
     load: float = 0.0
     distance: float = 0.0
 
@@ -60,7 +60,7 @@ def clarke_wright_savings(
     demand: np.ndarray,
     vehicle_capacity: float,
     depot_index: int = 0,
-) -> List[Route]:
+) -> list[Route]:
     """Solve CVRP using the parallel Clarke-Wright Savings Algorithm.
 
     Implements the classic Clarke & Wright (1964) savings algorithm
@@ -206,7 +206,11 @@ def clarke_wright_savings(
             node_idx for node_idx in range(distance_matrix.shape[0]) if node_idx != depot_index
         ][:n_customers]
 
-        def get_route_dist(custs: List[int]) -> float:
+        def get_route_dist(custs: list[int]) -> float:
+            """
+            Parameters
+            ----------
+            """
             if not custs:
                 return 0.0
             d = distance_matrix[depot_index, customer_nodes[custs[0]]]
@@ -216,6 +220,10 @@ def clarke_wright_savings(
             return d
 
         def run_intra_route_local_search(r: Route) -> bool:
+            """
+            Parameters
+            ----------
+            """
             n_r = len(r.customers)
             if n_r < 2:
                 return False
@@ -258,6 +266,10 @@ def clarke_wright_savings(
             return False
 
         def run_inter_route_local_search() -> bool:
+            """
+            Parameters
+            ----------
+            """
             if len(active_routes) < 2:
                 return False
 

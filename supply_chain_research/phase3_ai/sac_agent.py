@@ -21,7 +21,6 @@ Haarnoja, T., Zhou, A., Hartikainen, K., Tucker, G., Ha, S., Tan, J.,
 
 import random
 from collections import deque
-from typing import Tuple
 
 import numpy as np
 import torch
@@ -79,7 +78,7 @@ class ReplayBuffer:
         """
         self.buffer.append((obs, action, reward, next_obs, done))
 
-    def sample(self, batch_size: int) -> Tuple[
+    def sample(self, batch_size: int) -> tuple[
         torch.FloatTensor, torch.FloatTensor, torch.FloatTensor,
         torch.FloatTensor, torch.FloatTensor
     ]:
@@ -183,7 +182,7 @@ class SACActorNetwork(nn.Module):
         self.fc_mean = nn.Linear(hidden_size, action_dim)
         self.fc_log_std = nn.Linear(hidden_size, action_dim)
 
-    def forward(self, obs: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
+    def forward(self, obs: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
         """Compute action mean and log_std.
 
         Parameters
@@ -205,7 +204,7 @@ class SACActorNetwork(nn.Module):
         log_std = torch.clamp(log_std, self.LOG_STD_MIN, self.LOG_STD_MAX)
         return mean, log_std
 
-    def sample(self, obs: torch.Tensor) -> Tuple[
+    def sample(self, obs: torch.Tensor) -> tuple[
         torch.Tensor, torch.Tensor
     ]:
         """Sample an action using the reparameterization trick with tanh squashing.
@@ -309,7 +308,7 @@ class SACCriticNetwork(nn.Module):
         self.q2_out = nn.Linear(hidden_size, 1)
 
     def forward(self, obs: torch.Tensor,
-                action: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
+                action: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
         """Compute Q-values from both networks.
 
         Parameters
@@ -410,6 +409,10 @@ class SACAgent:
 
     def __init__(self, obs_dim: int, action_dim: int,
                  config: SACConfig = None, device=None):
+        """
+        Parameters
+        ----------
+        """
         if config is None:
             config = SACConfig()
         self.config = config
@@ -484,6 +487,9 @@ class SACAgent:
         -------
         torch.Tensor
             Scalar tensor ``exp(log_alpha)``.
+        
+        Parameters
+        ----------
         """
         return self.log_alpha.exp()
 

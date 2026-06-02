@@ -5,19 +5,23 @@ crowding distance leader selection, and custom MarginalTradeoffRepair.
 """
 
 import time
+
 import numpy as np
 from loguru import logger
 
 from supply_chain_research.config import MasterConfig
-from supply_chain_research.phase1_foundation.solver_base import BaseSolver, SolverResult
 from supply_chain_research.phase1_foundation.nsga2_solver import (
-    SupplyChainProblem,
     MarginalTradeoffRepair,
+    SupplyChainProblem,
 )
+from supply_chain_research.phase1_foundation.solver_base import BaseSolver, SolverResult
 
 
 def compute_crowding_distances(F: np.ndarray) -> np.ndarray:
-    """Compute crowding distances for points in objective space."""
+    """Compute crowding distances for points in objective space.
+    Parameters
+    ----------
+    """
     n = len(F)
     if n <= 2:
         return np.full(n, np.inf)
@@ -40,7 +44,10 @@ def compute_crowding_distances(F: np.ndarray) -> np.ndarray:
 
 
 def update_archive(archive_X: list, archive_F: list, candidate_X: np.ndarray, candidate_F: np.ndarray, max_size: int = 100):
-    """Update Pareto archive with new non-dominated solutions."""
+    """Update Pareto archive with new non-dominated solutions.
+    Parameters
+    ----------
+    """
     # Check if candidate is dominated by any archive member
     for f in archive_F:
         if np.all(f <= candidate_F) and np.any(f < candidate_F):
@@ -71,7 +78,10 @@ def update_archive(archive_X: list, archive_F: list, candidate_X: np.ndarray, ca
 
 
 class MOPSOSolver(BaseSolver):
-    """Multi-Objective Particle Swarm Optimization (MOPSO) solver."""
+    """Multi-Objective Particle Swarm Optimization (MOPSO) solver.
+    Parameters
+    ----------
+    """
 
     def solve(
         self,
@@ -80,7 +90,10 @@ class MOPSOSolver(BaseSolver):
         demand: np.ndarray,
         seed: int = 42,
     ) -> SolverResult:
-        """Run MOPSO optimization."""
+        """Run MOPSO optimization.
+        Parameters
+        ----------
+        """
         logger.info("Initializing MOPSO solver...")
         start_time = time.time()
 
@@ -202,6 +215,10 @@ class MOPSOSolver(BaseSolver):
 
     @property
     def name(self) -> str:
+        """
+        Parameters
+        ----------
+        """
         return "MOPSO"
 
 
@@ -211,6 +228,9 @@ def run_mopso(
     demand: np.ndarray,
     seed: int = 42,
 ) -> SolverResult:
-    """Wrapper function to execute MOPSO solver."""
+    """Wrapper function to execute MOPSO solver.
+    Parameters
+    ----------
+    """
     solver = MOPSOSolver()
     return solver.solve(config, distance_matrix, demand, seed)

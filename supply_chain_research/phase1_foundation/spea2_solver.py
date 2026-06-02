@@ -4,6 +4,7 @@ Uses pymoo's SPEA2 algorithm implementation with MarginalTradeoffRepair.
 """
 
 import time
+
 import numpy as np
 from loguru import logger
 from pymoo.algorithms.moo.spea2 import SPEA2
@@ -11,15 +12,18 @@ from pymoo.optimize import minimize
 from pymoo.termination import get_termination
 
 from supply_chain_research.config import MasterConfig
-from supply_chain_research.phase1_foundation.solver_base import BaseSolver, SolverResult
 from supply_chain_research.phase1_foundation.nsga2_solver import (
-    SupplyChainProblem,
     MarginalTradeoffRepair,
+    SupplyChainProblem,
 )
+from supply_chain_research.phase1_foundation.solver_base import BaseSolver, SolverResult
 
 
 class SPEA2Solver(BaseSolver):
-    """Strength Pareto Evolutionary Algorithm 2 (SPEA2) solver."""
+    """Strength Pareto Evolutionary Algorithm 2 (SPEA2) solver.
+    Parameters
+    ----------
+    """
 
     def solve(
         self,
@@ -28,7 +32,10 @@ class SPEA2Solver(BaseSolver):
         demand: np.ndarray,
         seed: int = 42,
     ) -> SolverResult:
-        """Run SPEA2 optimization."""
+        """Run SPEA2 optimization.
+        Parameters
+        ----------
+        """
         logger.info("Initializing SPEA2 solver...")
         start_time = time.time()
 
@@ -98,6 +105,10 @@ class SPEA2Solver(BaseSolver):
 
     @property
     def name(self) -> str:
+        """
+        Parameters
+        ----------
+        """
         return "SPEA2"
 
 
@@ -107,6 +118,9 @@ def run_spea2(
     demand: np.ndarray,
     seed: int = 42,
 ) -> SolverResult:
-    """Wrapper function to execute SPEA2 solver."""
+    """Wrapper function to execute SPEA2 solver.
+    Parameters
+    ----------
+    """
     solver = SPEA2Solver()
     return solver.solve(config, distance_matrix, demand, seed)

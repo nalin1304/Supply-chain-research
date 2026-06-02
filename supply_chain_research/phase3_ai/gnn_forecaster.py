@@ -13,24 +13,31 @@ References:
     - Bai et al. (2020). Adaptive Graph Convolutional Recurrent Network.
 """
 
+import math
+
 import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torch.utils.data import DataLoader, TensorDataset
 from loguru import logger
-import math
+from torch.utils.data import DataLoader, TensorDataset
 
 from supply_chain_research.phase3_ai.forecaster_base import BaseForecaster
-from supply_chain_research.phase3_ai.lstm_forecaster import HuberLoss
 
 
 class AdaptiveGraphConvolution(nn.Module):
     """Adaptive Graph Convolution Layer.
     
     Uses node embeddings to generate a graph adjacency matrix dynamically.
+    
+    Parameters
+    ----------
     """
     def __init__(self, in_features: int, out_features: int, n_nodes: int, embed_dim: int = 10):
+        """
+        Parameters
+        ----------
+        """
         super().__init__()
         self.in_features = in_features
         self.out_features = out_features
@@ -47,6 +54,10 @@ class AdaptiveGraphConvolution(nn.Module):
         self.reset_parameters()
 
     def reset_parameters(self):
+        """
+        Parameters
+        ----------
+        """
         stdv = 1. / math.sqrt(self.weight.size(1))
         self.weight.data.uniform_(-stdv, stdv)
         self.bias.data.uniform_(-stdv, stdv)
@@ -59,6 +70,9 @@ class AdaptiveGraphConvolution(nn.Module):
             x: Tensor of shape (batch_size, n_nodes, in_features)
         Returns:
             Tensor of shape (batch_size, n_nodes, out_features)
+        
+        Parameters
+        ----------
         """
         # Calculate adaptive adjacency matrix: A = Softmax(ReLU(E1 * E2))
         adj = F.relu(torch.matmul(self.node_embed1, self.node_embed2))
@@ -77,7 +91,10 @@ class AdaptiveGraphConvolution(nn.Module):
 
 
 class STGNNModel(nn.Module):
-    """Spatio-Temporal Graph Neural Network."""
+    """Spatio-Temporal Graph Neural Network.
+    Parameters
+    ----------
+    """
     def __init__(
         self,
         n_nodes: int,
@@ -88,6 +105,10 @@ class STGNNModel(nn.Module):
         embed_dim: int = 10,
         dropout: float = 0.2
     ):
+        """
+        Parameters
+        ----------
+        """
         super().__init__()
         self.n_nodes = n_nodes
         self.seq_length = seq_length
@@ -121,18 +142,21 @@ class STGNNModel(nn.Module):
             x: Input of shape (batch_size, seq_length, n_nodes)
         Returns:
             Output of shape (batch_size, horizon, n_nodes)
+        
+        Parameters
+        ----------
         """
         b, s, n = x.shape
         
         # Process each time step through the GCN
         # Reshape to (B*S, N, 1) to apply GCN across all spatial graphs
-        x_gcn = x.view(b * s, n, 1)
+        x_gcn = x.reshape(b * s, n, 1)
         
         h_gcn = F.relu(self.gcn1(x_gcn))
         h_gcn = F.relu(self.gcn2(h_gcn))  # Shape: (B*S, N, GCN_HIDDEN)
         
         # Reshape back for GRU: (B, S, N * GCN_HIDDEN)
-        h_gcn = h_gcn.view(b, s, n * self.gcn1.out_features)
+        h_gcn = h_gcn.reshape(b, s, n * self.gcn1.out_features)
         
         # Temporal processing
         gru_out, _ = self.gru(h_gcn)
@@ -144,11 +168,14 @@ class STGNNModel(nn.Module):
         out = self.fc(last_hidden)
         
         # Reshape to (B, HORIZON, N)
-        return out.view(b, self.horizon, n)
+        return out.reshape(b, self.horizon, n)
 
 
 class GNNForecaster(BaseForecaster):
-    """Forecaster wrapper for the ST-GNN Model."""
+    """Forecaster wrapper for the ST-GNN Model.
+    Parameters
+    ----------
+    """
     def __init__(
         self,
         seq_length: int = 30,
@@ -157,14 +184,20 @@ class GNNForecaster(BaseForecaster):
         lr: float = 1e-3,
         gcn_hidden: int = 32,
         rnn_hidden: int = 128,
-        device: str = "auto"
+        device: str = "auto",
+        seed: int | None = None,
     ):
+        """
+        Parameters
+        ----------
+        """
         self.seq_length = seq_length
         self.batch_size = batch_size
         self.epochs = epochs
         self.lr = lr
         self.gcn_hidden = gcn_hidden
         self.rnn_hidden = rnn_hidden
+        self.seed = seed
         
         if device == "auto":
             self.device = torch.device(
@@ -178,7 +211,10 @@ class GNNForecaster(BaseForecaster):
         self.train_history = None
 
     def _create_sequences(self, data: np.ndarray, horizon: int):
-        """Create sequences of shape (seq_length) predicting (horizon)."""
+        """Create sequences of shape (seq_length) predicting (horizon).
+        Parameters
+        ----------
+        """
         n_days, n_nodes = data.shape
         n_samples = n_days - self.seq_length - horizon + 1
         
@@ -192,8 +228,14 @@ class GNNForecaster(BaseForecaster):
         return torch.tensor(X), torch.tensor(y)
 
     def fit(self, train_data: np.ndarray, val_data: np.ndarray = None) -> None:
-        """Train the ST-GNN model."""
+        """Train the ST-GNN model.
+        Parameters
+        ----------
+        """
         self.train_history = train_data
+        if self.seed is not None:
+            np.random.seed(self.seed)
+            torch.manual_seed(self.seed)
         n_nodes = train_data.shape[1]
         
         # We assume predict() will be called for horizon=7 by default in CV
@@ -213,9 +255,9 @@ class GNNForecaster(BaseForecaster):
         ).to(self.device)
         
         optimizer = torch.optim.AdamW(self.model.parameters(), lr=self.lr, weight_decay=1e-4)
-        criterion = HuberLoss(delta=1.0)
+        criterion = nn.HuberLoss(delta=1.0)
         scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
-            optimizer, mode='min', factor=0.5, patience=5, verbose=False
+            optimizer, mode='min', factor=0.5, patience=5
         )
         
         logger.info(f"Training ST-GNN on {self.device} for {self.epochs} epochs...")
@@ -253,7 +295,10 @@ class GNNForecaster(BaseForecaster):
                 break
 
     def predict(self, horizon: int) -> np.ndarray:
-        """Forecast future demand."""
+        """Forecast future demand.
+        Parameters
+        ----------
+        """
         self.model.eval()
         
         # Need exactly seq_length days of history

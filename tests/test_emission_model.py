@@ -293,7 +293,7 @@ class TestRouteAdditivity:
         assert abs((e1 + e2) - e_combined) < 1e-9
 
 
-@pytest.mark.skip(reason="CIS not implemented")
+
 class TestCarbonIntensityScore:
     """Property-based tests for Carbon Intensity Score (CIS).
 

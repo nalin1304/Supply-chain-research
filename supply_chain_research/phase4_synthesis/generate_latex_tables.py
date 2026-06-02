@@ -5,30 +5,33 @@ All tables output to outputs/tables/ as .tex files.
 """
 
 import os
+
 import numpy as np
 from jinja2 import Template
-from typing import Dict, List
 
 from supply_chain_research.config import MasterConfig
-from supply_chain_research.phase4_synthesis.statistical_tests import (
-    run_full_statistical_analysis,
-    generate_synthetic_results,
-)
 from supply_chain_research.phase4_synthesis.ablation_study import (
-    run_ablation_study,
     VARIANT_LABELS,
+    run_ablation_study,
 )
 from supply_chain_research.phase4_synthesis.sensitivity_analysis import (
-    run_sensitivity_sweep,
     compute_sensitivity_indices,
     rank_parameters,
+    run_sensitivity_sweep,
+)
+from supply_chain_research.phase4_synthesis.statistical_tests import (
+    generate_synthetic_results,
+    run_full_statistical_analysis,
 )
 
 TABLES_DIR = os.path.join("outputs", "tables")
 
 
 def _ensure_dir():
-    """Ensure output directory exists."""
+    """Ensure output directory exists.
+    Parameters
+    ----------
+    """
     os.makedirs(TABLES_DIR, exist_ok=True)
 
 
@@ -149,6 +152,9 @@ def generate_table1_parameters(config: MasterConfig = None) -> str:
 
     Returns:
         Path to generated .tex file.
+    
+    Parameters
+    ----------
     """
     if config is None:
         config = MasterConfig()
@@ -191,7 +197,7 @@ def generate_table1_parameters(config: MasterConfig = None) -> str:
     return filepath
 
 
-def _load_real_results_from_disk(seed: int = 42) -> Dict:
+def _load_real_results_from_disk(seed: int = 42) -> dict:
     """Load real per-seed Pareto-front numbers from `data/results/` pickles.
 
     Replaces the prior synthetic-Gaussian generator
@@ -216,6 +222,9 @@ def _load_real_results_from_disk(seed: int = 42) -> Dict:
         Method -> metric arrays. Falls back to the legacy synthetic
         generator if ``data/results/`` is empty (e.g. on a fresh
         clone before any training run).
+    
+    Parameters
+    ----------
     """
     import pickle
     project_root = os.path.dirname(
@@ -229,6 +238,10 @@ def _load_real_results_from_disk(seed: int = 42) -> Dict:
         return generate_synthetic_results()
 
     def _summarise(pkl_path):
+        """
+        Parameters
+        ----------
+        """
         with open(pkl_path, "rb") as f:
             data = pickle.load(f)
         fronts = data.get("fronts", [])
@@ -261,7 +274,7 @@ def _load_real_results_from_disk(seed: int = 42) -> Dict:
 
 
 def generate_table2_algorithm_comparison(
-    results: Dict = None,
+    results: dict = None,
 ) -> str:
     """Generate Table 2: Algorithm comparison.
 
@@ -273,6 +286,9 @@ def generate_table2_algorithm_comparison(
 
     Returns:
         Path to generated .tex file.
+    
+    Parameters
+    ----------
     """
     if results is None:
         results = _load_real_results_from_disk()
@@ -317,7 +333,7 @@ def generate_table2_algorithm_comparison(
 
 
 def generate_table3_statistical_tests(
-    analysis: Dict = None,
+    analysis: dict = None,
 ) -> str:
     """Generate Table 3: Statistical test results.
 
@@ -330,6 +346,9 @@ def generate_table3_statistical_tests(
 
     Returns:
         Path to generated .tex file.
+    
+    Parameters
+    ----------
     """
     if analysis is None:
         # Run on real per-seed pickles when present; otherwise fall
@@ -403,6 +422,9 @@ def generate_table4_resilience(seed: int = 42) -> str:
 
     Returns:
         Path to generated .tex file.
+    
+    Parameters
+    ----------
     """
     metrics = [
         ("Service Level", 0.945, 0.922, 0.891),
@@ -438,6 +460,9 @@ def generate_table5_ablation(seed: int = 42) -> str:
 
     Returns:
         Path to generated .tex file.
+    
+    Parameters
+    ----------
     """
     study = run_ablation_study(seed=seed)
     results = study["results"]
@@ -471,6 +496,9 @@ def generate_table6_sensitivity(seed: int = 42) -> str:
 
     Returns:
         Path to generated .tex file.
+    
+    Parameters
+    ----------
     """
     config = MasterConfig()
     results = run_sensitivity_sweep(config, seed=seed)
@@ -511,7 +539,7 @@ def generate_table6_sensitivity(seed: int = 42) -> str:
     return filepath
 
 
-def generate_all_tables(seed: int = 42) -> List[str]:
+def generate_all_tables(seed: int = 42) -> list[str]:
     """Generate all LaTeX tables.
 
     Args:
@@ -519,6 +547,9 @@ def generate_all_tables(seed: int = 42) -> List[str]:
 
     Returns:
         List of generated file paths.
+    
+    Parameters
+    ----------
     """
     _ensure_dir()
 

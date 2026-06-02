@@ -55,8 +55,8 @@ crash picks up where it left off.
 make tests
 ```
 
-Expected on the Python 3.14 audit environment: `483 passed, 5 skipped`
-in about 315 seconds. This is your
+Expected on the Python 3.14 audit environment: `488 passed, 5 skipped`
+in about 205 seconds. This is your
 first signal that the package is installed correctly. If anything
 fails here, stop and resolve before going further.
 

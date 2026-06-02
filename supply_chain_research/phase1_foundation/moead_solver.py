@@ -6,14 +6,13 @@ neighborhood-based selection.
 
 import numpy as np
 from pymoo.algorithms.moo.moead import MOEAD
+from pymoo.core.problem import Problem
 from pymoo.optimize import minimize
 from pymoo.termination import get_termination
 from pymoo.util.ref_dirs import get_reference_directions
-from pymoo.core.problem import Problem
 
 from supply_chain_research.config import MasterConfig
 from supply_chain_research.phase1_foundation.nsga2_solver import (
-    DemandRepair,
     MarginalTradeoffRepair,
     SupplyChainProblem,
 )
@@ -25,8 +24,15 @@ class UnconstrainedSupplyChainProblem(Problem):
     This is necessary because pymoo's MOEA/D does not support constraints,
     but our custom repair operator (MarginalTradeoffRepair) handles feasibility,
     so we can safely hide constraints from pymoo.
+    
+    Parameters
+    ----------
     """
     def __init__(self, problem):
+        """
+        Parameters
+        ----------
+        """
         super().__init__(
             n_var=problem.n_var,
             n_obj=problem.n_obj,
@@ -41,6 +47,10 @@ class UnconstrainedSupplyChainProblem(Problem):
         self.warehouse_capacities = getattr(problem, "warehouse_capacities", None)
 
     def _evaluate(self, X, out, *args, **kwargs):
+        """
+        Parameters
+        ----------
+        """
         sub_out = {}
         self.problem._evaluate(X, sub_out, *args, **kwargs)
         out["F"] = sub_out["F"]
@@ -66,6 +76,9 @@ def run_moead(
 
     Returns:
         pymoo Result object with Pareto front.
+    
+    Parameters
+    ----------
     """
     if pop_size is None:
         pop_size = config.moead.pop_size

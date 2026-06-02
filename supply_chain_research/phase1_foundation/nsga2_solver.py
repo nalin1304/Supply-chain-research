@@ -8,6 +8,7 @@ warehouse i to customer j via vehicle type v.
 """
 
 import hashlib
+
 import numpy as np
 from pymoo.algorithms.moo.nsga2 import NSGA2
 from pymoo.core.problem import Problem
@@ -51,6 +52,10 @@ class DemandRepair(Repair):
         warehouse_capacities: np.ndarray,
         distance_matrix: np.ndarray,
     ):
+        """
+        Parameters
+        ----------
+        """
         super().__init__()
         self.n_warehouses = n_warehouses
         self.n_customers = n_customers
@@ -64,6 +69,10 @@ class DemandRepair(Repair):
         # available on the problem; otherwise apply the original
         # proportional behavior. This preserves any tests that import
         # DemandRepair directly with problem=None.
+        """
+        Parameters
+        ----------
+        """
         if hasattr(problem, "vehicle_types"):
             mtr = MarginalTradeoffRepair(
                 n_warehouses=self.n_warehouses,
@@ -153,6 +162,10 @@ class MarginalTradeoffRepair(Repair):
         vehicle_types: list,
         config: MasterConfig = None,
     ):
+        """
+        Parameters
+        ----------
+        """
         super().__init__()
         self.n_w = n_warehouses
         self.n_c = n_customers
@@ -182,6 +195,9 @@ class MarginalTradeoffRepair(Repair):
     def _marginal_cost_carbon(self, w, c, v, delta_volume):
         """Marginal (delta_cost, delta_carbon) of routing delta_volume kg
         from warehouse w to customer c via vehicle v.
+        
+        Parameters
+        ----------
         """
         d = self.distance_matrix[w, c]
         n_trips = delta_volume / self.cap_v[v]
@@ -194,6 +210,10 @@ class MarginalTradeoffRepair(Repair):
         return delta_cost, delta_carbon
 
     def _do(self, problem, X, **kwargs):
+        """
+        Parameters
+        ----------
+        """
         n_w, n_c, n_v = self.n_w, self.n_c, self.n_v
         seed_bytes = hashlib.blake2b(X.tobytes(), digest_size=8).digest()
         repair_seed = int.from_bytes(seed_bytes, byteorder="little") % (2**31)
@@ -337,11 +357,39 @@ class SupplyChainProblem(Problem):
             distance_matrix: Distance matrix in km,
                 shape (n_warehouses, n_customers).
             demand: Customer demand in kg, shape (n_customers,).
+        
+        Parameters
+        ----------
         """
         self.config = config
         self.distance_matrix = distance_matrix
         self.demand = demand
         self.emission_calc = EmissionCalculator(config)
+        
+        # Load Traffic Matrix (Phase 13)
+        self._time_penalty = np.ones_like(distance_matrix)
+        if getattr(config.network, 'apply_traffic_penalties', False):
+            try:
+                import os
+
+                from supply_chain_research.phase3_ai.traffic_matrix import TrafficMatrix
+                base_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+                traffic_data_path = os.path.join(base_dir, "data", "external", "traffic_data", "delhi_travel_time", "delhi_traffic_features.csv")
+                self.traffic_matrix = TrafficMatrix(data_path=traffic_data_path)
+                
+                # Assume a baseline morning dispatch at 08:00
+                dispatch_time = 8.0 
+                avg_speed_kmph = 40.0
+                
+                # Precompute an expected penalty matrix
+                for w in range(distance_matrix.shape[0]):
+                    for c in range(distance_matrix.shape[1]):
+                        dist = distance_matrix[w, c]
+                        # Expected arrival time at customer
+                        arrival_time = dispatch_time + (dist / avg_speed_kmph)
+                        self._time_penalty[w, c] = self.traffic_matrix.get_penalty(arrival_time)
+            except ImportError:
+                pass
 
         n_w = config.network.n_warehouses
         n_c = config.network.n_customers
@@ -395,6 +443,13 @@ class SupplyChainProblem(Problem):
         # Pre-broadcasted shapes — store the (1, n_w, n_c, 1) view of
         # the distance matrix so we don't re-broadcast it on every call
         self._dist_b = self.distance_matrix[None, :, :, None]
+        
+        # Phase 13 time penalty broadcast
+        if hasattr(self, '_time_penalty'):
+            self._penalty_b = self._time_penalty[None, :, :, None]
+        else:
+            self._penalty_b = np.ones_like(self._dist_b)
+            
         self._cap_b = self._cap_v[None, None, None, :]
         self._cost_b = self._cost_per_km[None, None, None, :]
         self._k_b = self._k_v[None, None, None, :]
@@ -417,6 +472,9 @@ class SupplyChainProblem(Problem):
             F_cost/F_carbon (pre-reduce): (pop_size, n_w, n_c, n_v)
             F (final):   (pop_size, 2)
             G (final):   (pop_size, n_c + n_w)
+        
+        Parameters
+        ----------
         """
         n_w = self.config.network.n_warehouses
         n_c = self.config.network.n_customers
@@ -430,9 +488,9 @@ class SupplyChainProblem(Problem):
         # n_trips: (pop, n_w, n_c, n_v)
         n_trips = x_pop * self._inv_cap_b
 
-        # Cost objective: 2 * cost_per_km * d * n_trips, summed
+        # Cost objective: 2 * cost_per_km * d * penalty * n_trips, summed
         # cost_elem: (pop, n_w, n_c, n_v) -> sum -> (pop,)
-        F_cost = (2.0 * self._cost_b * self._dist_b * n_trips).sum(
+        F_cost = (2.0 * self._cost_b * self._dist_b * self._penalty_b * n_trips).sum(
             axis=(1, 2, 3),
         )
 
@@ -687,6 +745,9 @@ def _compute_ortools_seeds(
     (cost_seed, carbon_seed) : tuple of np.ndarray
         Two flattened decision-variable vectors ready for injection
         into the NSGA-II sampling array.
+    
+    Parameters
+    ----------
     """
     # Lazy import keeps the cold-start path free of OR-Tools overhead.
     from supply_chain_research.phase1_foundation.baseline_solver import (

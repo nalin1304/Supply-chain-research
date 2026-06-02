@@ -2563,7 +2563,7 @@ The full verification log is preserved under
 ### Modal training
 
 Untouched. `cloud_training/modal_train.py` was not modified — the live
-Modal A100 pipeline is unaffected by this scaffold.
+Modal T4 pipeline is unaffected by this scaffold.
 
 ### Anti-pattern guard
 
@@ -3995,7 +3995,7 @@ than just the raw episode reward, and the discussion should make
 the survival-vs-efficiency trade-off explicit.
 
 **Verification:**
-- `pytest -q` → **454 passed, 5 skipped** (was 445; +9 new
+- `pytest -q` → **488 passed, 5 skipped** (current full-suite baseline; this FIX originally added +9
   consistency tests).
 - `make lint-tables` → all 10 tables pass syntactic validation.
 - `outputs/tables/disruption_evaluation.tex` validates clean.
@@ -4103,7 +4103,7 @@ remain well below the 0.05 manuscript threshold.
 
 **Verification:**
 
-- `pytest -q` → **454 passed, 5 skipped** (no regressions; including
+- `pytest -q` → **488 passed, 5 skipped** (current full-suite baseline; including
   the 9 paper-asset-consistency tests).
 - `make lint-tables` → all 10 tables pass.
 - The consistency test caught one cascading mismatch (Table 3
@@ -4201,7 +4201,7 @@ significant after multiple-comparison correction at α = 0.05."
 - Holm (1979) — Holm-Bonferroni in standard reference texts
 
 **Verification:**
-- `pytest -q` → **454 passed, 5 skipped** in ~130 s.
+- `pytest -q` → **488 passed, 5 skipped** in ~205 s on the current Python 3.14 audit environment.
 - All 10 LaTeX tables validate clean.
 - Cross-asset consistency tests (9 of them) all pass.
 

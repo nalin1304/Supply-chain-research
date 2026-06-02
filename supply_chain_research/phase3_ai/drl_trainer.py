@@ -63,6 +63,9 @@ class DRLTrainer:
             log_dir: Directory for TensorBoard logs.
             checkpoint_dir: Directory for model checkpoints.
             env_kwargs: Optional kwargs for SupplyChainEnv.
+        
+        Parameters
+        ----------
         """
         if config is None:
             config = PPOConfig()
@@ -96,6 +99,9 @@ class DRLTrainer:
 
         Returns:
             Dictionary with training results.
+        
+        Parameters
+        ----------
         """
         if total_timesteps is None:
             total_timesteps = self.config.total_timesteps
@@ -233,6 +239,9 @@ class DRLTrainer:
 
         Returns:
             Mean episode reward.
+        
+        Parameters
+        ----------
         """
         eval_env = SupplyChainEnv(
             n_customers=self.env.n_customers,

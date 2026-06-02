@@ -12,31 +12,51 @@ Mapping:
 """
 
 import os
+
 import numpy as np
 import pandas as pd
 from loguru import logger
 
+
 class M5DataLoader:
-    def __init__(self, data_dir="data/m5", n_customers=100, n_warehouses=5):
-        self.data_dir = data_dir
+    """
+    Parameters
+    ----------
+    """
+    def __init__(self, data_dir="data/m5", n_customers=100, n_warehouses=5, seed=42):
+        """
+        Parameters
+        ----------
+        """
+        self.data_dir = str(data_dir)
         self.n_customers = n_customers
         self.n_warehouses = n_warehouses
-        self.csv_path = os.path.join(data_dir, "sales_train_validation.csv")
+        self.seed = seed
+        self.csv_path = os.path.join(self.data_dir, "sales_train_validation.csv")
         self.demand_series = None
+        self.used_synthetic = False
         
     def load_or_simulate(self):
-        """Loads M5 data if available, otherwise simulates it."""
+        """Loads M5 data if available, otherwise simulates it.
+        Parameters
+        ----------
+        """
         if os.path.exists(self.csv_path):
             logger.info(f"Found M5 dataset at {self.csv_path}. Loading real data...")
+            self.used_synthetic = False
             self._load_real_m5()
         else:
             logger.warning(f"M5 dataset not found at {self.csv_path}. Generating M5-like synthetic data.")
+            self.used_synthetic = True
             self._generate_synthetic_m5()
             
         return self.demand_series
         
     def _load_real_m5(self):
-        """Loads and aggregates real M5 data."""
+        """Loads and aggregates real M5 data.
+        Parameters
+        ----------
+        """
         df = pd.read_csv(self.csv_path)
         
         # We need to map to n_customers (items) and n_warehouses (stores)
@@ -60,22 +80,30 @@ class M5DataLoader:
         demand_df = df_filtered.groupby('item_id')[day_cols].sum()
         
         # Transpose so rows are days (T), columns are items (n_customers)
-        self.demand_series = demand_df.T.values.astype(np.float32)
+        demand = demand_df.T.values.astype(np.float32)
+        if demand.shape[1] < self.n_customers:
+            pad = np.zeros((demand.shape[0], self.n_customers - demand.shape[1]), dtype=np.float32)
+            demand = np.concatenate([demand, pad], axis=1)
+        self.demand_series = demand[:, : self.n_customers]
         logger.info(f"Successfully loaded real M5 data. Shape: {self.demand_series.shape}")
 
     def _generate_synthetic_m5(self):
-        """Generates synthetic data matching M5 characteristics (intermittent, zero-inflated)."""
+        """Generates synthetic data matching M5 characteristics (intermittent, zero-inflated).
+        Parameters
+        ----------
+        """
         T = 1913  # M5 has 1913 days
+        rng = np.random.default_rng(self.seed)
         self.demand_series = np.zeros((T, self.n_customers), dtype=np.float32)
         
         for c in range(self.n_customers):
             # M5 is zero-inflated Poisson-like
-            base_rate = np.random.uniform(0.5, 5.0)
-            demand = np.random.poisson(base_rate, size=T)
+            base_rate = rng.uniform(0.5, 5.0)
+            demand = rng.poisson(base_rate, size=T)
             
             # Add intermittency (many zero sales days)
-            zero_prob = np.random.uniform(0.1, 0.7)
-            zeros = np.random.choice([0, 1], size=T, p=[zero_prob, 1 - zero_prob])
+            zero_prob = rng.uniform(0.1, 0.7)
+            zeros = rng.choice([0, 1], size=T, p=[zero_prob, 1 - zero_prob])
             demand = demand * zeros
             
             # Add some weekly seasonality

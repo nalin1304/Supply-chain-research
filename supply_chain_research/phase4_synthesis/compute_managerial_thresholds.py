@@ -11,17 +11,19 @@ Usage:
 """
 
 import json
-import os
 from pathlib import Path
 
 import numpy as np
-
 
 RESULTS_DIR = Path("data/results")
 OUTPUT_PATH = Path("outputs/managerial_thresholds.json")
 
 
 def _load(name: str):
+    """
+    Parameters
+    ----------
+    """
     p = RESULTS_DIR / name
     if not p.exists():
         return None
@@ -116,6 +118,10 @@ def threshold_t2_breakeven_hcv_shift() -> dict:
     base = 1000.0  # delivered kg
 
     def fleet_emissions_cost(hcv_frac):
+        """
+        Parameters
+        ----------
+        """
         hcv_kg = base * hcv_frac
         lcv_kg = base * (1 - hcv_frac)
         trips_h = hcv_kg / cfg.vehicle.hcv_capacity

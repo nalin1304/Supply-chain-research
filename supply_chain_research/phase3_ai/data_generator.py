@@ -41,6 +41,9 @@ class DemandDataGenerator:
             n_customers: Number of customers to generate data for.
             n_years: Number of years of daily data.
             seed: Random seed for reproducibility.
+        
+        Parameters
+        ----------
         """
         self.n_customers = n_customers
         self.n_years = n_years
@@ -56,6 +59,9 @@ class DemandDataGenerator:
                 'demand': array of shape (n_days, n_customers)
                 'train': tuple (X_train, y_train) - not split yet
                 'dates': array of day indices
+        
+        Parameters
+        ----------
         """
         demand = np.zeros((self.n_days, self.n_customers))
 
@@ -82,6 +88,9 @@ class DemandDataGenerator:
 
         Returns:
             Array of shape (n_days,) with daily demand values.
+        
+        Parameters
+        ----------
         """
         t = np.arange(self.n_days, dtype=np.float64)
 
@@ -127,6 +136,9 @@ class DemandDataGenerator:
 
         Returns:
             Array of shape (n_days, n_customers) with edge-case patterns.
+        
+        Parameters
+        ----------
         """
         demand = np.zeros((self.n_days, self.n_customers))
 
@@ -188,6 +200,9 @@ class DemandDataGenerator:
             Dictionary with keys:
                 'X': Combined input sequences array.
                 'y': Combined target sequences array.
+        
+        Parameters
+        ----------
         """
         # Generate standard data
         standard_data = self.generate()
@@ -237,6 +252,9 @@ class DemandDataGenerator:
             Tuple of (X, y) where:
                 X has shape (n_samples, seq_length, n_customers)
                 y has shape (n_samples, forecast_horizon, n_customers)
+        
+        Parameters
+        ----------
         """
         n_days = demand.shape[0]
         n_samples = n_days - seq_length - forecast_horizon + 1
@@ -368,6 +386,10 @@ class DemandDataGenerator:
             train_std = 1.0
 
         def _norm(arr):
+            """
+            Parameters
+            ----------
+            """
             if arr.size == 0:
                 return arr.astype(np.float32)
             return ((arr - train_mean) / train_std).astype(np.float32)

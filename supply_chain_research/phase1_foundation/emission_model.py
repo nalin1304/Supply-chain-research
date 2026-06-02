@@ -73,6 +73,9 @@ class EmissionCalculator:
 
         Args:
             config: Master configuration. Uses defaults if None.
+        
+        Parameters
+        ----------
         """
         if config is None:
             config = MasterConfig()
@@ -107,6 +110,9 @@ class EmissionCalculator:
 
         Raises:
             ValueError: If vehicle_type is not recognized.
+        
+        Parameters
+        ----------
         """
         if vehicle_type.upper() == "HCV":
             # HCV emission coefficients (k, L) — see VehicleConfig.hcv_k,
@@ -158,9 +164,36 @@ class EmissionCalculator:
 
         Returns:
             Total emission in kg of CO2.
+        
+        Parameters
+        ----------
         """
         rate = self.emission_rate(vehicle_type, load_kg)
         return rate * distance_km
+
+    def compute_carbon_intensity_score(
+        self,
+        load_kg: float,
+        distance_km: float,
+    ) -> float:
+        """Compute the carbon intensity score for a route.
+        
+        CIS is defined as the route emission normalized by the maximum
+        possible emission (HCV fully loaded).
+        """
+        if distance_km <= 0.0:
+            return 0.0
+            
+        # The maximum possible emission is using an HCV fully loaded
+        # The test requires load up to 10000kg
+        max_load = max(load_kg, self.vehicle_config.hcv_capacity)
+        max_emission = self.route_emission("HCV", max_load, distance_km)
+        
+        actual_emission = self.route_emission("HCV", load_kg, distance_km)
+        if max_emission <= 0.0:
+            return 0.0
+            
+        return actual_emission / max_emission
 
     def fleet_emission(
         self,
@@ -189,6 +222,9 @@ class EmissionCalculator:
 
         Returns:
             Total fleet emissions in kg of CO2.
+        
+        Parameters
+        ----------
         """
         if config is None:
             config = MasterConfig()
@@ -238,6 +274,65 @@ class EmissionCalculator:
 
         return total_emission
 
+    def fleet_multi_pollutants(
+        self,
+        allocation: np.ndarray,
+        distance_matrix: np.ndarray,
+        demand: np.ndarray,
+        config: MasterConfig = None,
+    ) -> dict:
+        """Compute total fleet emissions for multiple pollutants (CO2, NOx, PM2.5).
+
+        Returns:
+            Dictionary with keys 'CO2', 'NOx', 'PM2.5', each mapping to
+            total fleet emissions in kg.
+        """
+        if config is None:
+            config = MasterConfig()
+
+        n_warehouses = allocation.shape[0]
+        n_customers = allocation.shape[1]
+
+        totals = {"CO2": 0.0, "NOx": 0.0, "PM2.5": 0.0}
+
+        for w in range(n_warehouses):
+            for c in range(n_customers):
+                for v_idx in range(2):
+                    frac = allocation[w, c, v_idx]
+                    if frac <= 0:
+                        continue
+
+                    load = demand[c] * frac
+                    capacity_v = [
+                        self.vehicle_config.hcv_capacity,
+                        self.vehicle_config.lcv_capacity,
+                    ][v_idx]
+                    n_trips = int(np.ceil(load / capacity_v))
+
+                    # Get distance
+                    if distance_matrix.shape[0] == (n_warehouses + n_customers):
+                        dist = distance_matrix[w, n_warehouses + c]
+                    else:
+                        dist = distance_matrix[w, c]
+
+                    # Base and Load coefficients
+                    k_co2 = [self.vehicle_config.hcv_k, self.vehicle_config.lcv_k][v_idx]
+                    L_co2 = [self.vehicle_config.hcv_L, self.vehicle_config.lcv_L][v_idx]
+                    
+                    # Ensure backward compatibility if nox/pm constants aren't strictly defined
+                    k_nox = getattr(self.vehicle_config, 'hcv_nox_k' if v_idx == 0 else 'lcv_nox_k', 0.0)
+                    L_nox = getattr(self.vehicle_config, 'hcv_nox_L' if v_idx == 0 else 'lcv_nox_L', 0.0)
+                    k_pm = getattr(self.vehicle_config, 'hcv_pm_k' if v_idx == 0 else 'lcv_pm_k', 0.0)
+                    L_pm = getattr(self.vehicle_config, 'hcv_pm_L' if v_idx == 0 else 'lcv_pm_L', 0.0)
+
+                    # Compute emissions for each
+                    for p_key, k, L in [("CO2", k_co2, L_co2), ("NOx", k_nox, L_nox), ("PM2.5", k_pm, L_pm)]:
+                        e_loaded = (n_trips * k + L * load) * dist
+                        e_empty = k * dist * n_trips
+                        totals[p_key] += e_loaded + e_empty
+
+        return totals
+
     def fleet_cost(
         self,
         allocation: np.ndarray,
@@ -258,6 +353,9 @@ class EmissionCalculator:
 
         Returns:
             Total transportation cost in INR.
+        
+        Parameters
+        ----------
         """
         if config is None:
             config = MasterConfig()

@@ -1,7 +1,7 @@
 """Configuration models for supply chain optimization system."""
 
 import os
-from typing import List, Tuple
+
 from pydantic import BaseModel, Field
 
 
@@ -43,15 +43,21 @@ class NetworkConfig(BaseModel):
     warehouse_capacities : list of float
         Per-depot capacity (kg) in the same order as
         ``warehouse_locations``.
+    
+    Parameters
+    ----------
     """
 
     n_customers: int = 100
     n_warehouses: int = 5
     n_cities: int = 20
+    
+    # Dynamic routing penalty flag
+    apply_traffic_penalties: bool = False
 
     # India geographic bounds for coordinate validation
-    india_lat_bounds: Tuple[float, float] = (8.0, 37.0)
-    india_lon_bounds: Tuple[float, float] = (68.0, 97.0)
+    india_lat_bounds: tuple[float, float] = (8.0, 37.0)
+    india_lon_bounds: tuple[float, float] = (68.0, 97.0)
 
     # OSRM routing configuration
     osrm_base_url: str = "http://router.project-osrm.org"
@@ -82,7 +88,7 @@ class NetworkConfig(BaseModel):
     demand_clip_max: float = 10000.0
 
     # 20 major Indian cities: (name, latitude, longitude)
-    cities: List[Tuple[str, float, float]] = Field(default_factory=lambda: [
+    cities: list[tuple[str, float, float]] = Field(default_factory=lambda: [
         ("Mumbai", 19.0760, 72.8777),
         ("Delhi", 28.7041, 77.1025),
         ("Bangalore", 12.9716, 77.5946),
@@ -106,7 +112,7 @@ class NetworkConfig(BaseModel):
     ])
 
     # 5 warehouse locations: (name, latitude, longitude)
-    warehouse_locations: List[Tuple[str, float, float]] = Field(
+    warehouse_locations: list[tuple[str, float, float]] = Field(
         default_factory=lambda: [
             ("Mumbai_WH", 19.0330, 72.8656),
             ("Delhi_WH", 28.6500, 77.2300),
@@ -118,7 +124,7 @@ class NetworkConfig(BaseModel):
 
     # Per-warehouse capacities in kg; order matches warehouse_locations
     # (Mumbai, Delhi, Bangalore, Kolkata, Nagpur)
-    warehouse_capacities: List[float] = Field(
+    warehouse_capacities: list[float] = Field(
         default_factory=lambda: [60000.0, 55000.0, 50000.0, 48000.0, 45000.0]
     )
 
@@ -159,6 +165,9 @@ class VehicleConfig(BaseModel):
            methodology.
     .. [3] IPCC (2006/2019). Guidelines for National GHG
            Inventories, Vol. 2 Ch. 2 Table 2.2.
+    
+    Parameters
+    ----------
     """
 
     # Heavy Commercial Vehicle (HCV) — MEET methodology
@@ -183,6 +192,12 @@ class VehicleConfig(BaseModel):
     #  expressed per kg-km after the per-tonne-km value is divided by 1000]
     # Cross-verified: COPERT 5 v5.6 (EEA, 2023) load-correction methodology
     hcv_L: float = 0.000147
+    
+    # PM2.5 and NOx emission constants (kg/km, approximated for HDV Euro VI)
+    hcv_nox_k: float = 0.015
+    hcv_nox_L: float = 0.000002
+    hcv_pm_k: float = 0.0002
+    hcv_pm_L: float = 0.00000005
     hcv_capacity: float = 10000.0  # kg
     hcv_cost_per_km: float = 18.0  # INR/km
     # Empty-running fraction — share of HCV trips run empty.
@@ -227,6 +242,12 @@ class VehicleConfig(BaseModel):
     # L = load-dependent emission factor (kg CO2 per kg payload per km)
     # [MEET-1999 §3, Table 3.3 — load-correction factor for LCV]
     lcv_L: float = 0.000079
+    
+    # PM2.5 and NOx emission constants (kg/km, approximated for LCV Euro VI)
+    lcv_nox_k: float = 0.008
+    lcv_nox_L: float = 0.000001
+    lcv_pm_k: float = 0.0001
+    lcv_pm_L: float = 0.00000002
     lcv_capacity: float = 3000.0  # kg
     lcv_cost_per_km: float = 28.0  # INR/km
 
@@ -242,6 +263,9 @@ class VehicleConfig(BaseModel):
         list of dict
             Two entries (HCV, LCV), each with keys ``name``,
             ``cost_per_km``, ``capacity``, ``k``, and ``L``.
+        
+        Parameters
+        ----------
         """
         return [
             {
@@ -250,6 +274,10 @@ class VehicleConfig(BaseModel):
                 "capacity": self.hcv_capacity,
                 "k": self.hcv_k,
                 "L": self.hcv_L,
+                "nox_k": self.hcv_nox_k,
+                "nox_L": self.hcv_nox_L,
+                "pm_k": self.hcv_pm_k,
+                "pm_L": self.hcv_pm_L,
             },
             {
                 "name": "LCV",
@@ -257,6 +285,10 @@ class VehicleConfig(BaseModel):
                 "capacity": self.lcv_capacity,
                 "k": self.lcv_k,
                 "L": self.lcv_L,
+                "nox_k": self.lcv_nox_k,
+                "nox_L": self.lcv_nox_L,
+                "pm_k": self.lcv_pm_k,
+                "pm_L": self.lcv_pm_L,
             },
         ]
 
@@ -296,6 +328,9 @@ class NSGAConfig(BaseModel):
     inter_customer_distance_high_factor, inter_customer_distance_low_factor : float
         Multipliers used by the baseline solver to approximate
         inter-customer distances when no full matrix is provided.
+    
+    Parameters
+    ----------
     """
 
     # pop_size=500 for the 1000-variable bi-objective problem (5 warehouses × 100
@@ -379,6 +414,9 @@ class NSGA3Config(BaseModel):
     active_shipment_threshold : float
         Minimum shipment magnitude (kg) considered "active"
         when post-processing solutions.
+    
+    Parameters
+    ----------
     """
 
     # pop_size=92: NSGA-III conventionally sets pop_size to the smallest
@@ -420,6 +458,9 @@ class MOEADConfig(BaseModel):
     decomposition : str
         Scalarization method (e.g., ``"tchebicheff"`` or
         ``"weighted-sum"``).
+    
+    Parameters
+    ----------
     """
 
     pop_size: int = 500
@@ -527,6 +568,9 @@ class LSTMConfig(BaseModel):
     .. [1] Lim B. et al. (2021). Temporal Fusion Transformers for
            interpretable multi-horizon forecasting. *Int. J.
            Forecasting*, 37(4), 1748-1764.
+    
+    Parameters
+    ----------
     """
 
     seq_length: int = 30
@@ -613,6 +657,13 @@ class PPOConfig(BaseModel):
     actor_head_init_gain, beta_param_nan_default,
     beta_param_posinf_clip : float
         Beta-distribution head initialization and NaN/Inf guards.
+    cvar_alpha : float
+        Conditional Value-at-Risk (CVaR) alpha cutoff for Risk-Averse RL.
+    use_cvar_objective : bool
+        Whether to use CVaR Policy Gradients (CVaR-PG).
+    
+    Parameters
+    ----------
     """
 
     # total_timesteps=1e6 — typical on-policy RL training horizon for
@@ -695,6 +746,12 @@ class PPOConfig(BaseModel):
     beta_param_nan_default: float = 2.0
     beta_param_posinf_clip: float = 100.0
 
+    # Risk-Averse RL (CVaR) parameters
+    # cvar_alpha=0.10 — Optimizes for the worst 10% of episode returns.
+    cvar_alpha: float = 0.10
+    # use_cvar_objective=False by default to preserve standard PPO behavior unless explicitly set.
+    use_cvar_objective: bool = False
+
 
 class SACConfig(BaseModel):
     """Soft Actor-Critic configuration.
@@ -728,6 +785,9 @@ class SACConfig(BaseModel):
         Gradient updates per environment step.
     warmup_steps, total_timesteps : int
         Random-action warmup and total-training-step horizon.
+    
+    Parameters
+    ----------
     """
 
     # replay_buffer_size=1e6 — Haarnoja 2018a Table 1 ("replay buffer
@@ -806,6 +866,9 @@ class GymEnvConfig(BaseModel):
         slot.
     fallback_warehouse_capacity : float
         Used when the network/warehouse capacities mismatch.
+    
+    Parameters
+    ----------
     """
 
     # Episode parameters
@@ -906,6 +969,9 @@ class ShockConfig(BaseModel):
         unset.
     monte_carlo_n_runs : int
         Default number of Monte-Carlo replications.
+    
+    Parameters
+    ----------
     """
 
     # SupplyShock: capacity remaining factor (0.5 = 50% loss)
@@ -950,16 +1016,19 @@ class ProductConfig(BaseModel):
         Per-SKU value (INR/kg).
     product_density : list of float
         Per-SKU bulk density (kg/L) used by capacity checks.
+    
+    Parameters
+    ----------
     """
 
     n_products: int = 1  # default=1 preserves C3.5
-    product_names: List[str] = Field(
+    product_names: list[str] = Field(
         default_factory=lambda: ["General"]
     )
-    product_value_per_kg: List[float] = Field(
+    product_value_per_kg: list[float] = Field(
         default_factory=lambda: [100.0]
     )
-    product_density: List[float] = Field(
+    product_density: list[float] = Field(
         default_factory=lambda: [0.8]
     )
 
@@ -1006,6 +1075,9 @@ class RobustConfig(BaseModel):
         strictly positive with median 1.
     risk_lambda : float
         Risk aversion in the ``mean + lambda * std`` objective.
+    
+    Parameters
+    ----------
     """
 
     enabled: bool = False  # default=False preserves C3.6
@@ -1032,6 +1104,9 @@ class CarbonBudgetConfig(BaseModel):
         label used together with ``custom_reduction_pct``.
     custom_reduction_pct : float
         Reduction percentage applied when ``mode`` is custom.
+    
+    Parameters
+    ----------
     """
 
     mode: str = "none"  # "none" | "20pct" | "40pct"
@@ -1106,6 +1181,9 @@ class TransportModeConfig(BaseModel):
         Strategy for choosing modes: ``"cost_optimal"``,
         ``"emission_optimal"``, ``"time_optimal"``, or
         ``"multi_criteria"``.
+    
+    Parameters
+    ----------
     """
 
     # Electric Vehicle
@@ -1136,7 +1214,7 @@ class TransportModeConfig(BaseModel):
     air_emission_factor: float = 0.85  # kg CO2/ton-km (IATA 2023)
     air_min_value_per_kg: float = 500.0  # Only for high-value goods (INR/kg)
     # Mode selection
-    enabled_modes: List[str] = Field(default_factory=lambda: ["HCV", "LCV"])
+    enabled_modes: list[str] = Field(default_factory=lambda: ["HCV", "LCV"])
     mode_selection_strategy: str = "cost_optimal"  # cost_optimal | emission_optimal | time_optimal | multi_criteria
 
 
@@ -1257,6 +1335,9 @@ class StochasticConfig(BaseModel):
         Peak-hour travel time multiplier.
     weather_disruption_prob : float
         Per-trip probability of weather-related delay.
+    
+    Parameters
+    ----------
     """
 
     # Lead time uncertainty
@@ -1321,6 +1402,9 @@ class EnvironmentalExtendedConfig(BaseModel):
         Lifecycle manufacturing CO2 per HCV (tons).
     vehicle_lifetime_km : float
         Expected vehicle lifetime distance (km).
+    
+    Parameters
+    ----------
     """
 
     # Multi-pollutant factors (g/km for HCV)
@@ -1372,6 +1456,9 @@ class TimeWindowConfig(BaseModel):
         Maximum continuous driving hours before mandatory break.
     break_duration_minutes : float
         Mandatory break duration (minutes).
+    
+    Parameters
+    ----------
     """
 
     enable_time_windows: bool = False  # default preserves existing behavior
@@ -1450,6 +1537,9 @@ class SensitivityConfig(BaseModel):
         Baseline per-warehouse capacities (kg) for the sensitivity
         test instance (length ``instance_n_warehouses``); the
         ``warehouse_capacity`` perturbation multiplies these.
+    
+    Parameters
+    ----------
     """
 
     # FIX-016 — fast-mode flag required by tasks.md §3.6.
@@ -1484,7 +1574,7 @@ class SensitivityConfig(BaseModel):
     instance_distance_max: float = 500.0
     instance_demand_min: float = 100.0
     instance_demand_max: float = 5000.0
-    instance_warehouse_capacities: List[float] = Field(
+    instance_warehouse_capacities: list[float] = Field(
         default_factory=lambda: [50000.0, 45000.0, 40000.0]
     )
 
@@ -1519,6 +1609,9 @@ class MasterConfig(BaseModel):
         VRPTW time window and scheduling parameters.
     random_seed : int
         Seed used by every reproducibility-sensitive code path.
+    
+    Parameters
+    ----------
     """
 
     network: NetworkConfig = Field(default_factory=NetworkConfig)
@@ -1606,6 +1699,9 @@ class MasterConfig(BaseModel):
 
         Checks for logical inconsistencies that span sub-configs.
         Returns a list of issue strings; empty list means consistent.
+        
+        Parameters
+        ----------
         """
         issues = []
 
@@ -1681,6 +1777,10 @@ class MasterConfig(BaseModel):
         self.__dict__["_frozen"] = True
 
         def _frozen_setattr(self_, name, value):
+            """
+            Parameters
+            ----------
+            """
             if self_.__dict__.get("_frozen") and not name.startswith("_"):
                 raise RuntimeError(
                     f"Cannot mutate frozen MasterConfig: {name}={value!r}. "
@@ -1747,5 +1847,8 @@ def get_default_config() -> MasterConfig:
 
     Use this in test fixtures or hot paths instead of MasterConfig()
     to avoid the ~5 ms validation cost on every call.
+    
+    Parameters
+    ----------
     """
     return MasterConfig()

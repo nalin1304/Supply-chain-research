@@ -129,7 +129,7 @@ network, 365-day horizon:
 | Total Modal training time | **2.96 hours** |
 | GPU | Tesla T4 (16 GB) |
 | Total Modal cost | ~$1.80 (T4 at $0.59/hr) |
-| Test suite | **454 passed, 5 skipped** |
+| Test suite | **488 passed, 5 skipped** |
 | Code modules | 53 Python files, 0 syntax errors |
 | LaTeX tables | 10 (all syntactically validated) |
 | Publication figures | 9 main + 2 supplementary (300 DPI PNG) |

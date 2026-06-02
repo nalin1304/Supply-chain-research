@@ -2,7 +2,7 @@
 
 This document satisfies bugfix clauses C1.21 and C2.21 of `.kiro/specs/supply-chain-research-audit/bugfix.md` (FIX-019d). It is the canonical runbook for reproducing every numerical figure, table, and metric reported in `docs/PAPER_OUTLINE.md` from a clean environment. Every step is ordered, every artefact size is documented, and every known issue is annotated.
 
-The pipeline takes approximately 4-5 hours of A100 GPU time (cloud) or 2-3 days of CPU time (laptop). On the A100 the dominant cost is NSGA-II ×50 seeds (≈4 hours) followed by PPO 5M-step total (≈45 minutes); the LSTM training, MOEA/D, and DES Monte-Carlo combined fit inside 30 minutes.
+The pipeline takes approximately 3-5 hours of Modal T4 GPU time (cloud) or 2-3 days of CPU time (laptop). On the recorded T4 run the full production bundle completed in 2.96 hours; the dominant cost is NSGA-II ×50 seeds, followed by the 3M-step PPO-20 and 2M-step PPO-100 stress-mode runs. The LSTM training, MOEA/D, and DES Monte-Carlo combined fit inside the remaining wall-clock budget.
 
 ## Environment Setup
 
@@ -17,7 +17,7 @@ This pipeline targets Python 3.11 or newer. We have validated the full run on Py
 
 ### GPU
 
-A GPU is optional but recommended for the PPO and LSTM steps. The code paths fall back to CPU when CUDA is unavailable; the device-detection logic in `phase3_ai/lstm_forecaster.py::LSTMForecaster.__init__` and `phase3_ai/ppo_agent.py::PPOAgent.__init__` accepts both string and `torch.device` arguments and auto-selects CUDA when available. The Modal cloud-training pipeline uses an NVIDIA A100 (40 GB or 80 GB) by default.
+A GPU is optional but recommended for the PPO and LSTM steps. The code paths fall back to CPU when CUDA is unavailable; the device-detection logic in `phase3_ai/lstm_forecaster.py::LSTMForecaster.__init__` and `phase3_ai/ppo_agent.py::PPOAgent.__init__` accepts both string and `torch.device` arguments and auto-selects CUDA when available. The Modal cloud-training pipeline uses an NVIDIA T4 (16 GB) by default to keep the reproduction budget predictable.
 
 ### Python environment
 
@@ -46,7 +46,7 @@ Run the test suite before the production pipeline to confirm the environment is 
 pytest tests/ -q
 ```
 
-Expected: ~352 tests collected, ≥346 passing, ≤6 skipped (the LIVE-gated OSRM/ORS probes plus a few config-shape-dependent regressions). The exact baseline is in `audit_workspace/PASSING_TESTS_BASELINE.txt`.
+Expected on the current audit environment: 488 passed and 5 skipped (the LIVE-gated OSRM/ORS probes plus intentionally skipped optional checks). The exact baseline is in `audit_workspace/PASSING_TESTS_BASELINE.txt`.
 
 ## Ordered Runbook (10 Steps)
 
@@ -103,7 +103,7 @@ These values match `audit_workspace/NUMERIC_BASELINE.json` bit-for-bit (preserva
 
 ### Step 3: Run NSGA-II ×50 Seeds
 
-This is the largest single step in the pipeline (≈4 hours on A100, ≈30 hours on CPU). It produces the bi-objective Pareto fronts for the cost-vs-carbon tradeoff.
+This is the largest single step in the pipeline (multi-hour on T4, ≈30 hours on CPU). It produces the bi-objective Pareto fronts for the cost-vs-carbon tradeoff.
 
 ```bash
 # Cloud (recommended):
@@ -136,7 +136,7 @@ Expected output:
 - `data/results/nsga3_all_results.pkl`: ≈ 3 KiB (50 fronts, 50 HVs).
 - `data/results/moead_all_results.pkl`: ≈ 4 KiB (50 fronts, 50 HVs).
 
-NSGA-III adds a third objective (max delivery time) and uses 91 Das-Dennis reference directions [debjain2014nsga3]; MOEA/D uses 99-partition uniform reference directions [zhang2007moead]. Wall-clock: NSGA-III ≈ 26 minutes on A100; MOEA/D ≈ 0.2 minutes.
+NSGA-III adds a third objective (max delivery time) and uses 91 Das-Dennis reference directions [debjain2014nsga3]; MOEA/D uses 99-partition uniform reference directions [zhang2007moead]. Wall-clock varies by cloud queue and cache state; both are covered by the unified Modal T4 run recorded in `data/results/training_summary.json`.
 
 ### Step 5: Train the LSTM Demand Forecaster
 
@@ -153,7 +153,7 @@ Expected output:
 - `data/results/lstm_actuals.npy`: ≈ 100 KB (held-out actuals).
 - `data/results/lstm_checkpoint.pt`: ≈ 30 MB (model weights + optimizer state).
 
-Expected MAPE: 8.2% on the Diwali-period holdout. Training time: ≈ 6 minutes on A100, ≈ 30 minutes on Apple M1.
+Expected MAPE: 23.46% and RMSE 56.46 kg on the recorded holdout in `data/results/training_summary.json`. Training time is minutes on T4 and roughly tens of minutes on Apple Silicon CPU/MPS depending on cache state.
 
 ### Step 6: Train PPO Inventory Agents (3M Small + 2M Full)
 
@@ -176,7 +176,7 @@ Expected per-episode mean reward (last 100 episodes):
 - 20-customer instance: approximately -760.
 - 100-customer instance: approximately depends on demand distribution; consult the figure 6 panels for the production trajectory.
 
-Wall-clock: PPO-20 ≈ 25 minutes on A100; PPO-100 ≈ 20 minutes (smaller per-step but larger network).
+Wall-clock: both PPO stress-mode runs are included in the recorded 2.96-hour Modal T4 production run.
 
 ### Step 7: Run DES Monte Carlo (100 Replications)
 
@@ -309,13 +309,13 @@ This section documents known issues, their workarounds, and the planned resoluti
 
 ## Reproducibility Statement
 
-Every numerical figure in `docs/PAPER_OUTLINE.md` is reproducible by following Steps 1-10 above on a clean environment. The expected wall-clock is approximately 4-5 hours on an A100 (cloud) or 2-3 days on CPU (laptop). The captured baselines in `audit_workspace/` are the ground truth for the preservation contract; any bit-level deviation triggers a regression test failure.
+Every numerical figure in `docs/PAPER_OUTLINE.md` is reproducible by following Steps 1-10 above on a clean environment. The expected wall-clock is approximately 3-5 hours on Modal T4 (cloud) or 2-3 days on CPU (laptop). The captured baselines in `audit_workspace/` are the ground truth for the preservation contract; any bit-level deviation triggers a regression test failure.
 
 For peer review, we recommend the cloud route: clone the repository, authenticate with Modal, and run `modal run --detach cloud_training/modal_train.py`. The pipeline is fully resumable; any crash or partial completion is recoverable by re-running the same command.
 
 ## Files of Record
 
-- `cloud_training/modal_train.py` — driver for Steps 3-9 on Modal A100.
+- `cloud_training/modal_train.py` — driver for Steps 3-9 on Modal T4.
 - `cloud_training/local_training_runner.py` — local CPU/GPU runner with Rich progress bars.
 - `cloud_training/TRAINING_GUIDE.md` — extended guide with Kaggle / Colab / vast.ai variants.
 - `audit_workspace/NUMERIC_BASELINE.json` — captured baselines for the preservation contract.

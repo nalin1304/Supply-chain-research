@@ -5,19 +5,25 @@ integrated into the pymoo GeneticAlgorithm framework.
 """
 
 import time
+
 import numpy as np
 from loguru import logger
 from pymoo.algorithms.base.genetic import GeneticAlgorithm
 from pymoo.core.survival import Survival
-from pymoo.optimize import minimize
-from pymoo.termination import get_termination
 from pymoo.operators.crossover.sbx import SBX
 from pymoo.operators.mutation.pm import PM
 from pymoo.operators.sampling.rnd import FloatRandomSampling
 from pymoo.operators.selection.tournament import TournamentSelection
+from pymoo.optimize import minimize
+from pymoo.termination import get_termination
 from pymoo.util.dominator import Dominator
 
+
 def ibea_binary_tournament(pop, P, algorithm, **kwargs):
+    """
+    Parameters
+    ----------
+    """
     n_tournaments, n_parents = P.shape
     if n_parents != 2:
         raise ValueError("Only implemented for binary tournament!")
@@ -44,21 +50,32 @@ def ibea_binary_tournament(pop, P, algorithm, **kwargs):
     return S[:, None]
 
 from supply_chain_research.config import MasterConfig
-from supply_chain_research.phase1_foundation.solver_base import BaseSolver, SolverResult
 from supply_chain_research.phase1_foundation.nsga2_solver import (
-    SupplyChainProblem,
     MarginalTradeoffRepair,
+    SupplyChainProblem,
 )
+from supply_chain_research.phase1_foundation.solver_base import BaseSolver, SolverResult
 
 
 class IBEASurvival(Survival):
-    """Environmental selection based on additive epsilon indicator (Zitzler & Kunzli 2004)."""
+    """Environmental selection based on additive epsilon indicator (Zitzler & Kunzli 2004).
+    Parameters
+    ----------
+    """
 
     def __init__(self, kappa: float = 0.05):
+        """
+        Parameters
+        ----------
+        """
         super().__init__(filter_infeasible=True)
         self.kappa = kappa
 
     def _do(self, problem, pop, n_survive, **kwargs):
+        """
+        Parameters
+        ----------
+        """
         F = pop.get("F")
         N = len(F)
         if N <= n_survive:
@@ -92,7 +109,10 @@ class IBEASurvival(Survival):
 
 
 class IBEASolver(BaseSolver):
-    """Indicator-Based Evolutionary Algorithm (IBEA) solver."""
+    """Indicator-Based Evolutionary Algorithm (IBEA) solver.
+    Parameters
+    ----------
+    """
 
     def solve(
         self,
@@ -101,7 +121,10 @@ class IBEASolver(BaseSolver):
         demand: np.ndarray,
         seed: int = 42,
     ) -> SolverResult:
-        """Run IBEA optimization."""
+        """Run IBEA optimization.
+        Parameters
+        ----------
+        """
         logger.info("Initializing IBEA solver...")
         start_time = time.time()
 
@@ -176,6 +199,10 @@ class IBEASolver(BaseSolver):
 
     @property
     def name(self) -> str:
+        """
+        Parameters
+        ----------
+        """
         return "IBEA"
 
 
@@ -185,6 +212,9 @@ def run_ibea(
     demand: np.ndarray,
     seed: int = 42,
 ) -> SolverResult:
-    """Wrapper function to execute IBEA solver."""
+    """Wrapper function to execute IBEA solver.
+    Parameters
+    ----------
+    """
     solver = IBEASolver()
     return solver.solve(config, distance_matrix, demand, seed)

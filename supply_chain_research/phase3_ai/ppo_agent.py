@@ -24,13 +24,16 @@ Source: Schulman et al. (2017). PPO. arXiv:1707.06347.
 import numpy as np
 import torch
 import torch.nn as nn
-from torch.distributions import Beta, Normal
+from torch.distributions import Beta
 
 from supply_chain_research.config import PPOConfig
 
 
 def _orthogonal_init(layer, gain=1.0):
-    """Apply orthogonal initialization to a linear layer."""
+    """Apply orthogonal initialization to a linear layer.
+    Parameters
+    ----------
+    """
     nn.init.orthogonal_(layer.weight, gain=gain)
     if layer.bias is not None:
         nn.init.zeros_(layer.bias)
@@ -67,6 +70,10 @@ class ActorNetwork(nn.Module):
     """
 
     def __init__(self, obs_dim, action_dim, hidden_size=256, config=None):
+        """
+        Parameters
+        ----------
+        """
         super().__init__()
         self.action_dim = action_dim
         if config is None:
@@ -91,6 +98,10 @@ class ActorNetwork(nn.Module):
         _orthogonal_init(self.fc_beta, gain=config.actor_head_init_gain)
 
     def _trunk(self, obs):
+        """
+        Parameters
+        ----------
+        """
         x = self.fc1(obs)
         x = self.ln1(x)
         x = torch.tanh(x)
@@ -148,6 +159,9 @@ class ActorNetwork(nn.Module):
         """Sample action from Beta(alpha, beta) on [0,1].
 
         Returns (action, log_prob). action shape: (..., action_dim).
+        
+        Parameters
+        ----------
         """
         dist = self.get_distribution(obs)
         action = dist.sample()
@@ -207,12 +221,16 @@ class CriticNetwork(nn.Module):
         Per-layer normalization.
     """
 
-    def __init__(self, obs_dim, hidden_size=256):
+    def __init__(self, obs_dim, hidden_size=256, output_dim=1):
         """Initialize critic network.
 
         Args:
             obs_dim: Observation space dimension.
             hidden_size: Hidden layer size.
+            output_dim: Value vector dimension (default 1).
+        
+        Parameters
+        ----------
         """
         super().__init__()
 
@@ -220,7 +238,7 @@ class CriticNetwork(nn.Module):
         self.ln1 = nn.LayerNorm(hidden_size)
         self.fc2 = nn.Linear(hidden_size, hidden_size)
         self.ln2 = nn.LayerNorm(hidden_size)
-        self.fc_out = nn.Linear(hidden_size, 1)
+        self.fc_out = nn.Linear(hidden_size, output_dim)
 
         # Orthogonal initialization
         _orthogonal_init(self.fc1, gain=np.sqrt(2))
@@ -235,6 +253,9 @@ class CriticNetwork(nn.Module):
 
         Returns:
             Value tensor of shape (batch, 1).
+        
+        Parameters
+        ----------
         """
         x = self.fc1(obs)
         x = self.ln1(x)
@@ -261,7 +282,10 @@ class RolloutBuffer:
     """
 
     def __init__(self):
-        """Initialize empty rollout buffer."""
+        """Initialize empty rollout buffer.
+        Parameters
+        ----------
+        """
         self.observations = []
         self.actions = []
         self.rewards = []
@@ -305,6 +329,9 @@ class RolloutBuffer:
 
         Returns:
             Dictionary with all buffer data.
+        
+        Parameters
+        ----------
         """
         return {
             'observations': np.array(self.observations),
@@ -336,7 +363,10 @@ class RolloutBuffer:
         self.dones = []
 
     def __len__(self):
-        """Number of transitions in buffer."""
+        """Number of transitions in buffer.
+        Parameters
+        ----------
+        """
         return len(self.observations)
 
 
@@ -384,6 +414,9 @@ class PPOAgent:
             action_dim: Action space dimension.
             config: PPOConfig instance.
             device: torch device (auto-detected if None).
+        
+        Parameters
+        ----------
         """
         if config is None:
             config = PPOConfig()
@@ -444,6 +477,9 @@ class PPOAgent:
         Returns
         -------
         Tuple of (action, value, log_prob) as numpy arrays.
+        
+        Parameters
+        ----------
         """
         obs_tensor = torch.FloatTensor(obs).unsqueeze(0).to(self.device)
         with torch.no_grad():
@@ -521,6 +557,9 @@ class PPOAgent:
             L = L_CLIP + vf_coef * L_VF - ent_coef * entropy
 
         Returns dict of training metrics.
+        
+        Parameters
+        ----------
         """
         observations = rollout_data['observations']
         actions = rollout_data['actions']

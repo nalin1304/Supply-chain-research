@@ -1093,34 +1093,7 @@ class TestRewardShaping:
             penalty_ratio = penalty_large / penalty_small
             assert penalty_ratio > missed_ratio
 
-    @pytest.mark.skip(reason="Audit 1.7: buffer_reward replaced with PBRS shaping")
-    def test_reward_buffer_zone(self):
-        """Positive reward when inventory is in buffer zone [15%, 40%]."""
-        env = SupplyChainEnv(
-            n_customers=10, n_warehouses=3,
-            episode_length=30,
-            warehouse_capacities=[10000.0, 10000.0, 10000.0],
-        )
-        env.reset(seed=42)
 
-        # Set inventories to 25% of capacity (within 15-40% buffer zone)
-        env.inventories[:] = 2500.0
-
-        action = np.ones(env.action_dim) * 0.5
-        _, reward_buffer, _, _, _ = env.step(action)
-
-        # Now set inventories to 5% of capacity (below buffer zone)
-        env.reset(seed=42)
-        env.inventories[:] = 500.0
-
-        action = np.ones(env.action_dim) * 0.5
-        _, reward_low, _, _, _ = env.step(action)
-
-        # Buffer zone reward should make the 25% case better than 5%
-        # when all else is roughly equal. Since the 25% case has more
-        # inventory to fulfill demand AND gets buffer reward, it should
-        # yield a higher reward.
-        assert reward_buffer > reward_low
 
     def test_reward_holding_penalty(self):
         """Negative holding penalty when inventory exceeds 40% of capacity."""

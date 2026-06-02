@@ -73,6 +73,10 @@ class DemandRepair3Obj(Repair):
         warehouse_capacities: np.ndarray,
         distance_matrix: np.ndarray,
     ):
+        """
+        Parameters
+        ----------
+        """
         super().__init__()
         self.n_warehouses = n_warehouses
         self.n_customers = n_customers

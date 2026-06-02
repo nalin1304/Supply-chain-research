@@ -50,6 +50,9 @@ class TemporalAttention(nn.Module):
 
         Args:
             hidden_size: Dimension of LSTM hidden states.
+        
+        Parameters
+        ----------
         """
         super().__init__()
         self.hidden_size = hidden_size
@@ -69,6 +72,9 @@ class TemporalAttention(nn.Module):
             Tuple of (context, attention_weights) where:
                 context: shape (batch, hidden_size)
                 attention_weights: shape (batch, seq_len)
+        
+        Parameters
+        ----------
         """
         # energy = v^T * tanh(W * h_t + b)
         # W * h_t + b: (batch, seq_len, hidden_size)

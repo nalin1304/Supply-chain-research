@@ -5,20 +5,24 @@ while constraining the other (carbon) to be below a set of epsilon values.
 """
 
 import time
+
 import numpy as np
 from loguru import logger
 from scipy.optimize import minimize as scipy_minimize
 
 from supply_chain_research.config import MasterConfig
-from supply_chain_research.phase1_foundation.solver_base import BaseSolver, SolverResult
 from supply_chain_research.phase1_foundation.nsga2_solver import (
-    SupplyChainProblem,
     MarginalTradeoffRepair,
+    SupplyChainProblem,
 )
+from supply_chain_research.phase1_foundation.solver_base import BaseSolver, SolverResult
 
 
 class EpsilonConstraintSolver(BaseSolver):
-    """Epsilon-Constraint Method solver."""
+    """Epsilon-Constraint Method solver.
+    Parameters
+    ----------
+    """
 
     def solve(
         self,
@@ -27,7 +31,10 @@ class EpsilonConstraintSolver(BaseSolver):
         demand: np.ndarray,
         seed: int = 42,
     ) -> SolverResult:
-        """Run Epsilon-Constraint solver."""
+        """Run Epsilon-Constraint solver.
+        Parameters
+        ----------
+        """
         logger.info("Initializing Epsilon-Constraint solver...")
         start_time = time.time()
 
@@ -54,6 +61,10 @@ class EpsilonConstraintSolver(BaseSolver):
 
         # Helper to compute objective and constraints
         def get_objectives(x):
+            """
+            Parameters
+            ----------
+            """
             X = x[None, :]
             out = {}
             problem._evaluate(X, out)
@@ -165,6 +176,10 @@ class EpsilonConstraintSolver(BaseSolver):
 
     @property
     def name(self) -> str:
+        """
+        Parameters
+        ----------
+        """
         return "Epsilon-Constraint"
 
 
@@ -174,6 +189,9 @@ def run_epsilon_constraint(
     demand: np.ndarray,
     seed: int = 42,
 ) -> SolverResult:
-    """Wrapper function to execute Epsilon-Constraint solver."""
+    """Wrapper function to execute Epsilon-Constraint solver.
+    Parameters
+    ----------
+    """
     solver = EpsilonConstraintSolver()
     return solver.solve(config, distance_matrix, demand, seed)

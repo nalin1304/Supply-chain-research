@@ -32,11 +32,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from supply_chain_research.utils.plotting_style import (
-    set_publication_style,
-    apply_modern_palette,
     get_method_colour,
+    set_publication_style,
 )
-
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 RESULTS_DIR = PROJECT_ROOT / "data" / "results"
@@ -44,7 +42,10 @@ FIG_DIR = PROJECT_ROOT / "outputs" / "figures"
 
 
 def _ensure_dir() -> None:
-    """Make sure ``outputs/figures/`` exists."""
+    """Make sure ``outputs/figures/`` exists.
+    Parameters
+    ----------
+    """
     FIG_DIR.mkdir(parents=True, exist_ok=True)
 
 
@@ -62,6 +63,9 @@ def render_fig2_pareto_front() -> Path:
 
     Panel (b): box-and-whisker of per-seed hypervolume across the
     three multi-objective methods (NSGA-II, NSGA-III, MOEA/D).
+    
+    Parameters
+    ----------
     """
     pkl = RESULTS_DIR / "nsga2_all_results.pkl"
     if not pkl.exists():
@@ -195,6 +199,9 @@ def render_fig3_convergence() -> Path:
     the across-seed median (bold) and the IQR ribbon (mid-translucency).
     The visual story: the algorithm converges quickly and the across-seed
     spread tightens with generations.
+    
+    Parameters
+    ----------
     """
     pkl = RESULTS_DIR / "nsga2_all_results.pkl"
     if not pkl.exists():
@@ -265,6 +272,9 @@ def render_fig5_lstm_forecast() -> Path:
     customer with shaded forecast horizons.
     Panel (b): histogram of per-customer MAPE so the reader sees the
     full distribution of forecast error rather than just the mean.
+    
+    Parameters
+    ----------
     """
     preds = np.load(RESULTS_DIR / "lstm_predictions.npy")
     actuals = np.load(RESULTS_DIR / "lstm_actuals.npy")
@@ -342,6 +352,9 @@ def render_fig7_sensitivity_spider() -> Path:
     Panel (b): grouped bar chart with first-order S1 alongside ST so
     the reader can see direct vs interaction effects at a glance.
     Sourced from ``sobol_sensitivity_full.json`` (post-FIX-027 full run).
+    
+    Parameters
+    ----------
     """
     sobol_path = RESULTS_DIR / "sobol_sensitivity_full.json"
     if not sobol_path.exists():
@@ -622,7 +635,10 @@ def render_fig9_green_premium_curve(
 # =============================================================
 
 def render_all() -> list[Path]:
-    """Re-render every upgraded figure. Returns list of saved paths."""
+    """Re-render every upgraded figure. Returns list of saved paths.
+    Parameters
+    ----------
+    """
     _ensure_dir()
     paths = []
     for fn, name in [

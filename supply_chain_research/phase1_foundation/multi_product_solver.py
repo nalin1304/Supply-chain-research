@@ -83,8 +83,6 @@ from pymoo.operators.mutation.pm import PM
 
 from supply_chain_research.config import MasterConfig
 from supply_chain_research.phase1_foundation.nsga2_solver import (
-    DemandRepair,
-    SupplyChainProblem,
     run_nsga2,
 )
 
@@ -180,6 +178,10 @@ class MultiProductDemandRepair(Repair):
         repair_zero_eps: float = 1e-9,
         repair_capacity_eps: float = 1e-6,
     ):
+        """
+        Parameters
+        ----------
+        """
         super().__init__()
         self.n_w = int(n_warehouses)
         self.n_c = int(n_customers)
@@ -197,6 +199,10 @@ class MultiProductDemandRepair(Repair):
         self._eps_cap = float(repair_capacity_eps)
 
     def _do(self, problem, X, **kwargs):
+        """
+        Parameters
+        ----------
+        """
         n_w, n_c, n_v, n_p = self.n_w, self.n_c, self.n_v, self.n_p
         eps_zero = self._eps_zero
         eps_cap = self._eps_cap
@@ -299,6 +305,10 @@ class MultiProductSupplyChainProblem(Problem):
         distance_matrix: np.ndarray,
         demand: np.ndarray,
     ):
+        """
+        Parameters
+        ----------
+        """
         self.config = config
         self.distance_matrix = np.asarray(distance_matrix, dtype=np.float64)
         self.n_products = int(config.product.n_products)
@@ -368,6 +378,9 @@ class MultiProductSupplyChainProblem(Problem):
         Shapes:
             X     : (P, n_w * n_c * n_v * n_p)
             x_pop : (P, n_w, n_c, n_v, n_p)
+        
+        Parameters
+        ----------
         """
         n_w = self.config.network.n_warehouses
         n_c = self.config.network.n_customers

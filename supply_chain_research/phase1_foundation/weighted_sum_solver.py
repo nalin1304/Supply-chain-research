@@ -9,6 +9,7 @@ cannot find solutions in non-convex regions of the true Pareto front.
 """
 
 import time
+
 import numpy as np
 from loguru import logger
 from pymoo.algorithms.soo.nonconvex.ga import GA
@@ -17,17 +18,24 @@ from pymoo.optimize import minimize
 from pymoo.termination import get_termination
 
 from supply_chain_research.config import MasterConfig
-from supply_chain_research.phase1_foundation.solver_base import BaseSolver, SolverResult
 from supply_chain_research.phase1_foundation.nsga2_solver import (
-    SupplyChainProblem,
     MarginalTradeoffRepair,
+    SupplyChainProblem,
 )
+from supply_chain_research.phase1_foundation.solver_base import BaseSolver, SolverResult
 
 
 class WeightedSumProblem(Problem):
-    """Scalarized single-objective version of the SupplyChainProblem."""
+    """Scalarized single-objective version of the SupplyChainProblem.
+    Parameters
+    ----------
+    """
 
     def __init__(self, bi_problem: Problem, alpha: float):
+        """
+        Parameters
+        ----------
+        """
         super().__init__(
             n_var=bi_problem.n_var,
             n_obj=1,
@@ -39,6 +47,10 @@ class WeightedSumProblem(Problem):
         self.alpha = alpha
 
     def _evaluate(self, X, out, *args, **kwargs):
+        """
+        Parameters
+        ----------
+        """
         bi_out = {}
         self.bi_problem._evaluate(X, bi_out, *args, **kwargs)
         # Scalarize: alpha * cost + (1 - alpha) * carbon
@@ -47,7 +59,10 @@ class WeightedSumProblem(Problem):
 
 
 class WeightedSumSolver(BaseSolver):
-    """Weighted Sum Method solver."""
+    """Weighted Sum Method solver.
+    Parameters
+    ----------
+    """
 
     def solve(
         self,
@@ -56,7 +71,10 @@ class WeightedSumSolver(BaseSolver):
         demand: np.ndarray,
         seed: int = 42,
     ) -> SolverResult:
-        """Run Weighted Sum solver by sweeping alpha weights."""
+        """Run Weighted Sum solver by sweeping alpha weights.
+        Parameters
+        ----------
+        """
         logger.info("Initializing Weighted Sum solver...")
         start_time = time.time()
 
@@ -166,6 +184,10 @@ class WeightedSumSolver(BaseSolver):
 
     @property
     def name(self) -> str:
+        """
+        Parameters
+        ----------
+        """
         return "Weighted Sum"
 
 
@@ -175,6 +197,9 @@ def run_weighted_sum(
     demand: np.ndarray,
     seed: int = 42,
 ) -> SolverResult:
-    """Wrapper function to execute Weighted Sum solver."""
+    """Wrapper function to execute Weighted Sum solver.
+    Parameters
+    ----------
+    """
     solver = WeightedSumSolver()
     return solver.solve(config, distance_matrix, demand, seed)

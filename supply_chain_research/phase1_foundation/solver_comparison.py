@@ -13,20 +13,23 @@ References
        Performance Profiles. Mathematical Programming, 91(2), 201-213.
 """
 
-import time
+from dataclasses import dataclass
+
+import matplotlib.pyplot as plt
 import numpy as np
 import scipy.stats as stats
-import matplotlib.pyplot as plt
-from dataclasses import dataclass, field
 from loguru import logger
 
 from supply_chain_research.config import MasterConfig
-from supply_chain_research.phase1_foundation.solver_base import BaseSolver, SolverResult
+from supply_chain_research.phase1_foundation.solver_base import BaseSolver
 
 
 @dataclass
 class ComparisonResult:
-    """Unified container for all algorithm comparison results."""
+    """Unified container for all algorithm comparison results.
+    Parameters
+    ----------
+    """
 
     solvers: list[str]
     seeds: list[int]
@@ -37,6 +40,10 @@ class ComparisonResult:
 
 @dataclass
 class FriedmanResult:
+    """
+    Parameters
+    ----------
+    """
     statistic: float
     p_value: float
     mean_ranks: dict[str, float]
@@ -45,6 +52,10 @@ class FriedmanResult:
 
 @dataclass
 class PairwiseResult:
+    """
+    Parameters
+    ----------
+    """
     p_values: dict[tuple[str, str], float]
     adjusted_p_values: dict[tuple[str, str], float]
     significant_pairs: list[tuple[str, str]]
@@ -57,7 +68,10 @@ def run_comparison(
     solvers: list[BaseSolver],
     n_seeds: int = 10,  # 10 is fast for testing, can be increased to 30 for publication
 ) -> ComparisonResult:
-    """Compare multiple solvers across multiple seeds."""
+    """Compare multiple solvers across multiple seeds.
+    Parameters
+    ----------
+    """
     logger.info(f"Running multi-objective solver comparison framework over {n_seeds} seeds...")
     seeds = [42 + i for i in range(n_seeds)]
 
@@ -89,7 +103,10 @@ def run_comparison(
 
 
 def friedman_test(results: ComparisonResult) -> FriedmanResult:
-    """Run non-parametric Friedman rank test on Hypervolume values."""
+    """Run non-parametric Friedman rank test on Hypervolume values.
+    Parameters
+    ----------
+    """
     logger.info("Executing Friedman rank test...")
     # Build matrix: shape (n_seeds, n_solvers)
     hv_matrix = np.array([results.hypervolumes[s] for s in results.solvers]).T
@@ -114,7 +131,10 @@ def friedman_test(results: ComparisonResult) -> FriedmanResult:
 
 
 def wilcoxon_pairwise(results: ComparisonResult, correction: str = "holm") -> PairwiseResult:
-    """Run pairwise Wilcoxon signed-rank tests with Holm-Bonferroni correction."""
+    """Run pairwise Wilcoxon signed-rank tests with Holm-Bonferroni correction.
+    Parameters
+    ----------
+    """
     logger.info("Executing pairwise Wilcoxon signed-rank tests...")
     solvers = results.solvers
     n_solvers = len(solvers)
@@ -160,7 +180,10 @@ def wilcoxon_pairwise(results: ComparisonResult, correction: str = "holm") -> Pa
 
 
 def critical_difference_diagram(results: ComparisonResult, output_path: str = "outputs/cd_diagram.png") -> None:
-    """Generate and save Critical Difference diagram based on mean ranks."""
+    """Generate and save Critical Difference diagram based on mean ranks.
+    Parameters
+    ----------
+    """
     logger.info(f"Generating Critical Difference diagram at {output_path}...")
     test_res = friedman_test(results)
     ranks = test_res.mean_ranks
@@ -183,7 +206,10 @@ def critical_difference_diagram(results: ComparisonResult, output_path: str = "o
 
 
 def performance_profile(results: ComparisonResult, output_path: str = "outputs/performance_profile.png") -> None:
-    """Generate and save Performance Profile plot."""
+    """Generate and save Performance Profile plot.
+    Parameters
+    ----------
+    """
     logger.info(f"Generating Performance Profile at {output_path}...")
     solvers = results.solvers
     n_seeds = len(results.seeds)

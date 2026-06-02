@@ -5,11 +5,12 @@ Matches the interface of AttentionLSTMModel but uses GRU cells.
 """
 
 import os
+
 import numpy as np
 import torch
 import torch.nn as nn
-from torch.utils.data import DataLoader, TensorDataset
 from loguru import logger
+from torch.utils.data import DataLoader, TensorDataset
 
 from supply_chain_research.config import LSTMConfig
 from supply_chain_research.phase3_ai.attention_lstm import TemporalAttention
@@ -17,9 +18,16 @@ from supply_chain_research.phase3_ai.forecaster_base import BaseForecaster
 
 
 class AttentionGRUModel(nn.Module):
-    """GRU with temporal attention for demand forecasting."""
+    """GRU with temporal attention for demand forecasting.
+    Parameters
+    ----------
+    """
 
     def __init__(self, input_size: int, config: LSTMConfig = None):
+        """
+        Parameters
+        ----------
+        """
         super().__init__()
         if config is None:
             config = LSTMConfig()
@@ -49,6 +57,10 @@ class AttentionGRUModel(nn.Module):
 
     def forward(self, x):
         # GRU forward
+        """
+        Parameters
+        ----------
+        """
         gru_out, _ = self.gru(x)
         # Temporal attention
         context, _ = self.attention(gru_out)
@@ -58,9 +70,16 @@ class AttentionGRUModel(nn.Module):
 
 
 class GRUForecaster(BaseForecaster):
-    """Training and inference wrapper for AttentionGRUModel."""
+    """Training and inference wrapper for AttentionGRUModel.
+    Parameters
+    ----------
+    """
 
     def __init__(self, input_size: int, config: LSTMConfig = None, device=None, checkpoint_dir='data/results'):
+        """
+        Parameters
+        ----------
+        """
         if config is None:
             config = LSTMConfig()
         self.config = config
@@ -90,6 +109,10 @@ class GRUForecaster(BaseForecaster):
         self.train_history = None
 
     def fit(self, train_data: np.ndarray, val_data: np.ndarray = None) -> None:
+        """
+        Parameters
+        ----------
+        """
         self.train_history = train_data
         n_customers = train_data.shape[1]
 
@@ -168,6 +191,10 @@ class GRUForecaster(BaseForecaster):
                 break
 
     def predict(self, horizon: int) -> np.ndarray:
+        """
+        Parameters
+        ----------
+        """
         self.model.eval()
         # Take the last seq_length window from train history
         window = self.train_history[-self.config.seq_length:]
@@ -188,6 +215,10 @@ class GRUForecaster(BaseForecaster):
             return padded
 
     def _create_sequences(self, data, seq_length, horizon):
+        """
+        Parameters
+        ----------
+        """
         X, y = [], []
         for i in range(len(data) - seq_length - horizon + 1):
             X.append(data[i:i + seq_length])
@@ -195,6 +226,10 @@ class GRUForecaster(BaseForecaster):
         return np.array(X), np.array(y)
 
     def _save_checkpoint(self, filename):
+        """
+        Parameters
+        ----------
+        """
         os.makedirs(self.checkpoint_dir, exist_ok=True)
         filepath = os.path.join(self.checkpoint_dir, filename)
         torch.save({

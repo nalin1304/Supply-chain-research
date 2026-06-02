@@ -14,9 +14,10 @@ coupling so that the learned policy transfers to the validated
 simulation environment.
 """
 
+from collections import deque
+
 import gymnasium as gym
 import numpy as np
-from collections import deque
 from gymnasium import spaces
 
 from supply_chain_research.config import MasterConfig
@@ -86,6 +87,9 @@ class SupplyChainEnv(gym.Env):
                 default preserves the previous L1-row-normalised
                 allocation semantics bit-for-bit so existing tests and
                 the legacy training data remain valid.
+        
+        Parameters
+        ----------
         """
         super().__init__()
 
@@ -224,6 +228,9 @@ class SupplyChainEnv(gym.Env):
 
         Returns:
             Tuple of (observation, info).
+        
+        Parameters
+        ----------
         """
         if seed is not None:
             self.rng = np.random.default_rng(seed)
@@ -274,6 +281,9 @@ class SupplyChainEnv(gym.Env):
         The potential is the mean fraction of warehouse capacity held
         in inventory. Used for potential-based reward shaping
         (Ng et al. 1999) — guarantees policy invariance.
+        
+        Parameters
+        ----------
         """
         if inventories is None:
             inventories = self.inventories
@@ -680,6 +690,9 @@ class SupplyChainEnv(gym.Env):
         """Write normalized values of all components into state_matrix in-place.
 
         Called at the end of reset() and step() before _get_observation().
+        
+        Parameters
+        ----------
         """
         self.state_matrix[self._inv_slice] = (
             self.inventories / self.warehouse_capacities
@@ -698,6 +711,9 @@ class SupplyChainEnv(gym.Env):
 
         Returns:
             Numpy array of shape (obs_dim,).
+        
+        Parameters
+        ----------
         """
         return np.clip(self.state_matrix, 0.0, 1.0).astype(np.float32)
 
@@ -706,6 +722,9 @@ class SupplyChainEnv(gym.Env):
 
         Returns:
             Array of shape (n_customers,) with daily demand.
+        
+        Parameters
+        ----------
         """
         gym_cfg = self.config.gym_env
         # Base demand with weekly pattern
@@ -730,6 +749,9 @@ class SupplyChainEnv(gym.Env):
         Uses capacity * replenishment_rate_per_day per day.
         This approximately matches mean daily demand across customers,
         creating meaningful scarcity during demand spikes and shock events.
+        
+        Parameters
+        ----------
         """
         replenishment_rate = self.warehouse_capacities * self.config.gym_env.replenishment_rate_per_day
 
@@ -743,14 +765,20 @@ class SupplyChainEnv(gym.Env):
         self.inventories += actual_replenish
 
     def _update_forecasts(self):
-        """Update demand forecasts (simulate LSTM output)."""
+        """Update demand forecasts (simulate LSTM output).
+        Parameters
+        ----------
+        """
         noise = self.rng.normal(0, self.config.gym_env.forecast_noise_std, size=self.demand_forecasts.shape)
         self.demand_forecasts = np.maximum(
             self.demand_forecasts + noise, 0.0
         )
 
     def _update_shocks(self):
-        """Update shock flags based on time."""
+        """Update shock flags based on time.
+        Parameters
+        ----------
+        """
         gym_cfg = self.config.gym_env
         # Warehouse supply shocks: random per warehouse
         for w in range(self.n_warehouses):

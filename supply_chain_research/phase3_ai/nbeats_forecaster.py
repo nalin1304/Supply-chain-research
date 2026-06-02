@@ -5,20 +5,28 @@ residual connections, and direct forecasting.
 """
 
 import os
+
 import numpy as np
 import torch
 import torch.nn as nn
-from torch.utils.data import DataLoader, TensorDataset
 from loguru import logger
+from torch.utils.data import DataLoader, TensorDataset
 
 from supply_chain_research.config import LSTMConfig
 from supply_chain_research.phase3_ai.forecaster_base import BaseForecaster
 
 
 class NBeatsBlock(nn.Module):
-    """Generic N-BEATS block with fully connected layers and backcast/forecast outputs."""
+    """Generic N-BEATS block with fully connected layers and backcast/forecast outputs.
+    Parameters
+    ----------
+    """
 
     def __init__(self, input_size: int, theta_size: int, horizon: int):
+        """
+        Parameters
+        ----------
+        """
         super().__init__()
         self.fc1 = nn.Linear(input_size, 128)
         self.fc2 = nn.Linear(128, 128)
@@ -32,6 +40,10 @@ class NBeatsBlock(nn.Module):
         self.forecast_out = nn.Linear(theta_size, horizon)
 
     def forward(self, x):
+        """
+        Parameters
+        ----------
+        """
         h = torch.relu(self.fc1(x))
         h = torch.relu(self.fc2(h))
         h = torch.relu(self.fc3(h))
@@ -46,9 +58,16 @@ class NBeatsBlock(nn.Module):
 
 
 class NBeatsModel(nn.Module):
-    """N-BEATS model stack with residual backcast and sum forecast connections."""
+    """N-BEATS model stack with residual backcast and sum forecast connections.
+    Parameters
+    ----------
+    """
 
     def __init__(self, seq_len: int, horizon: int, input_size: int):
+        """
+        Parameters
+        ----------
+        """
         super().__init__()
         self.seq_len = seq_len
         self.horizon = horizon
@@ -61,6 +80,10 @@ class NBeatsModel(nn.Module):
 
     def forward(self, x):
         # x shape: (batch, seq_len, input_size)
+        """
+        Parameters
+        ----------
+        """
         batch_size = x.shape[0]
 
         # Reshape to treat customer channels as batch dimensions for parallel processing
@@ -81,9 +104,16 @@ class NBeatsModel(nn.Module):
 
 
 class NBeatsForecaster(BaseForecaster):
-    """Training and inference wrapper for NBeatsModel."""
+    """Training and inference wrapper for NBeatsModel.
+    Parameters
+    ----------
+    """
 
     def __init__(self, input_size: int, config: LSTMConfig = None, device=None, checkpoint_dir='data/results'):
+        """
+        Parameters
+        ----------
+        """
         if config is None:
             config = LSTMConfig()
         self.config = config
@@ -118,6 +148,10 @@ class NBeatsForecaster(BaseForecaster):
         self.train_history = None
 
     def fit(self, train_data: np.ndarray, val_data: np.ndarray = None) -> None:
+        """
+        Parameters
+        ----------
+        """
         self.train_history = train_data
         n_customers = train_data.shape[1]
 
@@ -193,6 +227,10 @@ class NBeatsForecaster(BaseForecaster):
                 break
 
     def predict(self, horizon: int) -> np.ndarray:
+        """
+        Parameters
+        ----------
+        """
         self.model.eval()
         window = self.train_history[-self.config.seq_length:]
         X_tensor = torch.FloatTensor(window[None, :, :]).to(self.device)
@@ -211,6 +249,10 @@ class NBeatsForecaster(BaseForecaster):
             return padded
 
     def _create_sequences(self, data, seq_length, horizon):
+        """
+        Parameters
+        ----------
+        """
         X, y = [], []
         for i in range(len(data) - seq_length - horizon + 1):
             X.append(data[i:i + seq_length])
@@ -218,6 +260,10 @@ class NBeatsForecaster(BaseForecaster):
         return np.array(X), np.array(y)
 
     def _save_checkpoint(self, filename):
+        """
+        Parameters
+        ----------
+        """
         os.makedirs(self.checkpoint_dir, exist_ok=True)
         filepath = os.path.join(self.checkpoint_dir, filename)
         torch.save({

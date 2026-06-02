@@ -20,9 +20,16 @@ except ImportError:
 
 
 class ProphetForecaster(BaseForecaster):
-    """Facebook Prophet wrapper forecaster with holiday/seasonality options."""
+    """Facebook Prophet wrapper forecaster with holiday/seasonality options.
+    Parameters
+    ----------
+    """
 
     def __init__(self, yearly_seasonality: bool = True, weekly_seasonality: bool = True, add_holidays: bool = True):
+        """
+        Parameters
+        ----------
+        """
         self.yearly_seasonality = yearly_seasonality
         self.weekly_seasonality = weekly_seasonality
         self.add_holidays = add_holidays
@@ -31,6 +38,10 @@ class ProphetForecaster(BaseForecaster):
         self.models = {}
 
     def fit(self, train_data: np.ndarray, val_data: np.ndarray = None) -> None:
+        """
+        Parameters
+        ----------
+        """
         self.train_data = train_data
 
         if not PROPHET_AVAILABLE:
@@ -65,6 +76,10 @@ class ProphetForecaster(BaseForecaster):
                 self.models[c] = None
 
     def predict(self, horizon: int) -> np.ndarray:
+        """
+        Parameters
+        ----------
+        """
         if not PROPHET_AVAILABLE:
             return self.fallback.predict(horizon)
 

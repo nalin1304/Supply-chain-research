@@ -8,21 +8,34 @@ References:
     - Yu et al. (2021). The Surprising Effectiveness of PPO in Cooperative MARL.
 """
 
+from pathlib import Path
+
 import numpy as np
 import torch
 import torch.nn as nn
 
 from supply_chain_research.config import PPOConfig
-from supply_chain_research.phase3_ai.ppo_agent import ActorNetwork, CriticNetwork, RolloutBuffer
+from supply_chain_research.phase3_ai.ppo_agent import (
+    ActorNetwork,
+    CriticNetwork,
+    RolloutBuffer,
+)
 
 
 class MAPPOAgent:
     """Multi-Agent PPO Agent with parameter sharing.
     
     All agents share the same actor and critic networks.
+    
+    Parameters
+    ----------
     """
     
     def __init__(self, local_obs_dim, global_obs_dim, action_dim, n_agents, config=None, device=None):
+        """
+        Parameters
+        ----------
+        """
         if config is None:
             config = PPOConfig()
         self.config = config
@@ -63,6 +76,9 @@ class MAPPOAgent:
             actions_dict: {agent_id: action}
             value: float (global state value)
             log_probs_dict: {agent_id: log_prob}
+        
+        Parameters
+        ----------
         """
         # Batch all local observations to pass through actor once
         local_obs_batch = np.array([local_obs_dict[i] for i in range(self.n_agents)])
@@ -84,7 +100,10 @@ class MAPPOAgent:
         return actions_dict, value_np, log_probs_dict
 
     def compute_gae(self, rewards, values, dones, last_value=0.0):
-        """Standard GAE on the global rewards and values."""
+        """Standard GAE on the global rewards and values.
+        Parameters
+        ----------
+        """
         gamma = self.config.gamma
         gae_lambda = self.config.gae_lambda
         T = len(rewards)
@@ -113,6 +132,9 @@ class MAPPOAgent:
         
         Expects rollout_data to contain global values/rewards, and local obs/actions.
         We broadcast the global advantage to all agents sharing the actor.
+        
+        Parameters
+        ----------
         """
         # Unpack global data (T steps)
         global_obs = rollout_data['global_obs']
@@ -127,6 +149,16 @@ class MAPPOAgent:
         old_log_probs = rollout_data['log_probs']
         
         adv_global, ret_global = self.compute_gae(rewards, values, dones, last_value)
+        
+        # Phase 10: Risk-Averse RL (CVaR-PG)
+        # If enabled, only update the policy on the worst-case (highest cost / lowest return) episodes.
+        if getattr(self.config, 'use_cvar_objective', False):
+            # var_threshold is the alpha-quantile of returns (e.g., lowest 10% of returns)
+            var_threshold = np.quantile(ret_global, self.config.cvar_alpha)
+            # Zero out advantages for transitions that are better than the VaR threshold
+            cvar_mask = (ret_global <= var_threshold).astype(np.float32)
+            adv_global = adv_global * cvar_mask
+
         adv_mean_pre = float(np.mean(adv_global))
         
         # To update the actor, we broadcast the global advantage to each agent's local action
@@ -214,3 +246,48 @@ class MAPPOAgent:
             'mean_advantage': adv_mean_pre,
             'mean_return': float(ret_global.mean()),
         }
+
+    def save(self, path: str) -> None:
+        """Save MAPPO weights, optimizer states, and shape metadata.
+        Parameters
+        ----------
+        """
+        out = Path(path)
+        out.parent.mkdir(parents=True, exist_ok=True)
+        torch.save(
+            {
+                "actor": self.actor.state_dict(),
+                "critic": self.critic.state_dict(),
+                "actor_optimizer": self.actor_optimizer.state_dict(),
+                "critic_optimizer": self.critic_optimizer.state_dict(),
+                "local_obs_dim": self.local_obs_dim,
+                "global_obs_dim": self.global_obs_dim,
+                "action_dim": self.action_dim,
+                "n_agents": self.n_agents,
+            },
+            out,
+        )
+
+    def load(self, path: str, load_optimizers: bool = False) -> None:
+        """Load a checkpoint produced by :meth:`save`.
+        Parameters
+        ----------
+        """
+        checkpoint = torch.load(path, map_location=self.device)
+        expected = {
+            "local_obs_dim": self.local_obs_dim,
+            "global_obs_dim": self.global_obs_dim,
+            "action_dim": self.action_dim,
+            "n_agents": self.n_agents,
+        }
+        for key, value in expected.items():
+            if checkpoint.get(key) != value:
+                raise ValueError(
+                    f"Checkpoint {key}={checkpoint.get(key)!r} does not match "
+                    f"agent {key}={value!r}"
+                )
+        self.actor.load_state_dict(checkpoint["actor"])
+        self.critic.load_state_dict(checkpoint["critic"])
+        if load_optimizers:
+            self.actor_optimizer.load_state_dict(checkpoint["actor_optimizer"])
+            self.critic_optimizer.load_state_dict(checkpoint["critic_optimizer"])

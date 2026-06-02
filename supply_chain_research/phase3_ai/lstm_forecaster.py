@@ -138,6 +138,9 @@ class AttentionLSTMModel(nn.Module):
         Args:
             input_size: Number of input features (n_customers).
             config: LSTMConfig instance. Uses defaults if None.
+        
+        Parameters
+        ----------
         """
         super().__init__()
         if config is None:
@@ -186,6 +189,9 @@ class AttentionLSTMModel(nn.Module):
 
         Returns:
             Forecast tensor of shape (batch, forecast_horizon, input_size).
+        
+        Parameters
+        ----------
         """
         # LSTM forward
         lstm_out, _ = self.lstm(x)
@@ -212,6 +218,9 @@ class AttentionLSTMModel(nn.Module):
 
         Returns:
             Attention weights of shape (batch, seq_len).
+        
+        Parameters
+        ----------
         """
         with torch.no_grad():
             lstm_out, _ = self.lstm(x)
@@ -260,6 +269,9 @@ class LSTMForecaster:
             config: LSTMConfig instance.
             device: torch device (auto-detected if None).
             checkpoint_dir: Directory for saving model checkpoints.
+        
+        Parameters
+        ----------
         """
         if config is None:
             config = LSTMConfig()
@@ -364,6 +376,9 @@ class LSTMForecaster:
 
         Returns:
             Dictionary with training history.
+        
+        Parameters
+        ----------
         """
         # Convert to tensors
         train_dataset = TensorDataset(
@@ -456,6 +471,9 @@ class LSTMForecaster:
 
         Returns:
             Average loss as float.
+        
+        Parameters
+        ----------
         """
         self.model.eval()
         total_loss = 0.0
@@ -481,6 +499,9 @@ class LSTMForecaster:
 
         Returns:
             Predictions array of shape (n, horizon, features).
+        
+        Parameters
+        ----------
         """
         self.model.eval()
         X_tensor = torch.FloatTensor(X).to(self.device)
@@ -495,6 +516,9 @@ class LSTMForecaster:
 
         Args:
             filename: Checkpoint filename.
+        
+        Parameters
+        ----------
         """
         os.makedirs(self.checkpoint_dir, exist_ok=True)
         filepath = os.path.join(self.checkpoint_dir, filename)

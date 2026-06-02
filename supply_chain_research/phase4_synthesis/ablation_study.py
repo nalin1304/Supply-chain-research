@@ -26,12 +26,10 @@ Run 30 seeds per configuration -> 240 NSGA-II runs total.
 """
 
 from itertools import combinations
-from typing import Dict, List
 
 import numpy as np
 
 from supply_chain_research.config import MasterConfig
-
 
 # Resolution-IV 2^(4-1) design matrix (8 runs, 4 factors)
 DESIGN_MATRIX = np.array([
@@ -61,6 +59,9 @@ def _simulate_response(
         warm_start is also on (positive interaction)
       - robust costs -0.02 (HV trade-off)
       - carbon_budget has +0.01 main effect
+    
+    Parameters
+    ----------
     """
     rng = np.random.default_rng(seed)
     A, B, C, D = config_row
@@ -81,7 +82,7 @@ def run_factorial_ablation(
     config: MasterConfig = None,
     seed: int = 42,
     response_fn=None,
-) -> Dict:
+) -> dict:
     """Audit 3.2: run the 2^(4-1) factorial ablation.
 
     Parameters
@@ -147,7 +148,7 @@ def run_factorial_ablation(
     }
 
 
-def print_interaction_table(results: Dict) -> str:
+def print_interaction_table(results: dict) -> str:
     """Format the interaction table for display and return it.
 
     Parameters
@@ -177,12 +178,15 @@ def print_interaction_table(results: Dict) -> str:
 def run_ablation_study(
     config: MasterConfig = None,
     seed: int = 42,
-) -> Dict:
+) -> dict:
     """Backwards-compatible entry point.
 
     Returns a dict containing both the new factorial result and the
     legacy `results`/`contributions`/`rankings` keys for
     test_phase4.TestAblationStudy.
+    
+    Parameters
+    ----------
     """
     factorial = run_factorial_ablation(config=config, seed=seed)
     legacy_results = generate_ablation_results(seed=seed)

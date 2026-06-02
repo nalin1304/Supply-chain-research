@@ -9,10 +9,11 @@ A research framework for simultaneous cost and carbon emission minimization in I
 Finds the Pareto-optimal set of fleet allocation plans that trade off logistics **cost** against **CO₂ emissions** on real Indian road networks, while maintaining supply chain **resilience** under stochastic disruptions.
 
 The system produces:
-- Pareto-optimal solutions (10-15 per seed, 30 seeds, statistically validated)
+- Pareto-optimal solutions (10-15 per seed, 50 seeds, statistically validated)
 - Resilience metrics under supply/demand shocks (TTS, TTR) via Monte Carlo DES
-- Adaptive inventory control via PPO reinforcement learning (5M steps, 500-dim action space)
+- Adaptive inventory control via stress-mode PPO reinforcement learning (3M-step 20-customer and 2M-step 100-customer runs)
 - 7-day demand forecasts via Attention-LSTM (256 hidden, 3 layers)
+- Advanced research extensions: ST-GNN forecasting, MAPPO, deterministic M5 sim-to-real evaluation, and domain-randomized training contracts
 - Green premium curve showing marginal cost of decarbonization
 - Publication-ready figures and statistical tests (Friedman, Wilcoxon)
 
@@ -27,11 +28,12 @@ The system produces:
 | MOEA/D comparison | Complete | 50 seeds, normalised HV 0.5948 ± 0.3281 |
 | Friedman + Wilcoxon tests | Complete | χ² = 6.84, p = 0.033 ; W = 399, p = 0.021 |
 | LSTM forecasting | Complete | 256h × 3L, MAPE 23.5 %, RMSE 56.5 kg |
-| PPO controller (FIX-022 stress mode) | In progress (T4 Modal) | Periodic-review lost-sales formulation, post-FIX-022 rerun in flight |
-| (R, s, S) baseline | Queued (Step 4c) | Periodic-review (R = 7 days, lead = 3 days) |
+| PPO controller (FIX-022 stress mode) | Complete | Periodic-review lost-sales formulation, PPO-20 + PPO-100 artifacts present |
+| (R, s, S) baseline | Complete | Periodic-review (R = 7 days, lead = 3 days) baseline artifacts present |
+| Advanced MAPPO / sim-to-real | Ready for Modal | Domain-randomized MAPPO runner uses `.spawn()` on the `nalinaggarwal28` Modal profile |
 | DES Monte Carlo | Complete | 100 reps, service level 95.6 % ± 0.3 % |
 | Web dashboard | Available | http://localhost:5173 |
-| Test suite | Passing | 483 passed, 5 skipped |
+| Test suite | Passing | 488 passed, 5 skipped |
 
 ---
 
@@ -47,7 +49,7 @@ The system produces:
 | Demand forecasting (LSTM) | ✓ | ✗ | ✗ | ✗ | ✗ |
 | Robust optimization | ✓ | ✗ | ✗ | ✗ | ✗ |
 | Carbon budget constraint | ✓ | ✓ | ✗ | ✗ | ✗ |
-| Statistical validation (30 seeds) | ✓ | ✗ | ✗ | ✗ | ✗ |
+| Statistical validation (50 seeds) | ✓ | ✗ | ✗ | ✗ | ✗ |
 
 ---
 
@@ -85,7 +87,7 @@ python3 -m venv .venv && source .venv/bin/activate
 pip install -r supply_chain_research/requirements.txt
 
 # Run tests
-pytest tests/ -q  # 483 passed, 5 skipped, ~315 seconds on Python 3.14
+pytest tests/ -q  # 488 passed, 5 skipped, ~205 seconds on Python 3.14
 
 # Start dashboard
 cd webapp/backend && uvicorn main:app --reload --port 8000 &
@@ -118,20 +120,21 @@ Demand parameters calibrated from DataCo: LogNormal(μ=6.44, σ=0.97) for weekly
 
 ## Training Pipeline (v3)
 
-Runs on NVIDIA A100 80GB via Modal ($3.40/hr). Each step is resumable — if it crashes, re-run and it picks up from the last completed step.
+Runs on NVIDIA T4 16GB via Modal (~$0.59/hr). Each step is resumable — if it crashes, re-run and it picks up from the last completed step.
 
 | Step | What | Duration (est.) |
 |------|------|-----------------|
 | 1 | Network data generation | <1 min |
-| 2 | NSGA-II (30 seeds, pop=1000, gen=200) | ~5.5 hours |
-| 2b | NSGA-III (30 seeds, 3-objective) | ~2 hours |
-| 2c | MOEA/D (30 seeds) | ~1.5 hours |
+| 2 | NSGA-II (50 seeds, pop=1000, gen=200) | ~5.5 hours |
+| 2b | NSGA-III (50 seeds, 3-objective) | ~2 hours |
+| 2c | MOEA/D (50 seeds) | ~1.5 hours |
 | 3 | LSTM (256h, 3L, patience=15) | ~5 min |
 | 4a | PPO-20 (3M steps, 100-dim action) | ~45 min |
-| 4b | PPO-100 (2M steps, 500-dim action) | ~1 hour |
+| 4b | PPO-100 (2M steps, 5-dim stress-mode action) | ~1 hour |
 | 4c | Baselines ((s,S) + random) | ~5 min |
 | 5 | DES Monte Carlo (100 runs) | ~2 min |
 | 6 | Statistical tests (Friedman + Wilcoxon) | <1 min |
+| 7 | Advanced MAPPO domain-randomized run | separate `modal_mappo_trainer.py` job |
 
 ---
 

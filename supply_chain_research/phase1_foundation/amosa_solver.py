@@ -6,31 +6,41 @@ geometric cooling schedule, and custom MarginalTradeoffRepair.
 """
 
 import time
+
 import numpy as np
 from loguru import logger
 
 from supply_chain_research.config import MasterConfig
-from supply_chain_research.phase1_foundation.solver_base import BaseSolver, SolverResult
 from supply_chain_research.phase1_foundation.nsga2_solver import (
-    SupplyChainProblem,
     MarginalTradeoffRepair,
+    SupplyChainProblem,
 )
+from supply_chain_research.phase1_foundation.solver_base import BaseSolver, SolverResult
 
 
 def dominates(a: np.ndarray, b: np.ndarray) -> bool:
-    """Return True if a dominates b (minimization)."""
+    """Return True if a dominates b (minimization).
+    Parameters
+    ----------
+    """
     return np.all(a <= b) and np.any(a < b)
 
 
 def domination_amount(a: np.ndarray, b: np.ndarray) -> float:
-    """Calculate the amount of domination of a over b."""
+    """Calculate the amount of domination of a over b.
+    Parameters
+    ----------
+    """
     # Domination difference: product of positive differences
     diff = np.maximum(0.0, a - b)
     return float(np.prod(diff[diff > 0])) if np.any(diff > 0) else 0.0
 
 
 class AMOSASolver(BaseSolver):
-    """Archived Multi-Objective Simulated Annealing (AMOSA) solver."""
+    """Archived Multi-Objective Simulated Annealing (AMOSA) solver.
+    Parameters
+    ----------
+    """
 
     def solve(
         self,
@@ -39,7 +49,10 @@ class AMOSASolver(BaseSolver):
         demand: np.ndarray,
         seed: int = 42,
     ) -> SolverResult:
-        """Run AMOSA optimization."""
+        """Run AMOSA optimization.
+        Parameters
+        ----------
+        """
         logger.info("Initializing AMOSA solver...")
         start_time = time.time()
 
@@ -190,7 +203,9 @@ class AMOSASolver(BaseSolver):
                 # Limit archive size
                 if len(archive_X) > archive_limit:
                     # Prune using crowding distance
-                    from supply_chain_research.phase1_foundation.mopso_solver import compute_crowding_distances
+                    from supply_chain_research.phase1_foundation.mopso_solver import (
+                        compute_crowding_distances,
+                    )
                     F_arr = np.array(archive_F)
                     cd = compute_crowding_distances(F_arr)
                     worst = np.argmin(cd)
@@ -227,6 +242,10 @@ class AMOSASolver(BaseSolver):
 
     @property
     def name(self) -> str:
+        """
+        Parameters
+        ----------
+        """
         return "AMOSA"
 
 
@@ -236,6 +255,9 @@ def run_amosa(
     demand: np.ndarray,
     seed: int = 42,
 ) -> SolverResult:
-    """Wrapper function to execute AMOSA solver."""
+    """Wrapper function to execute AMOSA solver.
+    Parameters
+    ----------
+    """
     solver = AMOSASolver()
     return solver.solve(config, distance_matrix, demand, seed)

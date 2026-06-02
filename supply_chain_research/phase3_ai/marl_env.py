@@ -6,7 +6,9 @@ Each warehouse is treated as an independent cooperative agent.
 """
 
 import numpy as np
+
 from supply_chain_research.phase3_ai.gym_environment import SupplyChainEnv
+
 
 class MultiAgentSupplyChainEnv:
     """Wrapper to convert SupplyChainEnv into a Multi-Agent Environment.
@@ -17,10 +19,17 @@ class MultiAgentSupplyChainEnv:
         - Local: Agent's own inventory, own shock, global forecasts, time.
         - Global: Full state matrix (for centralized critic).
     Action: Each agent outputs a scalar order quantity [0, 1].
+    
+    Parameters
+    ----------
     """
     
     def __init__(self, **kwargs):
         # Force stress_mode=True for multi-agent (per-warehouse scalar action)
+        """
+        Parameters
+        ----------
+        """
         kwargs['stress_mode'] = True
         self.env = SupplyChainEnv(**kwargs)
         
@@ -34,6 +43,10 @@ class MultiAgentSupplyChainEnv:
         self.action_dim = 1  # Each agent outputs 1 continuous value
 
     def reset(self, seed=None):
+        """
+        Parameters
+        ----------
+        """
         global_obs, info = self.env.reset(seed=seed)
         local_obs = self._get_local_observations(global_obs)
         return local_obs, global_obs, info
@@ -41,11 +54,14 @@ class MultiAgentSupplyChainEnv:
     def step(self, actions_dict):
         """
         actions_dict: dict of {agent_id: action_scalar}
+        
+        Parameters
+        ----------
         """
         # Reconstruct centralized action array
         centralized_action = np.zeros(self.n_agents, dtype=np.float32)
         for i in range(self.n_agents):
-            centralized_action[i] = actions_dict[i]
+            centralized_action[i] = float(np.asarray(actions_dict[i]).reshape(-1)[0])
             
         global_obs, reward, terminated, truncated, info = self.env.step(centralized_action)
         
@@ -59,7 +75,10 @@ class MultiAgentSupplyChainEnv:
         return local_obs, global_obs, rewards, terminations, truncations, info
 
     def _get_local_observations(self, global_obs):
-        """Extract local observations for each agent from the global state."""
+        """Extract local observations for each agent from the global state.
+        Parameters
+        ----------
+        """
         local_obs_dict = {}
         
         inv_slice = self.env._inv_slice

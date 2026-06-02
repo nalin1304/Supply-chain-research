@@ -84,6 +84,9 @@ class Warehouse:
             capacity: Maximum inventory capacity in kg.
             initial_level: Starting inventory level in kg.
             replenishment_rate_multiplier: Weekly replenishment as fraction of capacity.
+        
+        Parameters
+        ----------
         """
         self.env = env
         self.warehouse_id = warehouse_id
@@ -99,7 +102,10 @@ class Warehouse:
 
     @property
     def level(self):
-        """Current inventory level."""
+        """Current inventory level.
+        Parameters
+        ----------
+        """
         return self.container.level
 
     def fulfill(self, quantity):
@@ -115,6 +121,9 @@ class Warehouse:
 
         Returns:
             Tuple of (fulfilled_quantity, success_bool).
+        
+        Parameters
+        ----------
         """
         available = self.container.level
         # Audit P5.B: epsilon guard against SimPy float-comparison
@@ -194,6 +203,9 @@ class DESEnvironment:
                 (n_warehouses + n_customers, n_warehouses + n_customers).
                 If None, generates synthetic distances.
             seed: Random seed for reproducibility.
+        
+        Parameters
+        ----------
         """
         if config is None:
             config = MasterConfig()
@@ -235,6 +247,9 @@ class DESEnvironment:
 
         Args:
             distance_matrix: Raw distance matrix or None.
+        
+        Parameters
+        ----------
         """
         if distance_matrix is not None:
             if distance_matrix.ndim == 2:
@@ -264,6 +279,9 @@ class DESEnvironment:
 
         Returns:
             Array of shape (n_warehouses, n_customers) in km.
+        
+        Parameters
+        ----------
         """
         return self.rng.uniform(
             self.config.simulation.synthetic_distance_min,
@@ -279,6 +297,9 @@ class DESEnvironment:
 
         Returns:
             Tuple of (warehouse_id, distance_km).
+        
+        Parameters
+        ----------
         """
         distances = self.dist_matrix[:, customer_id]
         nearest = int(np.argmin(distances))
@@ -289,6 +310,9 @@ class DESEnvironment:
 
         Returns:
             Dictionary with simulation results.
+        
+        Parameters
+        ----------
         """
         self.env = simpy.Environment()
 
@@ -336,6 +360,9 @@ class DESEnvironment:
         the same simulation step. This time-stepped design means there
         is no yield between checking warehouse level and calling get(),
         preventing SimPy Container race conditions.
+        
+        Parameters
+        ----------
         """
         day = 0
         total_time = self.sim_days + self.warmup_days
@@ -444,6 +471,9 @@ class DESEnvironment:
         cycles and maintains steady-state levels against aggregate daily
         demand, yielding approximately 95% service level under no-shock
         conditions.
+        
+        Parameters
+        ----------
         """
         while True:
             yield self.env.timeout(1)
@@ -458,7 +488,10 @@ class DESEnvironment:
                     wh.container.put(actual_replenish)
 
     def _daily_metrics_process(self):
-        """Track daily metrics (placeholder for event-driven hooks)."""
+        """Track daily metrics (placeholder for event-driven hooks).
+        Parameters
+        ----------
+        """
         total_time = self.sim_days + self.warmup_days
         while self.env.now < total_time:
             yield self.env.timeout(1)
@@ -471,6 +504,9 @@ class DESEnvironment:
 
         Returns:
             Float multiplier (1.0 = normal).
+        
+        Parameters
+        ----------
         """
         multiplier = 1.0
         current_day = int(self.env.now)
@@ -487,6 +523,9 @@ class DESEnvironment:
         Returns:
             Dictionary with all tracked metrics including SLA compliance
             and travel time statistics.
+        
+        Parameters
+        ----------
         """
         sla_compliance = (
             float(np.mean(self.daily_sla_met))

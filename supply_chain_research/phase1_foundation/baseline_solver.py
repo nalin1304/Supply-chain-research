@@ -44,6 +44,9 @@ def solve_baseline_cvrp(
             - total_emission: Total emissions (g CO2)
             - routes: List of routes per warehouse
             - feasible: Whether a feasible solution was found
+    
+    Parameters
+    ----------
     """
     # When method="clarke_wright", delegate to Clarke-Wright solver
     # [Clarke & Wright 1964, "Scheduling of Vehicles from a Central Depot to

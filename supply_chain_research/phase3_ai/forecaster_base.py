@@ -5,13 +5,17 @@ including comprehensive evaluation metrics (MAPE, SMAPE, MASE, RMSE, MAE).
 """
 
 from abc import ABC, abstractmethod
-import numpy as np
 from dataclasses import dataclass, field
+
+import numpy as np
 
 
 @dataclass
 class ForecastResult:
-    """Unified container for forecasting results."""
+    """Unified container for forecasting results.
+    Parameters
+    ----------
+    """
 
     predictions: np.ndarray  # shape (horizon, n_customers) or (n_samples, horizon, n_customers)
     actuals: np.ndarray = None  # same shape as predictions
@@ -21,7 +25,10 @@ class ForecastResult:
 
 
 class BaseForecaster(ABC):
-    """Abstract base class for all demand forecasting methods."""
+    """Abstract base class for all demand forecasting methods.
+    Parameters
+    ----------
+    """
 
     @abstractmethod
     def fit(self, train_data: np.ndarray, val_data: np.ndarray = None) -> None:

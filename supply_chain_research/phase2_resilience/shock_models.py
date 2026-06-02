@@ -26,6 +26,9 @@ class SupplyShock:
         severity: Capacity reduction factor (0.5 = 50% reduction).
         duration_days: How long the shock lasts.
         start_day: Day the shock begins (after warmup).
+    
+    Parameters
+    ----------
     """
 
     def __init__(
@@ -64,6 +67,9 @@ class SupplyShock:
             seed: Random seed for reproducibility.
             config: Optional MasterConfig override; defaults to the
                 module-level singleton ``CFG``.
+        
+        Parameters
+        ----------
         """
         cfg = config if config is not None else CFG
         if severity is None:
@@ -167,22 +173,34 @@ class SupplyShock:
 
         Returns:
             Always 1.0 (no demand effect).
+        
+        Parameters
+        ----------
         """
         return 1.0
 
     @property
     def shock_start(self):
-        """Actual shock start day (relative to post-warmup)."""
+        """Actual shock start day (relative to post-warmup).
+        Parameters
+        ----------
+        """
         return self._actual_start
 
     @property
     def shock_end(self):
-        """Actual shock end day (relative to post-warmup)."""
+        """Actual shock end day (relative to post-warmup).
+        Parameters
+        ----------
+        """
         return self._actual_end
 
     @property
     def duration(self):
-        """Actual shock duration in days."""
+        """Actual shock duration in days.
+        Parameters
+        ----------
+        """
         return self._duration
 
 
@@ -202,6 +220,9 @@ class DemandShock:
         multiplier: Demand multiplication factor (3.0 = 3x demand).
         duration_days: How long the shock lasts.
         start_day: Day the shock begins (after warmup).
+    
+    Parameters
+    ----------
     """
 
     def __init__(
@@ -249,6 +270,9 @@ class DemandShock:
             seed: Random seed for reproducibility.
             config: Optional MasterConfig override; defaults to the
                 module-level singleton ``CFG``.
+        
+        Parameters
+        ----------
         """
         cfg = config if config is not None else CFG
         if multiplier is None:
@@ -317,6 +341,9 @@ class DemandShock:
         Returns:
             DemandShock instance with customer_locations set for
             DBSCAN-based cluster selection during apply().
+        
+        Parameters
+        ----------
         """
         cfg = config if config is not None else CFG
         # Honour explicit overrides for ``eps`` / ``min_samples`` by
@@ -352,6 +379,9 @@ class DemandShock:
 
         Returns:
             Set of affected customer indices.
+        
+        Parameters
+        ----------
         """
         from sklearn.cluster import DBSCAN
 
@@ -390,6 +420,9 @@ class DemandShock:
 
         Returns:
             Set of affected customer indices.
+        
+        Parameters
+        ----------
         """
         # Preserve original `n_affected or default` semantics:
         # falsy n_affected (None, 0) falls through to the default.
@@ -480,6 +513,9 @@ class DemandShock:
 
         Returns:
             Multiplier float (1.0 if not affected or not active).
+        
+        Parameters
+        ----------
         """
         if not self._active:
             return 1.0
@@ -491,17 +527,26 @@ class DemandShock:
 
     @property
     def shock_start(self):
-        """Actual shock start day (relative to post-warmup)."""
+        """Actual shock start day (relative to post-warmup).
+        Parameters
+        ----------
+        """
         return self._actual_start
 
     @property
     def shock_end(self):
-        """Actual shock end day (relative to post-warmup)."""
+        """Actual shock end day (relative to post-warmup).
+        Parameters
+        ----------
+        """
         return self._actual_end
 
     @property
     def duration(self):
-        """Actual shock duration in days."""
+        """Actual shock duration in days.
+        Parameters
+        ----------
+        """
         return self._duration
 
 
@@ -511,6 +556,9 @@ class Cyberattack:
     Simulates a targeted or system-wide cyberattack that halts operations
     at target warehouses during detection_time, followed by a gradual
     Weibull-modeled recovery phase.
+    
+    Parameters
+    ----------
     """
 
     def __init__(
@@ -523,6 +571,10 @@ class Cyberattack:
         seed=42,
         config=None,
     ):
+        """
+        Parameters
+        ----------
+        """
         cfg = config if config is not None else CFG
         self._cfg = cfg
         self.warehouse_ids = warehouse_ids
@@ -538,6 +590,10 @@ class Cyberattack:
         self._active = False
 
     def apply(self, des_env):
+        """
+        Parameters
+        ----------
+        """
         warmup = des_env.warmup_days
         if self.start_day is not None:
             actual_start = self.start_day + warmup
@@ -583,18 +639,34 @@ class Cyberattack:
         self._active = False
 
     def get_demand_multiplier(self, customer_id, current_day):
+        """
+        Parameters
+        ----------
+        """
         return 1.0
 
     @property
     def shock_start(self):
+        """
+        Parameters
+        ----------
+        """
         return self._actual_start
 
     @property
     def shock_end(self):
+        """
+        Parameters
+        ----------
+        """
         return self._actual_end
 
     @property
     def duration(self):
+        """
+        Parameters
+        ----------
+        """
         return self._duration
 
 
@@ -603,6 +675,9 @@ class LaborStrike:
 
     Simulates labor strike that scales down warehouse capacity gradually
     in first 3 days, followed by a flat strike period and negotiation recovery.
+    
+    Parameters
+    ----------
     """
 
     def __init__(
@@ -616,6 +691,10 @@ class LaborStrike:
         seed=42,
         config=None,
     ):
+        """
+        Parameters
+        ----------
+        """
         cfg = config if config is not None else CFG
         self._cfg = cfg
         self.warehouse_ids = warehouse_ids
@@ -632,6 +711,10 @@ class LaborStrike:
         self._active = False
 
     def apply(self, des_env):
+        """
+        Parameters
+        ----------
+        """
         warmup = des_env.warmup_days
         if self.start_day is not None:
             actual_start = self.start_day + warmup
@@ -676,18 +759,34 @@ class LaborStrike:
         self._active = False
 
     def get_demand_multiplier(self, customer_id, current_day):
+        """
+        Parameters
+        ----------
+        """
         return 1.0
 
     @property
     def shock_start(self):
+        """
+        Parameters
+        ----------
+        """
         return self._actual_start
 
     @property
     def shock_end(self):
+        """
+        Parameters
+        ----------
+        """
         return self._actual_end
 
     @property
     def duration(self):
+        """
+        Parameters
+        ----------
+        """
         return self._duration
 
 
@@ -696,6 +795,9 @@ class RawMaterialShortage:
 
     Reduces replenishment rates of all warehouses and spikes shipping cost
     by price_multiplier during shortage. Shortage severity is halved if substitute is available.
+    
+    Parameters
+    ----------
     """
 
     def __init__(
@@ -708,6 +810,10 @@ class RawMaterialShortage:
         seed=42,
         config=None,
     ):
+        """
+        Parameters
+        ----------
+        """
         cfg = config if config is not None else CFG
         self._cfg = cfg
         self.shortage_severity = shortage_severity
@@ -722,6 +828,10 @@ class RawMaterialShortage:
         self._active = False
 
     def apply(self, des_env):
+        """
+        Parameters
+        ----------
+        """
         warmup = des_env.warmup_days
         if self.start_day is not None:
             actual_start = self.start_day + warmup
@@ -756,18 +866,34 @@ class RawMaterialShortage:
         self._active = False
 
     def get_demand_multiplier(self, customer_id, current_day):
+        """
+        Parameters
+        ----------
+        """
         return 1.0
 
     @property
     def shock_start(self):
+        """
+        Parameters
+        ----------
+        """
         return self._actual_start
 
     @property
     def shock_end(self):
+        """
+        Parameters
+        ----------
+        """
         return self._actual_end
 
     @property
     def duration(self):
+        """
+        Parameters
+        ----------
+        """
         return self._duration
 
 
@@ -776,6 +902,9 @@ class TransportInfrastructure:
 
     Spikes distance matrix by detour_factor to simulate infrastructure closures/reroutes,
     leading to longer travel times, higher costs, and increased emissions.
+    
+    Parameters
+    ----------
     """
 
     def __init__(
@@ -787,6 +916,10 @@ class TransportInfrastructure:
         seed=42,
         config=None,
     ):
+        """
+        Parameters
+        ----------
+        """
         cfg = config if config is not None else CFG
         self._cfg = cfg
         self.link_failure_prob = link_failure_prob
@@ -800,6 +933,10 @@ class TransportInfrastructure:
         self._active = False
 
     def apply(self, des_env):
+        """
+        Parameters
+        ----------
+        """
         warmup = des_env.warmup_days
         if self.start_day is not None:
             actual_start = self.start_day + warmup
@@ -826,18 +963,34 @@ class TransportInfrastructure:
         self._active = False
 
     def get_demand_multiplier(self, customer_id, current_day):
+        """
+        Parameters
+        ----------
+        """
         return 1.0
 
     @property
     def shock_start(self):
+        """
+        Parameters
+        ----------
+        """
         return self._actual_start
 
     @property
     def shock_end(self):
+        """
+        Parameters
+        ----------
+        """
         return self._actual_end
 
     @property
     def duration(self):
+        """
+        Parameters
+        ----------
+        """
         return self._duration
 
 
@@ -846,6 +999,9 @@ class RegulatoryChange:
 
     Simulates regulatory adjustments by charging a daily compliance_cost and,
     after implementation_lead_time, lowering vehicle cargo carrying capacities by 10%.
+    
+    Parameters
+    ----------
     """
 
     def __init__(
@@ -857,6 +1013,10 @@ class RegulatoryChange:
         seed=42,
         config=None,
     ):
+        """
+        Parameters
+        ----------
+        """
         cfg = config if config is not None else CFG
         self._cfg = cfg
         self.compliance_cost = compliance_cost
@@ -870,6 +1030,10 @@ class RegulatoryChange:
         self._active = False
 
     def apply(self, des_env):
+        """
+        Parameters
+        ----------
+        """
         warmup = des_env.warmup_days
         if self.start_day is not None:
             actual_start = self.start_day + warmup
@@ -904,18 +1068,34 @@ class RegulatoryChange:
         self._active = False
 
     def get_demand_multiplier(self, customer_id, current_day):
+        """
+        Parameters
+        ----------
+        """
         return 1.0
 
     @property
     def shock_start(self):
+        """
+        Parameters
+        ----------
+        """
         return self._actual_start
 
     @property
     def shock_end(self):
+        """
+        Parameters
+        ----------
+        """
         return self._actual_end
 
     @property
     def duration(self):
+        """
+        Parameters
+        ----------
+        """
         return self._duration
 
 
@@ -924,6 +1104,9 @@ class PowerOutage:
 
     Simulates regional electricity outages. Warehouses without backup power (backup_power_prob)
     suffer inventory spoilage (spoilage_rate fraction drained daily) and operational capacity degradation (0.2).
+    
+    Parameters
+    ----------
     """
 
     def __init__(
@@ -935,6 +1118,10 @@ class PowerOutage:
         seed=42,
         config=None,
     ):
+        """
+        Parameters
+        ----------
+        """
         cfg = config if config is not None else CFG
         self._cfg = cfg
         self.outage_duration = outage_duration
@@ -948,6 +1135,10 @@ class PowerOutage:
         self._active = False
 
     def apply(self, des_env):
+        """
+        Parameters
+        ----------
+        """
         warmup = des_env.warmup_days
         if self.start_day is not None:
             actual_start = self.start_day + warmup
@@ -986,16 +1177,32 @@ class PowerOutage:
         self._active = False
 
     def get_demand_multiplier(self, customer_id, current_day):
+        """
+        Parameters
+        ----------
+        """
         return 1.0
 
     @property
     def shock_start(self):
+        """
+        Parameters
+        ----------
+        """
         return self._actual_start
 
     @property
     def shock_end(self):
+        """
+        Parameters
+        ----------
+        """
         return self._actual_end
 
     @property
     def duration(self):
+        """
+        Parameters
+        ----------
+        """
         return self._duration

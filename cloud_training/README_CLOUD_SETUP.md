@@ -9,8 +9,8 @@ Bugfix : C1.7 (no documented cloud-training option),
          C3.16 (additive — must not change existing import paths).
 
 Append-only audit deliverable. The companion runbook is
-TRAINING_GUIDE.md and the canonical resumable A100 pipeline lives in
-modal_train.py — both referenced from the table below.
+TRAINING_GUIDE.md and the canonical resumable Modal T4 pipeline lives
+in modal_train.py — both referenced from the table below.
 -->
 
 # Cloud training — platform comparison
@@ -21,9 +21,12 @@ training, PPO 1M-step training) on cloud infrastructure. It compares the
 four targets we provide scaffolding for and points at the two reference
 documents that drive each runbook.
 
-The canonical resumable A100 pipeline is `cloud_training/modal_train.py`.
-The ordered runbook (per component, per platform, with `--resume`
-examples) is `cloud_training/TRAINING_GUIDE.md`.
+The canonical resumable T4 pipeline is `cloud_training/modal_train.py`.
+The advanced MAPPO runner is
+`supply_chain_research/phase3_ai/modal_mappo_trainer.py`; both Modal
+entry points use `.spawn()` so detached jobs survive terminal
+disconnects. The ordered runbook (per component, per platform, with
+`--resume` examples) is `cloud_training/TRAINING_GUIDE.md`.
 
 ## At-a-glance comparison
 
@@ -52,7 +55,8 @@ examples) is `cloud_training/TRAINING_GUIDE.md`.
 | `vastai_setup.sh`               | Bash bootstrap script for a rented Vast.ai A100 instance.                |
 | `local_training_runner.py`      | Local / cloud driver with rich progress, `--component`, and `--resume`.  |
 | `TRAINING_GUIDE.md`             | Ordered runbook (NSGA-II x 10, LSTM, PPO 1M) with `--resume` examples.   |
-| `modal_train.py`                | Canonical resumable A100 pipeline on Modal (do not edit while running).  |
+| `modal_train.py`                | Canonical resumable T4 pipeline on Modal (do not edit while running).    |
+| `supply_chain_research/phase3_ai/modal_mappo_trainer.py` | Advanced domain-randomized MAPPO runner using `.spawn()` and the `supply-chain-runs` volume. |
 
 ## Reproducibility contract
 

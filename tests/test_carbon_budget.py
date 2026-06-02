@@ -311,8 +311,8 @@ class TestGreenPremiumCurve:
             distance_matrix=distance_matrix,
             demand=demand,
             reduction_levels=[0, 20, 40],
-            pop_size=40,
-            n_gen=15,
+            pop_size=60,
+            n_gen=30,
             seed=SEED,
         )
 

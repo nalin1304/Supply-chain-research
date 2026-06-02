@@ -9,10 +9,10 @@ from pathlib import Path
 
 from pylatex import (
     Document,
-    Section,
-    Subsection,
     NoEscape,
     Package,
+    Section,
+    Subsection,
 )
 
 
@@ -24,6 +24,9 @@ def generate_formulation(output_path: str = "outputs/tables") -> str:
 
     Returns:
         Path to the generated LaTeX file.
+    
+    Parameters
+    ----------
     """
     doc = Document(documentclass="article")
     doc.packages.append(Package("amsmath"))

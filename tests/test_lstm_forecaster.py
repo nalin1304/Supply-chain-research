@@ -713,27 +713,7 @@ class TestDataGenerator:
         assert X.shape == (n_expected, 30, 10)
         assert y.shape == (n_expected, 7, 10)
 
-    @pytest.mark.skip(reason="Audit 2.5: temporal_split replaced with block-bootstrap Diwali holdout")
-    def test_temporal_split_ordering(self):
-        """Temporal split preserves time ordering."""
-        gen = DemandDataGenerator(
-            n_customers=10, n_years=1, seed=42
-        )
-        data = gen.generate()
-        X, y = gen.create_sequences(
-            data['demand'], seq_length=30, forecast_horizon=7
-        )
-        split = gen.temporal_split(X, y)
 
-        n_total = X.shape[0]
-        n_train = int(n_total * 0.7)
-        n_val = int(n_total * 0.15)
-
-        assert split['X_train'].shape[0] == n_train
-        assert split['X_val'].shape[0] == n_val - n_train + int(
-            n_total * 0.7
-        ) or split['X_val'].shape[0] > 0
-        assert split['X_test'].shape[0] > 0
 
     def test_normalization_uses_train_stats(self):
         """Normalization uses only training set statistics."""

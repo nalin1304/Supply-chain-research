@@ -6,7 +6,6 @@ feature engineering.
 """
 
 import numpy as np
-import pandas as pd
 from loguru import logger
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.multioutput import MultiOutputRegressor
@@ -73,9 +72,16 @@ def engineer_features(series: np.ndarray, horizon: int, seq_length: int = 30):
 
 
 class RandomForestForecaster(BaseForecaster):
-    """Random Forest regressor with direct multi-step forecasting."""
+    """Random Forest regressor with direct multi-step forecasting.
+    Parameters
+    ----------
+    """
 
     def __init__(self, n_estimators: int = 100, max_depth: int = 10, seq_length: int = 30):
+        """
+        Parameters
+        ----------
+        """
         self.n_estimators = n_estimators
         self.max_depth = max_depth
         self.seq_length = seq_length
@@ -83,6 +89,10 @@ class RandomForestForecaster(BaseForecaster):
         self.train_history = None
 
     def fit(self, train_data: np.ndarray, val_data: np.ndarray = None) -> None:
+        """
+        Parameters
+        ----------
+        """
         self.train_history = train_data
         n_customers = train_data.shape[1]
 
@@ -107,6 +117,10 @@ class RandomForestForecaster(BaseForecaster):
             self.models[c] = model
 
     def predict(self, horizon: int) -> np.ndarray:
+        """
+        Parameters
+        ----------
+        """
         n_customers = self.train_history.shape[1]
         predictions = np.zeros((horizon, n_customers))
 
@@ -146,9 +160,16 @@ class RandomForestForecaster(BaseForecaster):
 
 
 class XGBoostForecaster(BaseForecaster):
-    """XGBoost regressor with direct multi-step forecasting."""
+    """XGBoost regressor with direct multi-step forecasting.
+    Parameters
+    ----------
+    """
 
     def __init__(self, n_estimators: int = 100, max_depth: int = 6, seq_length: int = 30):
+        """
+        Parameters
+        ----------
+        """
         self.n_estimators = n_estimators
         self.max_depth = max_depth
         self.seq_length = seq_length
@@ -156,6 +177,10 @@ class XGBoostForecaster(BaseForecaster):
         self.train_history = None
 
     def fit(self, train_data: np.ndarray, val_data: np.ndarray = None) -> None:
+        """
+        Parameters
+        ----------
+        """
         self.train_history = train_data
         n_customers = train_data.shape[1]
 
@@ -186,6 +211,10 @@ class XGBoostForecaster(BaseForecaster):
             self.models[c] = model
 
     def predict(self, horizon: int) -> np.ndarray:
+        """
+        Parameters
+        ----------
+        """
         if not XGB_AVAILABLE:
             return self.fallback.predict(horizon)
 
@@ -225,9 +254,16 @@ class XGBoostForecaster(BaseForecaster):
 
 
 class LightGBMForecaster(BaseForecaster):
-    """LightGBM regressor with direct multi-step forecasting."""
+    """LightGBM regressor with direct multi-step forecasting.
+    Parameters
+    ----------
+    """
 
     def __init__(self, n_estimators: int = 100, max_depth: int = 6, seq_length: int = 30):
+        """
+        Parameters
+        ----------
+        """
         self.n_estimators = n_estimators
         self.max_depth = max_depth
         self.seq_length = seq_length
@@ -236,6 +272,10 @@ class LightGBMForecaster(BaseForecaster):
         self.train_history = None
 
     def fit(self, train_data: np.ndarray, val_data: np.ndarray = None) -> None:
+        """
+        Parameters
+        ----------
+        """
         self.train_history = train_data
 
         if not LGB_AVAILABLE:
@@ -266,6 +306,10 @@ class LightGBMForecaster(BaseForecaster):
             self.models[c] = model
 
     def predict(self, horizon: int) -> np.ndarray:
+        """
+        Parameters
+        ----------
+        """
         if not LGB_AVAILABLE:
             return self.fallback.predict(horizon)
 

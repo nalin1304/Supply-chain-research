@@ -11,11 +11,11 @@ References
        Forecast Methods. International Journal of Forecasting, 16(4), 437-450.
 """
 
-import time
+from dataclasses import dataclass
+
+import matplotlib.pyplot as plt
 import numpy as np
 import scipy.stats as stats
-import matplotlib.pyplot as plt
-from dataclasses import dataclass, field
 from loguru import logger
 
 from supply_chain_research.phase3_ai.forecaster_base import BaseForecaster
@@ -23,7 +23,10 @@ from supply_chain_research.phase3_ai.forecaster_base import BaseForecaster
 
 @dataclass
 class ForecastComparisonResult:
-    """Unified container for all forecasting comparison results."""
+    """Unified container for all forecasting comparison results.
+    Parameters
+    ----------
+    """
 
     forecasters: list[str]
     metrics: dict[str, dict[str, float]]  # {forecaster_name: {MAE: xx, RMSE: xx, ...}}
@@ -33,6 +36,10 @@ class ForecastComparisonResult:
 
 @dataclass
 class DMResult:
+    """
+    Parameters
+    ----------
+    """
     statistic: float
     p_value: float
     significant: bool
@@ -98,7 +105,10 @@ def expanding_window_cv(
     horizon: int = 7,
     seq_length: int = 30,
 ) -> list[dict]:
-    """Perform expanding-window cross-validation (Tashman 2000)."""
+    """Perform expanding-window cross-validation (Tashman 2000).
+    Parameters
+    ----------
+    """
     logger.info(f"Running expanding-window CV for {forecaster.__class__.__name__}...")
     n_days = len(data)
     fold_size = (n_days - seq_length - horizon) // n_folds
@@ -136,7 +146,10 @@ def run_forecast_comparison(
     n_folds: int = 5,
     horizon: int = 7,
 ) -> ForecastComparisonResult:
-    """Compare multiple forecasting methods using expanding-window cross-validation."""
+    """Compare multiple forecasting methods using expanding-window cross-validation.
+    Parameters
+    ----------
+    """
     logger.info("Starting forecasting comparison framework...")
 
     avg_metrics = {}
@@ -169,7 +182,10 @@ def run_forecast_comparison(
 
 
 def plot_forecast_comparison(results: ForecastComparisonResult, output_path: str = "outputs/forecast_comparison.png") -> None:
-    """Generate and save forecasting comparison overlay plot."""
+    """Generate and save forecasting comparison overlay plot.
+    Parameters
+    ----------
+    """
     logger.info(f"Generating forecasting comparison plot at {output_path}...")
     plt.figure(figsize=(10, 5))
 

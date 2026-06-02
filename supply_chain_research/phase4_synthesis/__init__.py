@@ -6,26 +6,29 @@ import time low. Test startup is faster.
 """
 
 # Light modules — always imported
-from supply_chain_research.phase4_synthesis.statistical_tests import (
-    run_full_statistical_analysis,
-    wilcoxon_signed_rank,
-    kruskal_wallis,
-    mann_whitney_u,
-    cliffs_delta,
-    bootstrap_ci,
-)
-from supply_chain_research.phase4_synthesis.sensitivity_analysis import (
-    run_sensitivity_sweep,
-    compute_sensitivity_indices,
-    rank_parameters,
-)
 from supply_chain_research.phase4_synthesis.ablation_study import (
     run_ablation_study,
+)
+from supply_chain_research.phase4_synthesis.sensitivity_analysis import (
+    compute_sensitivity_indices,
+    rank_parameters,
+    run_sensitivity_sweep,
+)
+from supply_chain_research.phase4_synthesis.statistical_tests import (
+    bootstrap_ci,
+    cliffs_delta,
+    kruskal_wallis,
+    mann_whitney_u,
+    run_full_statistical_analysis,
+    wilcoxon_signed_rank,
 )
 
 
 def __getattr__(name):
-    """Lazy-load heavy figure/table modules."""
+    """Lazy-load heavy figure/table modules.
+    Parameters
+    ----------
+    """
     if name == "generate_all_figures":
         from supply_chain_research.phase4_synthesis.generate_all_figures import (
             generate_all_figures,

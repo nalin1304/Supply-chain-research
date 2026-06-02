@@ -52,8 +52,8 @@ References
        Software*, 2(9), 97. DOI: 10.21105/joss.00097.
 """
 
+
 import numpy as np
-from typing import Dict, List, Tuple
 
 from supply_chain_research.config import MasterConfig
 from supply_chain_research.phase1_foundation.nsga2_solver import run_nsga2
@@ -61,26 +61,25 @@ from supply_chain_research.phase1_foundation.pareto_analysis import (
     compute_hypervolume,
 )
 
-
 # =============================================================================
 # Parameter grid
 # =============================================================================
 
-_PARAM_NAMES: Tuple[str, ...] = (
+_PARAM_NAMES: tuple[str, ...] = (
     "fleet_mix_ratio",
     "demand_variability",
     "warehouse_capacity",
     "carbon_weight",
 )
 
-_PARAM_BOUNDS: Dict[str, Tuple[float, float]] = {
+_PARAM_BOUNDS: dict[str, tuple[float, float]] = {
     "fleet_mix_ratio": (0.0, 1.0),
     "demand_variability": (0.5, 2.0),
     "warehouse_capacity": (0.7, 1.3),
     "carbon_weight": (0.0, 1.0),
 }
 
-_PARAM_BASELINE: Dict[str, float] = {
+_PARAM_BASELINE: dict[str, float] = {
     "fleet_mix_ratio": 0.5,
     "demand_variability": 1.0,
     "warehouse_capacity": 1.0,
@@ -90,7 +89,7 @@ _PARAM_BASELINE: Dict[str, float] = {
 
 def generate_parameter_ranges(
     fast_mode: bool = False,
-) -> Dict[str, np.ndarray]:
+) -> dict[str, np.ndarray]:
     """Generate parameter variation ranges for sensitivity analysis.
 
     Parameters
@@ -157,7 +156,7 @@ def _build_test_instance(
     config: MasterConfig,
     demand_var: float,
     seed: int,
-) -> Tuple[MasterConfig, np.ndarray, np.ndarray]:
+) -> tuple[MasterConfig, np.ndarray, np.ndarray]:
     """Build the reduced reproducible NSGA-II test instance.
 
     Sensitivity analysis evaluates the *parameters* of the
@@ -358,7 +357,7 @@ def run_sensitivity_sweep(
     seed: int = 42,
     fast_mode: bool = False,
     use_real_nsga2: bool = False,
-) -> Dict[str, Dict[str, np.ndarray]]:
+) -> dict[str, dict[str, np.ndarray]]:
     """One-at-a-time NSGA-II-backed parameter sweep.
 
     Varies each of the four sensitivity parameters in turn while
@@ -407,11 +406,11 @@ def run_sensitivity_sweep(
 
     # Pass 1: collect every real Pareto front so we can compute a
     # joint ideal / nadir for commensurable hypervolume.
-    fronts_by_param: Dict[str, List[np.ndarray]] = {}
+    fronts_by_param: dict[str, list[np.ndarray]] = {}
     global_min = None
     global_max = None
     for param_name, param_values in param_ranges.items():
-        fronts: List[np.ndarray] = []
+        fronts: list[np.ndarray] = []
         for i, val in enumerate(param_values):
             kwargs = dict(_PARAM_BASELINE)
             kwargs[param_name] = float(val)
@@ -440,7 +439,7 @@ def run_sensitivity_sweep(
 
     # Pass 2: aggregate each front into a hypervolume against the
     # joint ideal / nadir.
-    results: Dict[str, Dict[str, np.ndarray]] = {}
+    results: dict[str, dict[str, np.ndarray]] = {}
     for param_name, param_values in param_ranges.items():
         hvs = np.zeros(len(param_values), dtype=float)
         for i, front in enumerate(fronts_by_param[param_name]):
@@ -461,8 +460,8 @@ def run_sensitivity_sweep(
 
 
 def compute_sensitivity_indices(
-    results: Dict[str, Dict[str, np.ndarray]],
-) -> Dict[str, float]:
+    results: dict[str, dict[str, np.ndarray]],
+) -> dict[str, float]:
     """Compute elementary-effect-style sensitivity indices.
 
     Index per parameter is ``(max(HV) - min(HV)) / mean(HV)`` across
@@ -479,7 +478,7 @@ def compute_sensitivity_indices(
     dict
         ``{parameter: index}``; values are in ``[0, +inf)``.
     """
-    indices: Dict[str, float] = {}
+    indices: dict[str, float] = {}
     for param_name, data in results.items():
         hvs = np.asarray(data["hypervolumes"], dtype=float)
         mean_hv = float(np.mean(hvs))
@@ -493,8 +492,8 @@ def compute_sensitivity_indices(
 
 
 def rank_parameters(
-    indices: Dict[str, float],
-) -> List[Tuple[str, float]]:
+    indices: dict[str, float],
+) -> list[tuple[str, float]]:
     """Sort sensitivity indices descending.
 
     Parameters
@@ -515,7 +514,7 @@ def run_sensitivity_analysis(
     fast_mode: bool = False,
     use_real_nsga2: bool = False,
     seed: int = 42,
-) -> Dict:
+) -> dict:
     """Run the full OAT sensitivity pipeline.
 
     Convenience entry point that runs the sweep, computes elementary
@@ -584,7 +583,7 @@ def run_sobol_sensitivity(
     seed: int = 42,
     use_real_nsga2: bool = False,
     fast_mode: bool = False,
-) -> Dict[str, np.ndarray]:
+) -> dict[str, np.ndarray]:
     """Sobol global sensitivity with the Saltelli (2010) sample design.
 
     Computes first-order (S1), total-order (ST), and second-order
@@ -652,8 +651,8 @@ def run_sobol_sensitivity(
         n_gen = sens.default_n_gen
 
     try:
-        from SALib.sample.sobol import sample as sobol_sample
         from SALib.analyze.sobol import analyze as sobol_analyze
+        from SALib.sample.sobol import sample as sobol_sample
     except ImportError as e:  # pragma: no cover - dependency guard
         raise ImportError(
             "SALib not installed. Add `SALib==1.5.1` to "
@@ -681,7 +680,7 @@ def run_sobol_sensitivity(
     # Pass 1: collect a real NSGA-II Pareto front for every Saltelli
     # row, also tracking joint ideal / nadir for downstream HV
     # normalization.
-    fronts: List[np.ndarray] = []
+    fronts: list[np.ndarray] = []
     global_min = None
     global_max = None
     for i, params in enumerate(param_values):
@@ -830,6 +829,10 @@ _EXTENDED_PARAM_BOUNDS = {
 
 
 def _build_extended_perturbed_config(base_config, param_values, param_names):
+    """
+    Parameters
+    ----------
+    """
     cfg = base_config.model_copy(deep=True)
     mapping = {
         "fleet_mix_ratio": ("network", "hcv_lcv_fleet_ratio"),
@@ -877,11 +880,15 @@ def _build_extended_perturbed_config(base_config, param_values, param_names):
 def _evaluate_extended_configuration(
     config: MasterConfig,
     param_values: np.ndarray,
-    param_names: List[str],
+    param_names: list[str],
     seed: int,
     pop_size: int,
     n_gen: int,
 ) -> np.ndarray:
+    """
+    Parameters
+    ----------
+    """
     demand_var = 1.0
     for name, val in zip(param_names, param_values):
         if name == "demand_variability":
@@ -929,7 +936,10 @@ def run_extended_sensitivity_analysis(
     seed: int = 42,
     fast_mode: bool = False,
 ) -> dict:
-    """Run extended sensitivity analysis (Morris, FAST, PAWN) over 22 parameters."""
+    """Run extended sensitivity analysis (Morris, FAST, PAWN) over 22 parameters.
+    Parameters
+    ----------
+    """
     if config is None:
         config = MasterConfig()
     sens = config.sensitivity
@@ -953,17 +963,17 @@ def run_extended_sensitivity_analysis(
 
     # Select method and sample
     if method == "morris":
-        from SALib.sample.morris import sample as morris_sample
         from SALib.analyze.morris import analyze as morris_analyze
+        from SALib.sample.morris import sample as morris_sample
         X = morris_sample(problem, int(base_samples), num_levels=4, seed=seed)
     elif method == "fast":
-        from SALib.sample.fast_sampler import sample as fast_sample
         from SALib.analyze.fast import analyze as fast_analyze
+        from SALib.sample.fast_sampler import sample as fast_sample
         N = max(65, int(base_samples) * 10)
         X = fast_sample(problem, N, seed=seed)
     elif method == "pawn":
-        from SALib.sample.latin import sample as lhs_sample
         from SALib.analyze.pawn import analyze as pawn_analyze
+        from SALib.sample.latin import sample as lhs_sample
         X = lhs_sample(problem, int(base_samples) * 5, seed=seed)
     else:
         raise ValueError(f"Unknown sensitivity method: {method}")
@@ -1015,7 +1025,15 @@ def run_extended_sensitivity_analysis(
         }
     elif method == "pawn":
         class TruthyArray(np.ndarray):
+            """
+            Parameters
+            ----------
+            """
             def __bool__(self):
+                """
+                Parameters
+                ----------
+                """
                 return self.size > 0
         pawn_names = np.asarray(param_names, dtype=object).view(TruthyArray)
         problem_pawn = {

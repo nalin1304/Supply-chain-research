@@ -9,7 +9,7 @@ Review*.
 The complete source code for the framework, including the four-phase
 pipeline (`phase1_foundation`, `phase2_resilience`, `phase3_ai`,
 `phase4_synthesis`), the `MasterConfig` pydantic schema, the
-`tests/` suite of 454 tests plus 5 skipped, the figure and table
+`tests/` suite of 488 tests plus 5 skipped, the figure and table
 renderers, and the cloud-training scaffolds, is available in the
 public repository accompanying this submission. Pinned dependencies
 live in `supply_chain_research/requirements.txt`; the complete
@@ -58,7 +58,7 @@ values and the regenerated assets is caught automatically.
 
 Reproducibility is enforced through a master seed of 42, propagated
 to NumPy, PyTorch, the Python random module, and the pymoo internal
-generator. The full test suite (454 passed, 5 skipped) is the
+generator. The full test suite (488 passed, 5 skipped) is the
 binding correctness contract; the `tests/test_paper_assets_consistency.py`
 suite is the binding consistency contract that pins each headline
 number in the manuscript to the rendered LaTeX tables. Both must

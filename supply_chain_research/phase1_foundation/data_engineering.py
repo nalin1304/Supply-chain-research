@@ -30,14 +30,12 @@ import json
 import os
 import time
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 import requests
 from loguru import logger
 
 from supply_chain_research.config import CFG, MasterConfig
-
 
 # ---------------------------------------------------------------------------
 # OSRM / ORS endpoint health check
@@ -46,11 +44,11 @@ from supply_chain_research.config import CFG, MasterConfig
 # probe is gated behind ``SCR_OSRM_HEALTHCHECK=1`` because CI / offline test
 # runs MUST NOT hit the network (clause C3.1: existing tests must continue
 # to pass without external dependencies).
-_OSRM_HEALTH_CACHE: Dict[str, bool] = {}
+_OSRM_HEALTH_CACHE: dict[str, bool] = {}
 
 
 def check_osrm_health(
-    config: Optional[MasterConfig] = None,
+    config: MasterConfig | None = None,
     timeout: float = 5.0,
 ) -> bool:
     """Probe the configured OSRM endpoint and report availability.
@@ -93,7 +91,7 @@ def check_osrm_health(
 
 
 def check_ors_health(
-    config: Optional[MasterConfig] = None,
+    config: MasterConfig | None = None,
     timeout: float = 5.0,
 ) -> bool:
     """Probe the configured OpenRouteService endpoint and report availability.
@@ -164,6 +162,9 @@ def generate_customer_locations(
 
     Returns:
         Array of shape (n_customers, 2) with (latitude, longitude).
+    
+    Parameters
+    ----------
     """
     if rng is None:
         rng = np.random.default_rng(config.random_seed)
@@ -198,6 +199,9 @@ def get_warehouse_locations(config: MasterConfig) -> np.ndarray:
 
     Returns:
         Array of shape (n_warehouses, 2) with (latitude, longitude).
+    
+    Parameters
+    ----------
     """
     warehouses = []
     for name, lat, lon in config.network.warehouse_locations:
@@ -227,7 +231,7 @@ def get_or_compute_matrices(
     cache_key: str,
     config: MasterConfig = None,
     force_recompute: bool = False,
-) -> Tuple[np.ndarray, np.ndarray]:
+) -> tuple[np.ndarray, np.ndarray]:
     """Return (distance_km, duration_min) matrices, using disk cache if available.
 
     Parameters
@@ -340,9 +344,9 @@ def get_or_compute_matrices(
 
 
 def _ors_table_request(
-    coordinates: List[Tuple[float, float]],
+    coordinates: list[tuple[float, float]],
     config: MasterConfig,
-) -> Optional[dict]:
+) -> dict | None:
     """Call OpenRouteService Matrix API as fallback.
 
     Parameters
@@ -399,7 +403,7 @@ def _ors_table_request(
 
 
 def _osrm_table_request(
-    coordinates: List[Tuple[float, float]],
+    coordinates: list[tuple[float, float]],
     max_retries: int = 5,
     base_delay: float = 1.0,
     config: MasterConfig = None,
@@ -488,7 +492,7 @@ def compute_distance_matrix(
     config: MasterConfig,
     customer_locations: np.ndarray = None,
     batch_size: int = 50,
-) -> Tuple[np.ndarray, np.ndarray]:
+) -> tuple[np.ndarray, np.ndarray]:
     """Compute road distance and duration matrices using OSRM with caching.
 
     Combines warehouse and customer locations and delegates to
@@ -581,7 +585,7 @@ def compute_distance_matrix(
 def generate_network_data(
     config: MasterConfig,
     rng: np.random.Generator = None,
-) -> Dict[str, np.ndarray]:
+) -> dict[str, np.ndarray]:
     """Generate the full Phase-1 network artifact bundle.
 
     Single-call helper used by the cloud-training scaffold and the Phase-4

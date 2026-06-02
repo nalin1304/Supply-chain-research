@@ -5,6 +5,7 @@ Finds the absolute anchor points (extremes) of the Pareto front.
 """
 
 import time
+
 import numpy as np
 from loguru import logger
 from pymoo.algorithms.soo.nonconvex.ga import GA
@@ -13,17 +14,24 @@ from pymoo.optimize import minimize
 from pymoo.termination import get_termination
 
 from supply_chain_research.config import MasterConfig
-from supply_chain_research.phase1_foundation.solver_base import BaseSolver, SolverResult
 from supply_chain_research.phase1_foundation.nsga2_solver import (
-    SupplyChainProblem,
     MarginalTradeoffRepair,
+    SupplyChainProblem,
 )
+from supply_chain_research.phase1_foundation.solver_base import BaseSolver, SolverResult
 
 
 class ScalarProblem(Problem):
-    """Wraps bi-objective SupplyChainProblem as a single-objective problem."""
+    """Wraps bi-objective SupplyChainProblem as a single-objective problem.
+    Parameters
+    ----------
+    """
 
     def __init__(self, bi_problem: Problem, obj_index: int):
+        """
+        Parameters
+        ----------
+        """
         super().__init__(
             n_var=bi_problem.n_var,
             n_obj=1,
@@ -35,6 +43,10 @@ class ScalarProblem(Problem):
         self.obj_index = obj_index
 
     def _evaluate(self, X, out, *args, **kwargs):
+        """
+        Parameters
+        ----------
+        """
         bi_out = {}
         self.bi_problem._evaluate(X, bi_out, *args, **kwargs)
         out["F"] = bi_out["F"][:, self.obj_index]
@@ -42,7 +54,10 @@ class ScalarProblem(Problem):
 
 
 class SingleObjectiveGASolver(BaseSolver):
-    """Single-Objective GA solver for anchor points computation."""
+    """Single-Objective GA solver for anchor points computation.
+    Parameters
+    ----------
+    """
 
     def solve(
         self,
@@ -51,7 +66,10 @@ class SingleObjectiveGASolver(BaseSolver):
         demand: np.ndarray,
         seed: int = 42,
     ) -> SolverResult:
-        """Run two independent single-objective GA optimizations."""
+        """Run two independent single-objective GA optimizations.
+        Parameters
+        ----------
+        """
         logger.info("Initializing Single-Objective GA solver...")
         start_time = time.time()
 
@@ -137,6 +155,10 @@ class SingleObjectiveGASolver(BaseSolver):
 
     @property
     def name(self) -> str:
+        """
+        Parameters
+        ----------
+        """
         return "Single-Objective GA"
 
 
@@ -146,6 +168,9 @@ def run_single_objective_ga(
     demand: np.ndarray,
     seed: int = 42,
 ) -> SolverResult:
-    """Wrapper function to execute Single-Objective GA solver."""
+    """Wrapper function to execute Single-Objective GA solver.
+    Parameters
+    ----------
+    """
     solver = SingleObjectiveGASolver()
     return solver.solve(config, distance_matrix, demand, seed)

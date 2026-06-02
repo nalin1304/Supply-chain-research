@@ -37,9 +37,9 @@ Tasks that require manual intervention, judgment, or external resources.
 - **Note**: Cached matrices ensure reproducibility; fresh computation may differ as OSM updates
 
 ### 3.2 Statistical Runs
-- **Current**: 10 seeds for NSGA-II, 50 runs for Monte Carlo
+- **Current**: 50 seeds for NSGA-II / NSGA-III / MOEA/D, 100 DES Monte Carlo replications
 - **Minimum for publication**: 20+ seeds for Wilcoxon test power
-- **Recommended**: 30 seeds per method
+- **Recommended**: keep the 50-seed schedule for all reported algorithm comparisons
 
 ### 3.3 Hyperparameter Tuning
 - **Optional**: Use Optuna for systematic tuning of PPO/LSTM/NSGA-II parameters

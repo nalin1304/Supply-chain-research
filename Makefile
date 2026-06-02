@@ -6,7 +6,7 @@
 #
 # Usage examples:
 #   make help                  # show every target
-#   make tests                 # 483 passed, 5 skipped, ~315 s
+#   make tests                 # 488 passed, 5 skipped, ~205 s
 #   make figures               # all 9 publication figures
 #   make tables                # all 8 LaTeX tables
 #   make cvrplib-validation    # the 27 Augerat instances + the table
@@ -34,7 +34,7 @@ TBL_DIR := outputs/tables
 help:
 	@echo "Reviewer reproduction targets:"
 	@echo ""
-	@echo "  make tests                 Run the pytest suite (483 passed, 5 skipped, ~315 s)"
+	@echo "  make tests                 Run the pytest suite (488 passed, 5 skipped, ~205 s)"
 	@echo "  make tests-fast            Run only the non-PBT tests (~30 s)"
 	@echo "  make figures               Render all 9 publication figures"
 	@echo "  make tables                Render all 8 LaTeX tables"

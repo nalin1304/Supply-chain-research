@@ -6,16 +6,18 @@ compare against theoretical Big-O limits.
 """
 
 import json
-import os
 import time
 from pathlib import Path
+
 import numpy as np
 
 from supply_chain_research.config import MasterConfig
-from supply_chain_research.phase1_foundation.data_engineering import generate_network_data
-from supply_chain_research.phase1_foundation.clarke_wright import solve_cvrp_clarke_wright
-from supply_chain_research.phase1_foundation.nsga2_solver import run_nsga2
+from supply_chain_research.phase1_foundation.clarke_wright import (
+    solve_cvrp_clarke_wright,
+)
 from supply_chain_research.phase1_foundation.moead_solver import run_moead
+from supply_chain_research.phase1_foundation.nsga2_solver import run_nsga2
+
 
 def run_scalability_sweep(config: MasterConfig = None, seed: int = 42) -> dict:
     """Run the scalability benchmarks across four network scales.

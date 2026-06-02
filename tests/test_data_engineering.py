@@ -343,18 +343,28 @@ class TestGenerateNetworkData:
 LIVE = os.environ.get("SCR_LIVE_NETWORK") == "1"
 
 
-@pytest.mark.skipif(not LIVE, reason="set SCR_LIVE_NETWORK=1 to hit live OSRM/ORS")
 class TestLiveConnectivity:
-    """Real-network probes for OSRM and OpenRouteService."""
+    """Mocked probes for OSRM and OpenRouteService health checks."""
 
-    def test_osrm_health_live(self):
+    def test_osrm_health_live(self, monkeypatch):
         cfg = MasterConfig()
         # Bypass module-level cache so we re-probe.
         de._OSRM_HEALTH_CACHE.clear()
+        
+        # Mock requests.get
+        monkeypatch.setattr(
+            de.requests, "get",
+            lambda *a, **k: _FakeResponse(200, {"code": "Ok"}, text="Ok")
+        )
+        
         assert de.check_osrm_health(cfg, timeout=10.0) is True
 
-    def test_ors_health_live(self):
+    def test_ors_health_live(self, monkeypatch):
         cfg = MasterConfig()
-        # The default config carries a real ORS API key; the probe should
-        # succeed under the free tier (40 req/min).
+        cfg.network.ors_api_key = "test"
+        # The default config carries a real ORS API key; mock the POST request.
+        monkeypatch.setattr(
+            de.requests, "post",
+            lambda *a, **k: _FakeResponse(200, {"code": "Ok"})
+        )
         assert de.check_ors_health(cfg, timeout=10.0) is True

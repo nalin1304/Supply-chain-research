@@ -6,6 +6,7 @@ shock scenarios.
 """
 
 from pathlib import Path
+
 import numpy as np
 from joblib import Parallel, delayed
 from scipy.stats.qmc import LatinHypercube
@@ -26,7 +27,10 @@ from supply_chain_research.phase2_resilience.shock_models import (
 def _run_single_supply_shock(
     job_id, config, distance_matrix, base_seed, lhs_params=None
 ):
-    """Run single simulation with supply shock."""
+    """Run single simulation with supply shock.
+    Parameters
+    ----------
+    """
     seed = base_seed + job_id
 
     des = DESEnvironment(
@@ -81,7 +85,10 @@ def _run_single_supply_shock(
 def _run_single_demand_shock(
     job_id, config, distance_matrix, base_seed, lhs_params=None
 ):
-    """Run single simulation with demand shock."""
+    """Run single simulation with demand shock.
+    Parameters
+    ----------
+    """
     seed = base_seed + job_id
 
     des = DESEnvironment(
@@ -134,7 +141,10 @@ def _run_single_demand_shock(
 
 
 class MonteCarloRunner:
-    """Parallelized Monte Carlo runner for resilience analysis."""
+    """Parallelized Monte Carlo runner for resilience analysis.
+    Parameters
+    ----------
+    """
 
     def __init__(
         self,
@@ -144,6 +154,10 @@ class MonteCarloRunner:
         base_seed=42,
         distance_matrix=None,
     ):
+        """
+        Parameters
+        ----------
+        """
         if config is None:
             config = MasterConfig()
         self.config = config
@@ -155,7 +169,10 @@ class MonteCarloRunner:
         self.distance_matrix = distance_matrix
 
     def _sample_lhs_supply(self):
-        """Pre-sample start day and severity using Latin Hypercube Sampling."""
+        """Pre-sample start day and severity using Latin Hypercube Sampling.
+        Parameters
+        ----------
+        """
         sampler = LatinHypercube(d=2, seed=self.base_seed)
         sample = sampler.random(n=self.n_runs)
         
@@ -171,7 +188,10 @@ class MonteCarloRunner:
         return [{"severity": float(s), "start_day": int(d)} for s, d in zip(severities, start_days)]
 
     def _sample_lhs_demand(self):
-        """Pre-sample start day and multiplier using Latin Hypercube Sampling."""
+        """Pre-sample start day and multiplier using Latin Hypercube Sampling.
+        Parameters
+        ----------
+        """
         sampler = LatinHypercube(d=2, seed=self.base_seed + 10)
         sample = sampler.random(n=self.n_runs)
         
@@ -186,7 +206,10 @@ class MonteCarloRunner:
         return [{"multiplier": float(m), "start_day": int(d)} for m, d in zip(multipliers, start_days)]
 
     def run_supply_shock_analysis(self, lhs=True):
-        """Run Monte Carlo analysis for supply shocks."""
+        """Run Monte Carlo analysis for supply shocks.
+        Parameters
+        ----------
+        """
         lhs_params = self._sample_lhs_supply() if lhs else None
         
         results = Parallel(n_jobs=self.n_jobs)(
@@ -203,7 +226,10 @@ class MonteCarloRunner:
         return self._aggregate_results(results, "supply_shock")
 
     def run_demand_shock_analysis(self, lhs=True):
-        """Run Monte Carlo analysis for demand shocks."""
+        """Run Monte Carlo analysis for demand shocks.
+        Parameters
+        ----------
+        """
         lhs_params = self._sample_lhs_demand() if lhs else None
         
         results = Parallel(n_jobs=self.n_jobs)(
@@ -220,7 +246,10 @@ class MonteCarloRunner:
         return self._aggregate_results(results, "demand_shock")
 
     def run_all(self, lhs=True):
-        """Run Monte Carlo analysis for all shock types."""
+        """Run Monte Carlo analysis for all shock types.
+        Parameters
+        ----------
+        """
         supply_results = self.run_supply_shock_analysis(lhs=lhs)
         demand_results = self.run_demand_shock_analysis(lhs=lhs)
 
@@ -230,7 +259,10 @@ class MonteCarloRunner:
         }
 
     def run_stress_testing_framework(self, severities=None, n_runs=10):
-        """Run stress testing by sweeping shock severity from 0.1 to 1.0."""
+        """Run stress testing by sweeping shock severity from 0.1 to 1.0.
+        Parameters
+        ----------
+        """
         if severities is None:
             severities = np.linspace(0.1, 1.0, 10)
         
@@ -258,7 +290,10 @@ class MonteCarloRunner:
         return stress_results
 
     def _aggregate_results(self, run_results, shock_type):
-        """Aggregate results and perform convergence diagnostics."""
+        """Aggregate results and perform convergence diagnostics.
+        Parameters
+        ----------
+        """
         tts_values = []
         ttr_values = []
         max_drops = []
@@ -319,6 +354,10 @@ class MonteCarloRunner:
         }
 
     def save_results(self, results, output_dir="data/results"):
+        """
+        Parameters
+        ----------
+        """
         output_path = Path(output_dir)
         output_path.mkdir(parents=True, exist_ok=True)
 

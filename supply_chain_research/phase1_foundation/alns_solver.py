@@ -6,24 +6,31 @@ operators, and standard MarginalTradeoffRepair.
 """
 
 import time
+
 import numpy as np
 from loguru import logger
 
 from supply_chain_research.config import MasterConfig
-from supply_chain_research.phase1_foundation.solver_base import BaseSolver, SolverResult
 from supply_chain_research.phase1_foundation.nsga2_solver import (
-    SupplyChainProblem,
     MarginalTradeoffRepair,
+    SupplyChainProblem,
 )
+from supply_chain_research.phase1_foundation.solver_base import BaseSolver, SolverResult
 
 
 def dominates(a: np.ndarray, b: np.ndarray) -> bool:
-    """Return True if a dominates b (minimization)."""
+    """Return True if a dominates b (minimization).
+    Parameters
+    ----------
+    """
     return np.all(a <= b) and np.any(a < b)
 
 
 class ALNSSolver(BaseSolver):
-    """Adaptive Large Neighborhood Search (ALNS) solver for multi-objective optimization."""
+    """Adaptive Large Neighborhood Search (ALNS) solver for multi-objective optimization.
+    Parameters
+    ----------
+    """
 
     def solve(
         self,
@@ -32,7 +39,10 @@ class ALNSSolver(BaseSolver):
         demand: np.ndarray,
         seed: int = 42,
     ) -> SolverResult:
-        """Run ALNS optimization."""
+        """Run ALNS optimization.
+        Parameters
+        ----------
+        """
         logger.info("Initializing ALNS solver...")
         start_time = time.time()
 
@@ -212,7 +222,9 @@ class ALNSSolver(BaseSolver):
 
             # Limit archive size
             if len(archive_X) > archive_limit:
-                from supply_chain_research.phase1_foundation.mopso_solver import compute_crowding_distances
+                from supply_chain_research.phase1_foundation.mopso_solver import (
+                    compute_crowding_distances,
+                )
                 F_arr = np.array(archive_F)
                 cd = compute_crowding_distances(F_arr)
                 worst = np.argmin(cd)
@@ -236,6 +248,10 @@ class ALNSSolver(BaseSolver):
 
     @property
     def name(self) -> str:
+        """
+        Parameters
+        ----------
+        """
         return "ALNS"
 
 
@@ -245,6 +261,9 @@ def run_alns(
     demand: np.ndarray,
     seed: int = 42,
 ) -> SolverResult:
-    """Wrapper function to execute ALNS solver."""
+    """Wrapper function to execute ALNS solver.
+    Parameters
+    ----------
+    """
     solver = ALNSSolver()
     return solver.solve(config, distance_matrix, demand, seed)

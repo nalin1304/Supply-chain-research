@@ -68,7 +68,6 @@ from pymoo.operators.mutation.pm import PM
 from supply_chain_research.config import MasterConfig
 from supply_chain_research.phase1_foundation.nsga2_solver import (
     DemandRepair,
-    SupplyChainProblem,
     run_nsga2,
 )
 

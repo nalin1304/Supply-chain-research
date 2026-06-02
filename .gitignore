@@ -22,3 +22,7 @@ webapp/frontend/node_modules/
 .idea/
 .vscode/
 *.log
+
+# Large Datasets
+data/external/**/*.csv
+data/external/**/*.geojson

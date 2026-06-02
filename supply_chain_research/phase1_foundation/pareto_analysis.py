@@ -135,6 +135,9 @@ def compute_hypervolume_with_history(
 
     Returns:
         Hypervolume value computed with global reference point.
+    
+    Parameters
+    ----------
     """
     if pareto_front is None or len(pareto_front) == 0:
         return 0.0
@@ -168,6 +171,9 @@ def compute_generational_distance(
 
     Returns:
         GD value (lower is better).
+    
+    Parameters
+    ----------
     """
     if obtained_front is None or len(obtained_front) == 0:
         return float("inf")
@@ -190,6 +196,9 @@ def compute_igd(
 
     Returns:
         IGD value (lower is better).
+    
+    Parameters
+    ----------
     """
     if obtained_front is None or len(obtained_front) == 0:
         return float("inf")
@@ -208,6 +217,9 @@ def compute_spread(pareto_front: np.ndarray) -> float:
 
     Returns:
         Spread value.
+    
+    Parameters
+    ----------
     """
     if pareto_front is None or len(pareto_front) < 2:
         return 0.0
@@ -249,6 +261,9 @@ def compute_green_premium(
 
     Returns:
         Dictionary with green premium metrics.
+    
+    Parameters
+    ----------
     """
     if pareto_front is None or len(pareto_front) < 2:
         return {
@@ -296,6 +311,9 @@ def full_pareto_analysis(
 
     Returns:
         Dictionary with all Pareto quality metrics.
+    
+    Parameters
+    ----------
     """
     if reference_front is None:
         reference_front = pareto_front

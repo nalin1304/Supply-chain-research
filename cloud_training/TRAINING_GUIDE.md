@@ -10,6 +10,16 @@ path remains the default for everything else.
 
 ## Launch (detached)
 
+Make sure the local Modal profile is authenticated first:
+
+```bash
+modal profile current
+modal token new
+```
+
+This workstation is expected to use the `nalinaggarwal28` profile for the
+user's Modal account.
+
 ```bash
 modal run --detach cloud_training/modal_train.py
 ```
@@ -26,7 +36,7 @@ modal app logs supply-chain-ultimate-v3
 modal app list
 ```
 
-Web UI: [https://modal.com/apps/nalin1304](https://modal.com/apps/nalin1304)
+Web UI: [https://modal.com/apps/nalinaggarwal28](https://modal.com/apps/nalinaggarwal28)
 
 ## Download results
 
@@ -55,6 +65,26 @@ modal volume get sc-results-v3 / ./data/results/
 - Duration: ~3 hours (Steps 4a + 4b + 4c + 6 only when keepers are on the volume; ~7-8 h for a full cold-cache run)
 - Total: ~$1.80 (rerun-only) / ~$5 (full cold cache)
 
+## Advanced MAPPO run
+
+The advanced research runner trains the domain-randomized MAPPO policy
+and writes models/logs to the `supply-chain-runs` Modal volume. It also
+uses `.spawn()` from the local entrypoint.
+
+```bash
+# cheap container/code smoke run
+modal run --detach supply_chain_research/phase3_ai/modal_mappo_trainer.py --timesteps 1000
+
+# main advanced run
+modal run --detach supply_chain_research/phase3_ai/modal_mappo_trainer.py --timesteps 1000000
+```
+
+Monitor with:
+
+```bash
+modal app logs supply-chain-mappo-trainer
+```
+
 ## Troubleshooting
 
 **Job stopped unexpectedly?** Re-run `modal run --detach cloud_training/modal_train.py`. Each step skips when its output file already exists on the `sc-results-v3` volume.
@@ -71,7 +101,7 @@ modal volume get sc-results-v3 / ./data/results/
 | NSGA-II `n_gen` | 200 | HV plateau verified empirically |
 | Seeds per algorithm | 50 | Friedman power at α=0.05 (Audit 3.1) |
 | PPO total steps | 5 M (3 M + 2 M) | Literature: 3–5 M for convergence |
-| PPO `hidden_size` | 512 | Capacity for the 500-dim action space |
+| PPO `hidden_size` | 512 | Capacity for the stress-mode inventory policy; legacy non-stress calls still support the 500-dim allocation action space |
 | PPO LR schedule | linear `3e-4 → 0` (PPO-20, actor) and `2e-4 → 0` (PPO-100, actor); critic `multiplier × actor` per Andrychowicz et al. (2021); decay applied to BOTH actor and critic optimizers (Audit 2.2) | Andrychowicz et al. (2021); critic LR = `critic_lr_multiplier × actor LR` (Audit 2.2) |
 | PPO rollout | 4096 steps | Stable gradients for high-dim actions |
 | LSTM | 256 hidden × 3 layers | Capacity for 100-customer demand |

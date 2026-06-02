@@ -13,7 +13,6 @@ import contextlib
 import os
 import random
 from dataclasses import dataclass
-from typing import Optional
 
 import numpy as np
 
@@ -32,6 +31,9 @@ class SeedBundle:
     worker_base : int
         Base seed used to spawn per-worker seeds in parallel
         pools.
+    
+    Parameters
+    ----------
     """
     root: int
     numpy: int
@@ -79,6 +81,9 @@ def set_global_seed(seed: int = 42) -> SeedBundle:
 
     Returns the SeedBundle so callers can pass component seeds to
     library-specific APIs (pymoo, simpy) that need explicit control.
+    
+    Parameters
+    ----------
     """
     bundle = derive_seeds(seed)
 
@@ -123,7 +128,7 @@ def worker_seed(root_seed: int, worker_index: int) -> int:
     return int(ss.generate_state(1, dtype=np.uint32)[0])
 
 
-def get_rng(seed: Optional[int] = 42) -> np.random.Generator:
+def get_rng(seed: int | None = 42) -> np.random.Generator:
     """Get a numpy Generator; uses SeedSequence under the hood.
 
     Parameters

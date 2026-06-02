@@ -23,6 +23,9 @@ def _atomic_write(filepath: str, write_callback) -> None:
     write_callback receives an open file handle in binary or text mode
     depending on the caller, writes to a temp file in the same
     directory, and the wrapper atomically renames on success.
+    
+    Parameters
+    ----------
     """
     path = Path(filepath)
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -63,6 +66,10 @@ def save_numpy(array: np.ndarray, filepath: str) -> None:
         ``os.replace``).
     """
     def _writer(f):
+        """
+        Parameters
+        ----------
+        """
         np.save(f, array, allow_pickle=False)
     _atomic_write(filepath, _writer)
 
@@ -99,6 +106,10 @@ def save_json(data: Any, filepath: str) -> None:
         Writes to ``filepath`` atomically.
     """
     def _writer(f):
+        """
+        Parameters
+        ----------
+        """
         f.write(json.dumps(data, indent=2, default=str).encode("utf-8"))
     _atomic_write(filepath, _writer)
 
@@ -116,7 +127,7 @@ def load_json(filepath: str) -> Any:
     Any
         The decoded object.
     """
-    with open(filepath, "r") as f:
+    with open(filepath) as f:
         return json.load(f)
 
 
@@ -136,6 +147,10 @@ def save_pickle(obj: Any, filepath: str) -> None:
         Writes to ``filepath`` atomically.
     """
     def _writer(f):
+        """
+        Parameters
+        ----------
+        """
         pickle.dump(obj, f, protocol=pickle.HIGHEST_PROTOCOL)
     _atomic_write(filepath, _writer)
 

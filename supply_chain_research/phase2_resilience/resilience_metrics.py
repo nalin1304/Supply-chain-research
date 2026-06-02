@@ -51,6 +51,9 @@ class ResilienceMetrics:
             service_level_threshold: TTS threshold (default 0.90).
             recovery_threshold: TTR recovery fraction of pre-shock
                 baseline (default 0.95).
+        
+        Parameters
+        ----------
         """
         self.service_level_threshold = service_level_threshold
         self.recovery_threshold = recovery_threshold
@@ -75,6 +78,9 @@ class ResilienceMetrics:
 
         Returns:
             TTS in days. 0 if service level drops immediately.
+        
+        Parameters
+        ----------
         """
         sl = np.asarray(daily_service_level)
         if shock_start_day >= len(sl):
@@ -112,6 +118,9 @@ class ResilienceMetrics:
 
         Returns:
             TTR in days. -1 if system never recovers within data.
+        
+        Parameters
+        ----------
         """
         sl = np.asarray(daily_service_level)
 
@@ -185,6 +194,9 @@ class ResilienceMetrics:
 
         Returns:
             Maximum service level drop (positive value).
+        
+        Parameters
+        ----------
         """
         sl = np.asarray(daily_service_level)
 
@@ -224,6 +236,9 @@ class ResilienceMetrics:
 
         Returns:
             Total unfulfilled orders during shock.
+        
+        Parameters
+        ----------
         """
         orders = np.asarray(daily_orders)
         fulfilled = np.asarray(daily_fulfilled)
@@ -255,6 +270,9 @@ class ResilienceMetrics:
 
         Returns:
             Array of service levels for the recovery period.
+        
+        Parameters
+        ----------
         """
         sl = np.asarray(daily_service_level)
         end_idx = min(shock_end_day + window, len(sl))
@@ -281,6 +299,9 @@ class ResilienceMetrics:
 
         Returns:
             Dictionary with all resilience metrics.
+        
+        Parameters
+        ----------
         """
         sl = results["daily_service_level"]
         orders = results["daily_orders"]

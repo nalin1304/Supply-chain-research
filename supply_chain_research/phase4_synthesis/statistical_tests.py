@@ -12,12 +12,12 @@ validation functions. The analysis pipeline itself is correct; only
 the data source is synthetic.
 """
 
+
 import numpy as np
 from scipy import stats
-from typing import Dict, List, Tuple
 
 
-def cliffs_delta(x: np.ndarray, y: np.ndarray) -> Tuple[float, str]:
+def cliffs_delta(x: np.ndarray, y: np.ndarray) -> tuple[float, str]:
     """Compute Cliff's delta effect size.
 
     Cliff's delta measures how often values in one distribution
@@ -31,6 +31,9 @@ def cliffs_delta(x: np.ndarray, y: np.ndarray) -> Tuple[float, str]:
         Tuple of (delta value, magnitude label).
         Magnitude: negligible (<0.147), small (<0.33),
         medium (<0.474), large (>=0.474).
+    
+    Parameters
+    ----------
     """
     n_x = len(x)
     n_y = len(y)
@@ -70,7 +73,7 @@ def bootstrap_ci(
     n_bootstrap: int = 1000,
     confidence: float = 0.95,
     seed: int = 42,
-) -> Tuple[float, float]:
+) -> tuple[float, float]:
     """Compute bootstrap confidence interval.
 
     Args:
@@ -82,6 +85,9 @@ def bootstrap_ci(
 
     Returns:
         Tuple of (lower_bound, upper_bound).
+    
+    Parameters
+    ----------
     """
     rng = np.random.default_rng(seed)
     n = len(data)
@@ -103,7 +109,7 @@ def bootstrap_ci(
 
 def wilcoxon_signed_rank(
     x: np.ndarray, y: np.ndarray
-) -> Dict[str, float]:
+) -> dict[str, float]:
     """Wilcoxon signed-rank test for paired samples.
 
     Tests whether two paired samples come from the same distribution.
@@ -115,6 +121,9 @@ def wilcoxon_signed_rank(
 
     Returns:
         Dictionary with statistic, p_value, effect_size, magnitude.
+    
+    Parameters
+    ----------
     """
     if len(x) < 5 or len(y) < 5:
         return {
@@ -149,7 +158,7 @@ def wilcoxon_signed_rank(
     }
 
 
-def friedman_test(*groups: np.ndarray) -> Dict[str, float]:
+def friedman_test(*groups: np.ndarray) -> dict[str, float]:
     """Friedman test for paired samples (omnibus test).
 
     Non-parametric test comparing distributions of multiple related
@@ -162,6 +171,9 @@ def friedman_test(*groups: np.ndarray) -> Dict[str, float]:
 
     Returns:
         Dictionary with statistic, p_value, and effect_size (Kendall's W).
+    
+    Parameters
+    ----------
     """
     valid_groups = [g for g in groups if len(g) >= 2]
     if len(valid_groups) < 2:
@@ -195,7 +207,7 @@ def friedman_test(*groups: np.ndarray) -> Dict[str, float]:
     }
 
 
-def kruskal_wallis(*groups: np.ndarray) -> Dict[str, float]:
+def kruskal_wallis(*groups: np.ndarray) -> dict[str, float]:
     """Kruskal-Wallis H-test for independent samples.
 
     Non-parametric test comparing distributions of multiple groups.
@@ -207,6 +219,9 @@ def kruskal_wallis(*groups: np.ndarray) -> Dict[str, float]:
 
     Returns:
         Dictionary with statistic, p_value, effect_size (eta^2).
+    
+    Parameters
+    ----------
     """
     valid_groups = [g for g in groups if len(g) >= 2]
     if len(valid_groups) < 2:
@@ -233,7 +248,7 @@ def kruskal_wallis(*groups: np.ndarray) -> Dict[str, float]:
 
 def mann_whitney_u(
     x: np.ndarray, y: np.ndarray
-) -> Dict[str, float]:
+) -> dict[str, float]:
     """Mann-Whitney U test for two independent samples.
 
     Non-parametric test for pairwise comparison.
@@ -245,6 +260,9 @@ def mann_whitney_u(
     Returns:
         Dictionary with statistic, p_value, effect_size,
         magnitude.
+    
+    Parameters
+    ----------
     """
     if len(x) < 2 or len(y) < 2:
         return {
@@ -269,8 +287,8 @@ def mann_whitney_u(
 
 
 def holm_bonferroni_correction(
-    p_values: List[float],
-) -> List[float]:
+    p_values: list[float],
+) -> list[float]:
     """Apply Holm-Bonferroni correction for multiple comparisons.
 
     Audit 3.5 — SCOPE: This function applies the Holm correction
@@ -310,6 +328,9 @@ def holm_bonferroni_correction(
 
     Returns:
         List of adjusted p-values (in original order), capped at 1.0.
+    
+    Parameters
+    ----------
     """
     n = len(p_values)
     if n == 0:
@@ -339,7 +360,7 @@ def holm_bonferroni_correction(
 
 def generate_synthetic_results(
     n_runs: int = 30, seed: int = 42
-) -> Dict[str, Dict[str, np.ndarray]]:
+) -> dict[str, dict[str, np.ndarray]]:
     """Generate synthetic optimization results for testing.
 
     Creates plausible results for NSGA-II, MOEA/D, and OR-Tools
@@ -351,6 +372,9 @@ def generate_synthetic_results(
 
     Returns:
         Dictionary mapping method names to metric arrays.
+    
+    Parameters
+    ----------
     """
     rng = np.random.default_rng(seed)
 
@@ -382,8 +406,8 @@ def generate_synthetic_results(
 
 
 def run_full_statistical_analysis(
-    results: Dict[str, Dict[str, np.ndarray]] = None,
-) -> Dict[str, any]:
+    results: dict[str, dict[str, np.ndarray]] = None,
+) -> dict[str, any]:
     """Run comprehensive statistical analysis.
 
     Uses Friedman test as primary omnibus test (paired samples),
@@ -396,6 +420,9 @@ def run_full_statistical_analysis(
 
     Returns:
         Dictionary with all test results organized by metric.
+    
+    Parameters
+    ----------
     """
     if results is None:
         results = generate_synthetic_results()

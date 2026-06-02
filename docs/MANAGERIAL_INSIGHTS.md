@@ -6,9 +6,9 @@ Distils the four-phase pipeline into five concrete decisions a
 logistics planner needs to make before deploying the system to
 production.
 
-All numbers below come from the resumable A100 run
-(`cloud_training/modal_train.py`, 3.14 h wall, 50 seeds, NVIDIA
-A100-SXM4-40GB) recorded in `data/results/training_summary.json` and
+All numbers below come from the resumable Modal T4 run
+(`cloud_training/modal_train.py`, 2.96 h wall, 50 seeds, NVIDIA
+Tesla T4 16GB) recorded in `data/results/training_summary.json` and
 `data/results/statistical_tests.json`.
 
 ## 1. Executive Summary

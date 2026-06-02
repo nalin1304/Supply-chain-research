@@ -62,6 +62,9 @@ class SolverResult:
     metadata : dict
         Algorithm-specific extra data (e.g. archive size, final
         temperature for SA-based solvers).
+    
+    Parameters
+    ----------
     """
 
     pareto_front: np.ndarray  # (n_solutions, n_objectives)
@@ -75,12 +78,18 @@ class SolverResult:
 
     @property
     def n_solutions(self) -> int:
-        """Number of non-dominated solutions found."""
+        """Number of non-dominated solutions found.
+        Parameters
+        ----------
+        """
         return self.pareto_front.shape[0] if self.pareto_front.size > 0 else 0
 
     @property
     def n_objectives(self) -> int:
-        """Number of objectives."""
+        """Number of objectives.
+        Parameters
+        ----------
+        """
         if self.pareto_front.ndim == 2:
             return self.pareto_front.shape[1]
         return 0
@@ -130,6 +139,10 @@ class SolverResult:
         return self.hypervolume
 
     def __repr__(self) -> str:
+        """
+        Parameters
+        ----------
+        """
         return (
             f"SolverResult(algorithm={self.algorithm_name!r}, "
             f"n_solutions={self.n_solutions}, "
@@ -148,6 +161,9 @@ class BaseSolver(ABC):
 
     The base class provides convenience helpers for timing, logging,
     and hypervolume computation that all concrete solvers inherit.
+    
+    Parameters
+    ----------
     """
 
     @abstractmethod
@@ -184,8 +200,15 @@ class BaseSolver(ABC):
     @property
     @abstractmethod
     def name(self) -> str:
-        """Short, human-readable algorithm name (e.g. 'SPEA2')."""
+        """Short, human-readable algorithm name (e.g. 'SPEA2').
+        Parameters
+        ----------
+        """
         ...
 
     def __repr__(self) -> str:
+        """
+        Parameters
+        ----------
+        """
         return f"{self.__class__.__name__}(name={self.name!r})"

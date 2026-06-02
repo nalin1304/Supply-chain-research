@@ -10,9 +10,16 @@ class CompoundDisruption:
         shocks: List of individual shock objects (e.g. SupplyShock, DemandShock, Cyberattack).
         cascade_prob_matrix: Dict mapping tuple (primary_class_name, secondary_class_name) to cascading probability.
         simultaneous: If True, all shocks start at the same start_day. Otherwise, they are cascaded.
+    
+    Parameters
+    ----------
     """
 
     def __init__(self, shocks, cascade_prob_matrix=None, simultaneous=False, seed=42):
+        """
+        Parameters
+        ----------
+        """
         self.shocks = shocks
         self.cascade_prob_matrix = cascade_prob_matrix or {}
         self.simultaneous = simultaneous
@@ -22,6 +29,10 @@ class CompoundDisruption:
         self._duration = 0
 
     def apply(self, des_env):
+        """
+        Parameters
+        ----------
+        """
         warmup = des_env.warmup_days
 
         if self.simultaneous:
@@ -77,6 +88,10 @@ class CompoundDisruption:
                 self._duration = self._actual_end - self._actual_start
 
     def get_demand_multiplier(self, customer_id, current_day):
+        """
+        Parameters
+        ----------
+        """
         multiplier = 1.0
         for s in self.shocks:
             multiplier *= s.get_demand_multiplier(customer_id, current_day)
@@ -84,12 +99,24 @@ class CompoundDisruption:
 
     @property
     def shock_start(self):
+        """
+        Parameters
+        ----------
+        """
         return self._actual_start
 
     @property
     def shock_end(self):
+        """
+        Parameters
+        ----------
+        """
         return self._actual_end
 
     @property
     def duration(self):
+        """
+        Parameters
+        ----------
+        """
         return self._duration

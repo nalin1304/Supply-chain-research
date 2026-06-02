@@ -62,6 +62,16 @@
   - Calibrate demand arrival patterns (Poisson assumption check)
   - Real courier routing behavior for PPO comparison
 
+### 1.5 New Delhi Traffic Probe & Analytics 2024
+- **Folder**: `data/external/traffic_data/new_delhi_probe_2024`
+- **Key value**: **Time-of-day specific traffic penalties** for routing.
+- **Use for**: Dynamic Spatio-Temporal routing (Phase 13), creating a time-penalty matrix to penalize paths driving through heavy rush hour traffic nodes.
+
+### 1.6 High-Dimensional Supply Chain Inventory Dataset
+- **Folder**: `data/external/offline_rl_data/high_dim_inventory.csv`
+- **Key value**: **Real sequential inventory decisions** representing expert state-action trajectories.
+- **Use for**: Offline Reinforcement Learning (Phase 12). Used to pre-train the Decision Transformers on human-like replenishment actions before online fine-tuning.
+
 ---
 
 ## Tier 2: India-Specific Government & Policy Data
