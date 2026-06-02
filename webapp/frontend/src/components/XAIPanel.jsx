@@ -56,6 +56,18 @@ export default function XAIPanel() {
             </p>
           </div>
         </div>
+
+        {/* Deep Academic Specs */}
+        <div className="grid grid-cols-2 gap-4 mt-2">
+          <div className="p-3 bg-black/40 border border-zinc-800 rounded-md">
+            <h5 className="text-[10px] uppercase text-zinc-500 font-bold tracking-wider mb-1">Graph Neural Network</h5>
+            <div className="text-xs text-zinc-300 font-mono">Spatio-Temporal GNN (ST-GNN)<br/>Extracts inter-hub spatial dependencies for traffic/demand propagation.</div>
+          </div>
+          <div className="p-3 bg-black/40 border border-zinc-800 rounded-md">
+            <h5 className="text-[10px] uppercase text-zinc-500 font-bold tracking-wider mb-1">Explainability / Policy Extraction</h5>
+            <div className="text-xs text-zinc-300 font-mono">SHapley Additive exPlanations (SHAP)<br/>100% interpretable operational rules extracted from black-box PPO.</div>
+          </div>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

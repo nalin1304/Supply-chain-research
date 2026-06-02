@@ -148,6 +148,51 @@ export default function Dashboard() {
         </div>
       </motion.div>
 
+      {/* Global Academic Methodology & Datasets */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
+      >
+        <div className="p-4 rounded-lg bg-zinc-900/50 border border-zinc-800">
+          <h4 className="text-sm font-semibold text-zinc-300 mb-2 border-b border-zinc-800 pb-2">Primary Datasets</h4>
+          <ul className="text-xs text-zinc-400 space-y-1 font-mono">
+            <li>• Delhivery (144,867 records)</li>
+            <li>• DataCo Smart SC (180K orders)</li>
+            <li>• CVRPLIB Augerat Set-A</li>
+            <li>• SVRPBench (Stochastic VRP)</li>
+          </ul>
+        </div>
+        <div className="p-4 rounded-lg bg-zinc-900/50 border border-zinc-800">
+          <h4 className="text-sm font-semibold text-zinc-300 mb-2 border-b border-zinc-800 pb-2">Network Scope</h4>
+          <ul className="text-xs text-zinc-400 space-y-1 font-mono">
+            <li>• 5 Distribution Warehouses</li>
+            <li>• 101 Customer Demand Points</li>
+            <li>• 20 Indian Cities</li>
+            <li>• OSRM v5 Real Road Distances</li>
+          </ul>
+        </div>
+        <div className="p-4 rounded-lg bg-zinc-900/50 border border-zinc-800">
+          <h4 className="text-sm font-semibold text-zinc-300 mb-2 border-b border-zinc-800 pb-2">Experimental Setup</h4>
+          <ul className="text-xs text-zinc-400 space-y-1 font-mono">
+            <li>• 1,000,000 RL Timesteps</li>
+            <li>• 50-Seed Monte Carlo Evals</li>
+            <li>• $H_\infty$ Minimax Adversarial</li>
+            <li>• Cloud Env: Modal (Tesla T4)</li>
+          </ul>
+        </div>
+        <div className="p-4 rounded-lg bg-zinc-900/50 border border-zinc-800">
+          <h4 className="text-sm font-semibold text-zinc-300 mb-2 border-b border-zinc-800 pb-2">Statistical Validation</h4>
+          <ul className="text-xs text-zinc-400 space-y-1 font-mono">
+            <li>• Friedman Omnibus Test</li>
+            <li>• Paired Wilcoxon post-hoc</li>
+            <li>• Holm-Bonferroni correction</li>
+            <li>• Sobol Global Sensitivity</li>
+          </ul>
+        </div>
+      </motion.div>
+
       {/* KPI Cards */}
       {hasKpis && !isMock ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

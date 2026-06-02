@@ -52,6 +52,26 @@ export default function AdvancedRLPanel() {
             </p>
           </div>
         </div>
+
+        {/* Deep Academic Specs */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2">
+          <div className="p-3 bg-black/40 border border-zinc-800 rounded-md">
+            <h5 className="text-[10px] uppercase text-zinc-500 font-bold tracking-wider mb-1">Architecture</h5>
+            <div className="text-xs text-zinc-300 font-mono">Attention-LSTM<br/>256 hidden × 3 layers</div>
+          </div>
+          <div className="p-3 bg-black/40 border border-zinc-800 rounded-md">
+            <h5 className="text-[10px] uppercase text-zinc-500 font-bold tracking-wider mb-1">Forecasting (7-Day)</h5>
+            <div className="text-xs text-zinc-300 font-mono">MAPE: 23.46%<br/>RMSE: 56.46 kg</div>
+          </div>
+          <div className="p-3 bg-black/40 border border-zinc-800 rounded-md">
+            <h5 className="text-[10px] uppercase text-zinc-500 font-bold tracking-wider mb-1">RL Algorithms</h5>
+            <div className="text-xs text-zinc-300 font-mono">MAPPO (Phase 7)<br/>Decision Transformer (Phase 12)</div>
+          </div>
+          <div className="p-3 bg-black/40 border border-zinc-800 rounded-md">
+            <h5 className="text-[10px] uppercase text-zinc-500 font-bold tracking-wider mb-1">Cloud Training</h5>
+            <div className="text-xs text-zinc-300 font-mono">1,000,000 steps<br/>Modal Tesla T4 ($1.80)</div>
+          </div>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

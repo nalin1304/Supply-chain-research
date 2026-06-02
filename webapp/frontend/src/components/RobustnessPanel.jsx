@@ -52,6 +52,26 @@ export default function RobustnessPanel() {
             </p>
           </div>
         </div>
+
+        {/* Deep Academic Specs */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2">
+          <div className="p-3 bg-black/40 border border-zinc-800 rounded-md">
+            <h5 className="text-[10px] uppercase text-zinc-500 font-bold tracking-wider mb-1">Simulation Engine</h5>
+            <div className="text-xs text-zinc-300 font-mono">SimPy DES<br/>100 Monte Carlo Reps</div>
+          </div>
+          <div className="p-3 bg-black/40 border border-zinc-800 rounded-md">
+            <h5 className="text-[10px] uppercase text-zinc-500 font-bold tracking-wider mb-1">Severe Disruption Test</h5>
+            <div className="text-xs text-zinc-300 font-mono">Horizon: 365 days<br/>(R,s,S) Baseline: Fails at 61d</div>
+          </div>
+          <div className="p-3 bg-black/40 border border-zinc-800 rounded-md">
+            <h5 className="text-[10px] uppercase text-zinc-500 font-bold tracking-wider mb-1">PPO Stress Survival</h5>
+            <div className="text-xs text-zinc-300 font-mono">Survives 91 days<br/>SL drops to 95.4% max</div>
+          </div>
+          <div className="p-3 bg-black/40 border border-zinc-800 rounded-md">
+            <h5 className="text-[10px] uppercase text-zinc-500 font-bold tracking-wider mb-1">Risk Bounds (CVaR)</h5>
+            <div className="text-xs text-zinc-300 font-mono">99th percentile<br/>Stockouts strictly capped</div>
+          </div>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

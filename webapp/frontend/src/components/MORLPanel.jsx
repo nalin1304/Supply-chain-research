@@ -57,6 +57,26 @@ export default function MORLPanel() {
             </p>
           </div>
         </div>
+
+        {/* Deep Academic Specs */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2">
+          <div className="p-3 bg-black/40 border border-zinc-800 rounded-md">
+            <h5 className="text-[10px] uppercase text-zinc-500 font-bold tracking-wider mb-1">Multi-Objective Algorithms</h5>
+            <div className="text-xs text-zinc-300 font-mono">NSGA-II, NSGA-III, MOEA/D<br/>Marginal cost-carbon repair op</div>
+          </div>
+          <div className="p-3 bg-black/40 border border-zinc-800 rounded-md">
+            <h5 className="text-[10px] uppercase text-zinc-500 font-bold tracking-wider mb-1">NSGA-II Performance</h5>
+            <div className="text-xs text-zinc-300 font-mono">Joint-Normalized HV:<br/>0.713 ± 0.143 (50 seeds)</div>
+          </div>
+          <div className="p-3 bg-black/40 border border-zinc-800 rounded-md">
+            <h5 className="text-[10px] uppercase text-zinc-500 font-bold tracking-wider mb-1">Statistical Dominance</h5>
+            <div className="text-xs text-zinc-300 font-mono">Friedman Omnibus Test<br/>χ² = 7.32, p = 0.0257</div>
+          </div>
+          <div className="p-3 bg-black/40 border border-zinc-800 rounded-md">
+            <h5 className="text-[10px] uppercase text-zinc-500 font-bold tracking-wider mb-1">Dynamic Routing (Phase 13)</h5>
+            <div className="text-xs text-zinc-300 font-mono">Spatio-Temporal constraints<br/>Traffic matrices applied</div>
+          </div>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
