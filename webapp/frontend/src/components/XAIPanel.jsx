@@ -31,9 +31,12 @@ export default function XAIPanel() {
     >
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-3xl font-light tracking-wide text-white drop-shadow-cyber">
-            Explainable AI (SHAP & ST-GNN)
-          </h2>
+          <div>
+            <h2 className="text-xs font-bold uppercase tracking-widest text-premium-accent mb-1">Phase 9: Explainable AI</h2>
+            <h2 className="text-3xl font-light tracking-wide text-white drop-shadow-cyber">
+              Explainable AI (SHAP & ST-GNN)
+            </h2>
+          </div>
           <div className="flex gap-4">
             <span className="px-4 py-1 text-sm rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/30 backdrop-blur-md">
               Phase 9: SHAP Values

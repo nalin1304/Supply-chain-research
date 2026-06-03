@@ -105,7 +105,7 @@ export default function Dashboard() {
 
   if (error) {
     return (
-      <div className="space-y-8">
+      <div className="space-y-8 scroll-animate">
         <div>
           <h2 className="text-xl font-semibold text-zinc-50 tracking-tight">Overview</h2>
           <p className="text-sm text-zinc-500 mt-1">Supply chain optimization metrics</p>
@@ -125,7 +125,7 @@ export default function Dashboard() {
   const isMock = data?.is_mock_data
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 scroll-animate">
       {/* Welcome Banner */}
       <motion.div 
         initial={{ opacity: 0, y: -20 }}
@@ -138,64 +138,20 @@ export default function Dashboard() {
             <LayoutDashboard size={24} />
           </div>
           <div>
+            <h2 className="text-xs font-bold uppercase tracking-widest text-premium-accent mb-1">Phase 1: Baseline Heuristics & Overview</h2>
             <h1 className="text-2xl font-medium text-premium-text tracking-wide mb-2">
               Multi-Objective Resilient Supply Chain Dashboard
             </h1>
             <p className="text-premium-textMuted leading-relaxed text-sm max-w-4xl">
-              This project tackles the massive challenge of balancing <strong>logistics cost</strong> against <strong>carbon emissions (CO₂)</strong> across Indian logistics networks. Using cutting-edge Artificial Intelligence (Reinforcement Learning), we train virtual 'agents' to make inventory and routing decisions that are both green and highly resilient to real-world supply chain shocks. Use the sidebar to explore the 14 advanced phases of this research.
+              This project tackles the massive challenge of balancing <strong>logistics cost</strong> against <strong>carbon emissions (CO₂)</strong> across Indian logistics networks. Using cutting-edge Artificial Intelligence (Reinforcement Learning), we train virtual 'agents' to make inventory and routing decisions that are both green and highly resilient to real-world supply chain shocks.
             </p>
           </div>
         </div>
       </motion.div>
 
-      {/* Global Academic Methodology & Datasets */}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
-      >
-        <div className="p-5 rounded-xl bg-premium-panel border border-premium-border">
-          <h4 className="text-xs font-semibold text-zinc-300 mb-3 uppercase tracking-wider">Primary Datasets</h4>
-          <ul className="text-xs text-zinc-400 space-y-2 font-mono">
-            <li>• Delhivery (144,867 records)</li>
-            <li>• DataCo Smart SC (180K orders)</li>
-            <li>• CVRPLIB Augerat Set-A</li>
-            <li>• SVRPBench (Stochastic VRP)</li>
-          </ul>
-        </div>
-        <div className="p-5 rounded-xl bg-premium-panel border border-premium-border">
-          <h4 className="text-xs font-semibold text-zinc-300 mb-3 uppercase tracking-wider">Network Scope</h4>
-          <ul className="text-xs text-zinc-400 space-y-2 font-mono">
-            <li>• 5 Distribution Warehouses</li>
-            <li>• 101 Customer Demand Points</li>
-            <li>• 20 Indian Cities</li>
-            <li>• OSRM v5 Real Road Distances</li>
-          </ul>
-        </div>
-        <div className="p-5 rounded-xl bg-premium-panel border border-premium-border">
-          <h4 className="text-xs font-semibold text-zinc-300 mb-3 uppercase tracking-wider">Experimental Setup</h4>
-          <ul className="text-xs text-zinc-400 space-y-2 font-mono">
-            <li>• 1,000,000 RL Timesteps</li>
-            <li>• 50-Seed Monte Carlo Evals</li>
-            <li>• $H_\infty$ Minimax Adversarial</li>
-            <li>• Cloud Env: Modal (Tesla T4)</li>
-          </ul>
-        </div>
-        <div className="p-5 rounded-xl bg-premium-panel border border-premium-border">
-          <h4 className="text-xs font-semibold text-zinc-300 mb-3 uppercase tracking-wider">Statistical Validation</h4>
-          <ul className="text-xs text-zinc-400 space-y-2 font-mono">
-            <li>• Friedman Omnibus Test</li>
-            <li>• Paired Wilcoxon post-hoc</li>
-            <li>• Holm-Bonferroni correction</li>
-            <li>• Sobol Global Sensitivity</li>
-          </ul>
-        </div>
-      </motion.div>
-
-      {/* KPI Cards */}
+      {/* Primary KPIs (Moved up for F-Pattern / North Star visibility) */}
       {hasKpis && !isMock ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 scroll-animate">
           {Object.entries(data.kpis).map(([key, kpi]) => {
             const config = kpiConfig[key] || { icon: Target, label: key }
             const isPositive = key === 'service_level' || key === 'fleet_utilization'
@@ -215,7 +171,7 @@ export default function Dashboard() {
           })}
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 scroll-animate">
           {Object.entries(kpiConfig).map(([key, config]) => (
             <MetricCard
               key={key}
@@ -227,8 +183,81 @@ export default function Dashboard() {
         </div>
       )}
 
+      {/* Action-Oriented UI: Next Best Action */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+        className="bg-premium-background border border-premium-accent/30 rounded-xl p-5 scroll-animate relative overflow-hidden"
+      >
+        <div className="absolute top-0 right-0 w-32 h-32 bg-premium-accent/10 rounded-full blur-2xl transform translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
+        <div className="flex items-center gap-3 mb-4">
+          <Zap className="text-premium-accent" size={20} />
+          <h3 className="text-sm font-semibold text-zinc-100 uppercase tracking-wide">Next Best Action</h3>
+        </div>
+        <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
+          <div>
+            <p className="text-sm text-zinc-300 font-medium">Elevated Tail-Risk Detected (CVaR)</p>
+            <p className="text-xs text-zinc-500 mt-1">High variance in supply shock recovery during Phase 10 evaluation. Recommend re-running robust optimization.</p>
+          </div>
+          <button className="px-4 py-2 bg-premium-accent text-white text-xs font-semibold rounded-lg hover:bg-premium-accent/90 transition-colors border border-transparent">
+            Run Phase 10 CVaR Op
+          </button>
+        </div>
+      </motion.div>
+
+      {/* Progressive Disclosure: Academic Methodology & Datasets */}
+      <details className="group border border-premium-border bg-premium-panel rounded-xl scroll-animate">
+        <summary className="px-5 py-4 cursor-pointer list-none flex items-center justify-between text-sm font-medium text-zinc-300 hover:text-zinc-100 transition-colors">
+          <div className="flex items-center gap-2">
+            <span className="text-premium-accent">▸</span> Deep Academic Specs & Experimental Setup
+          </div>
+          <span className="text-xs text-zinc-500 font-normal">Click to expand</span>
+        </summary>
+        <div className="px-5 pb-5 pt-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 border-t border-premium-border/50">
+          <div>
+            <h4 className="text-[11px] font-semibold text-zinc-400 mb-2 uppercase tracking-wider">Primary Datasets</h4>
+            <ul className="text-xs text-zinc-500 space-y-1.5 font-mono">
+              <li>• Delhivery (144,867 records)</li>
+              <li>• DataCo Smart SC (180K orders)</li>
+              <li>• CVRPLIB Augerat Set-A</li>
+              <li>• SVRPBench (Stochastic VRP)</li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="text-[11px] font-semibold text-zinc-400 mb-2 uppercase tracking-wider">Network Scope</h4>
+            <ul className="text-xs text-zinc-500 space-y-1.5 font-mono">
+              <li>• 5 Distribution Warehouses</li>
+              <li>• 101 Customer Demand Points</li>
+              <li>• 20 Indian Cities</li>
+              <li>• OSRM v5 Real Road Distances</li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="text-[11px] font-semibold text-zinc-400 mb-2 uppercase tracking-wider">Experimental Setup</h4>
+            <ul className="text-xs text-zinc-500 space-y-1.5 font-mono">
+              <li>• 1,000,000 RL Timesteps</li>
+              <li>• 50-Seed Monte Carlo Evals</li>
+              <li>• $H_\infty$ Minimax Adversarial</li>
+              <li>• Cloud Env: Modal (Tesla T4)</li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="text-[11px] font-semibold text-zinc-400 mb-2 uppercase tracking-wider">Statistical Validation</h4>
+            <ul className="text-xs text-zinc-500 space-y-1.5 font-mono">
+              <li>• Friedman Omnibus Test</li>
+              <li>• Paired Wilcoxon post-hoc</li>
+              <li>• Holm-Bonferroni correction</li>
+              <li>• Sobol Global Sensitivity</li>
+            </ul>
+          </div>
+        </div>
+      </details>
+
       {/* Training Status */}
-      <TrainingStatus status={data?.training_status} />
+      <div className="scroll-animate">
+        <TrainingStatus status={data?.training_status} />
+      </div>
     </div>
   )
 }

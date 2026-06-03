@@ -145,7 +145,7 @@ export default function NetworkMap() {
 
   if (error || (!data?.warehouses?.length && !data?.customers?.length)) {
     return (
-      <div className="space-y-8">
+      <div className="space-y-8 scroll-animate">
         <div>
           <h2 className="text-xl font-semibold text-zinc-50 tracking-tight">Network Map</h2>
           <p className="text-sm text-zinc-500 mt-1">Distribution centers and customer locations</p>
@@ -162,9 +162,10 @@ export default function NetworkMap() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 scroll-animate">
       <div>
-        <h2 className="text-xl font-semibold text-zinc-50 tracking-tight">Network Map</h2>
+        <h2 className="text-xs font-bold uppercase tracking-widest text-premium-accent mb-1">Phase 2 & 13: Digital Twin & Dynamic Spatio-Temporal Routing</h2>
+        <h2 className="text-xl font-semibold text-zinc-50 tracking-tight">Supply Network Digital Twin</h2>
         <p className="text-sm text-zinc-500 mt-1">
           {data.warehouses.length} warehouses · {data.customers.length} customers
         </p>

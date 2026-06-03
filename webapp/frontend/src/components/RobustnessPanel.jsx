@@ -27,9 +27,12 @@ export default function RobustnessPanel() {
     >
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-3xl font-light tracking-wide text-white drop-shadow-cyber">
-            Adversarial & CVaR Robustness
-          </h2>
+          <div>
+            <h2 className="text-xs font-bold uppercase tracking-widest text-premium-accent mb-1">Phase 10 & 11: CVaR & Minimax Robustness</h2>
+            <h2 className="text-3xl font-light tracking-wide text-white drop-shadow-cyber">
+              Adversarial & CVaR Robustness
+            </h2>
+          </div>
           <div className="flex gap-4">
             <span className="px-4 py-1 text-sm rounded-full bg-red-500/10 text-red-400 border border-red-500/30 backdrop-blur-md">
               Phase 11: Minimax Attacks

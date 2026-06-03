@@ -60,8 +60,9 @@ export default function ParetoChart() {
   const hasData = points.length > 0 && !paretoData?.is_mock
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 scroll-animate">
       <div>
+        <h2 className="text-xs font-bold uppercase tracking-widest text-premium-accent mb-1">Phase 4 & 5: Single-Agent RL & Multi-Echelon Optimization</h2>
         <h2 className="text-xl font-semibold text-zinc-50 tracking-tight">Optimization</h2>
         <p className="text-sm text-zinc-500 mt-1">
           NSGA-II Pareto front — cost vs carbon tradeoff

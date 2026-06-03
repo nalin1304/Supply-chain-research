@@ -142,7 +142,7 @@ export default function ResiliencePanel() {
 
   if (slError) {
     return (
-      <div className="space-y-8">
+      <div className="space-y-8 scroll-animate">
         <div>
           <h2 className="text-xl font-semibold text-zinc-50 tracking-tight">Resilience</h2>
           <p className="text-sm text-zinc-500 mt-1">DES simulation — service level under disruption</p>
@@ -164,8 +164,9 @@ export default function ResiliencePanel() {
   const hasServiceData = serviceData.length > 0 && !isMock
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 scroll-animate">
       <div>
+        <h2 className="text-xs font-bold uppercase tracking-widest text-premium-accent mb-1">Phase 8: Sim-to-Real Domain Randomization</h2>
         <h2 className="text-xl font-semibold text-zinc-50 tracking-tight">Resilience</h2>
         <p className="text-sm text-zinc-500 mt-1">
           DES simulation — service level under disruption

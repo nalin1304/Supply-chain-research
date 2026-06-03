@@ -27,9 +27,12 @@ export default function AdvancedRLPanel() {
     >
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-3xl font-light tracking-wide text-white drop-shadow-cyber">
-            Advanced Multi-Agent & Offline RL
-          </h2>
+          <div>
+            <h2 className="text-xs font-bold uppercase tracking-widest text-premium-accent mb-1">Phase 7 & 12: MAPPO & Offline Decision Transformers</h2>
+            <h2 className="text-3xl font-light tracking-wide text-white drop-shadow-cyber">
+              Advanced Multi-Agent & Offline RL
+            </h2>
+          </div>
           <div className="flex gap-4">
             <span className="px-4 py-1 text-sm rounded-full bg-cyber-blue/10 text-cyber-blue border border-cyber-blue/30 backdrop-blur-md">
               Phase 7: MAPPO

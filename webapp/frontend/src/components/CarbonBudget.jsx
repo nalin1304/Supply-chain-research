@@ -92,8 +92,9 @@ export default function CarbonBudget() {
   const maxReduction = maxCarbon > 0 ? ((maxCarbon - minCarbon) / maxCarbon) * 100 : 0
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 scroll-animate">
       <div>
+        <h2 className="text-xs font-bold uppercase tracking-widest text-premium-accent mb-1">Phase 6: MEET Emission Modeling</h2>
         <h2 className="text-xl font-semibold text-zinc-50 tracking-tight">Carbon Budget</h2>
         <p className="text-sm text-zinc-500 mt-1">
           Green premium curve — cost of decarbonization from Pareto front
