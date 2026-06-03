@@ -170,7 +170,20 @@ export default function NetworkMap() {
         </p>
       </div>
 
-      <MapVisualization warehouses={data.warehouses} customers={data.customers} />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <MapVisualization warehouses={data.warehouses} customers={data.customers} />
+        
+        <div className="bg-premium-panel border border-premium-border rounded-xl p-6 relative overflow-hidden group">
+          <div className="absolute inset-0 bg-premium-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+          <h3 className="text-sm font-semibold text-zinc-100 mb-4 flex justify-between items-center relative z-10">
+            Delhivery Dataset Geographic Distribution
+            <span className="text-[10px] bg-premium-accent/20 text-premium-accent px-2 py-1 rounded-full uppercase tracking-wider">Publication Fig. 1</span>
+          </h3>
+          <div className="h-[500px] w-full rounded-lg overflow-hidden border border-zinc-800 bg-[#111] flex items-center justify-center relative z-10 p-2">
+            <img src="/assets/figures/fig1_network_map.png" alt="Dataset Distribution Map" className="max-w-full max-h-full object-contain hover:scale-105 transition-transform duration-500" />
+          </div>
+        </div>
+      </div>
 
       {/* Table */}
       <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-5">
